@@ -1,0 +1,201 @@
+// synthesis translate_off
+
+class counter_item;
+	rand bit en;
+	
+	bit [7:0] value;
+	bit will_overflow;
+	
+	function void print(string tag = "");
+		$display(
+			"T = %3t %12s en = %1b value = %8d will_overflow = %1b", 
+			$time, tag, en, value, will_overflow
+		);
+	endfunction
+endclass
+
+class counter_generator;
+	mailbox drv_mbx;
+	event drv_done;
+	
+	localparam ITERATIONS = 20;
+	
+	task run;
+		for (int i = 0; i < ITERATIONS; i++) begin
+			counter_item item = new;
+			item.randomize();
+			
+			$display(
+				"T = %3t %12s Item %0d/%0d created",
+				$time, "[Generator]", i + 1, ITERATIONS
+			);
+			
+			drv_mbx.put(item);
+			@(drv_done);
+		end
+	endtask
+endclass
+
+interface counter_if(clk);
+	input bit clk;
+	
+	logic rst, en;
+	logic [7:0] value;
+	logic will_overflow;
+endinterface
+
+class counter_driver;
+	virtual counter_if counter;
+	
+	mailbox drv_mbx;
+	event drv_done;
+	
+	task run;
+		@(posedge counter.clk);
+		forever begin
+			counter_item item;
+			drv_mbx.get(item);
+			
+			item.print("[Driver]");
+		
+			counter.en <= item.en;
+			
+			@(posedge counter.clk);
+			->drv_done;
+		end
+	endtask
+endclass
+
+class counter_monitor;
+	virtual counter_if counter;
+	
+	mailbox mon_mbx;
+	
+	task run;
+		@(posedge counter.clk);
+		forever begin
+			counter_item item = new;
+			@(posedge counter.clk);
+			
+			item.en <= counter.en;
+			item.value <= counter.value;
+			item.will_overflow <= counter.will_overflow;
+			
+			item.print("[Monitor]");
+			
+			mon_mbx.put(item);
+		end
+	endtask
+endclass
+
+class counter_scoreboard;
+	bit [7:0] counter = 8'd0;
+	
+	mailbox mon_mbx;
+	
+	task run;
+		forever begin
+			counter_item item;
+			mon_mbx.get(item);
+			
+			if (counter == item.value)
+				$display("T = %3t %12s PASS!", $time, "[Scoreboard]");
+			else
+				$display("T = %3t %12s FAIL! expected = %8b, got = %8b", $time, "[Scoreboard]", reg8, item.out);
+		end
+		
+		if (item.en)
+			counter++;
+	endtask
+endclass
+
+class counter_env;
+	counter_driver driver;
+	counter_monitor monitor;
+	counter_generator generator;
+	counter_scoreboard scoreboard;
+	
+	mailbox drv_mbx;
+	mailbox mon_mbx;
+	event drv_done;
+	
+	virtual counter_if counter;
+	
+	function new;
+		driver = new;
+		monitor = new;
+		generator = new;
+		scoreboard = new;
+		
+		drv_mbx = new;
+		driver.drv_mbx = drv_mbx;
+		generator.drv_mbx = drv_mbx;
+		
+		mon_mbx = new;
+		monitor.mon_mbx = mon_mbx;
+		scoreboard.mon_mbx = mon_mbx;
+		
+		driver.drv_done = drv_done;
+		generator.drv_done = drv_done;
+	endfunction
+	
+	virtual task run;
+		driver.counter = counter;
+		monitor.counter = counter;
+		
+		fork
+			driver.run();
+			monitor.run();
+			generator.run();
+			scoreboard.run();
+		join_any
+	endtask
+endclass
+
+class counter_test;
+	counter_env env;
+	
+	function new;
+		env = new;
+	endfunction
+	
+	task run;
+		env.run;
+	endtask
+endclass
+
+module counter_testbench;
+	reg clk;
+	
+	counter_if dut_if (clk);
+	
+	counter dut (
+		.clk(clk),
+		.rst(dut_if.rst),
+		.en(dut_if.en),
+		.value(dut_if.value),
+		.will_overflow(dut_if.will_overflow)
+	);
+	
+	initial begin
+		clk = 0;
+		forever begin
+			#10 clk = ~clk;
+		end
+	end
+	
+	counter_test test;
+	
+	initial begin
+		dut_if.rst = 1;
+		#5 dut_if.rst = 0;
+		
+		test = new;
+		test.env.counter = dut_if;
+		test.run;
+		
+		#100 $finish;
+	end
+endmodule
+
+// synthesis translate_on

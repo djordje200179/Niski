@@ -1,0 +1,9 @@
+module SevSegHexMapper (number, digit0, digit1, digit2, digit3);
+	input [15:0] number;
+	output [6:0] digit0, digit1, digit2, digit3;
+
+	SevSegDigitMapper ones		(number[0 +: 4], digit0);
+	SevSegDigitMapper tens		(number[4 +: 4], digit1);
+	SevSegDigitMapper hundreds	(number[8 +: 4], digit2);
+	SevSegDigitMapper thousands	(number[12 +: 4], digit3);
+endmodule

@@ -1,0 +1,4 @@
+module RisingEdgeDetector (CLK, rawInput, risingEdge);
+
+
+endmodule

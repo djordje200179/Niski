@@ -1,0 +1,47 @@
+module SevSegDisplaysController (CLK, RST, EN, digit0, digit1, digit2, digit3, dots, segmentPins, selectPins);
+	parameter REFRESH_RATE = 60;
+	parameter CLK_FREQ = 1_000;
+	
+	localparam REFRESH_PERIOD = CLK_FREQ / (REFRESH_RATE * 4);
+	
+	input CLK, RST, EN;
+	input [6:0] digit0, digit1, digit2, digit3;
+	input [3:0] dots;
+
+	output [7:0] segmentPins;
+	output [3:0] selectPins;
+	
+	wire refreshCLK;
+	FrequencyDivider #(REFRESH_PERIOD) refreshTickGenerator (
+		.CLK(CLK), 
+		.RST(RST),
+		.EN(1),
+		.slowCLK(refreshCLK)
+	);
+	
+	wire [1:0] currentDigit;
+	Counter #(4) digitCounter (
+		.CLK(refreshCLK), 
+		.RST(RST),
+		.EN(1), 
+		.value(currentDigit)
+	);
+
+	wire [6:0] segments [3:0];
+	assign {segments[3], segments[2], segments[1], segments[0]} = {digit3, digit2, digit1, digit0};
+
+	assign segmentPins = EN ? ~{dots[currentDigit], segments[currentDigit]} : 8'hff;
+	
+	function [3:0] decodeSelectPins(input [1:0] index);
+		begin
+			case (index)
+				2'd0: decodeSelectPins = 4'b1110;
+				2'd1: decodeSelectPins = 4'b1101;
+				2'd2: decodeSelectPins = 4'b1011;
+				2'd3: decodeSelectPins = 4'b0111;
+			endcase
+		end
+	endfunction
+	
+	assign selectPins = EN ? decodeSelectPins(currentDigit) : 4'hf;
+endmodule

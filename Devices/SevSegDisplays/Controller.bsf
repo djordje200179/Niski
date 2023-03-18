@@ -1,0 +1,111 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2022  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 288 240)
+	(text "sev_seg_displays_controller" (rect 5 0 191 15)(font "Arial" ))
+	(text "inst" (rect 8 160 31 175)(font "Arial" ))
+	(port
+		(pt 0 152)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 144 41 159)(font "Arial" ))
+		(line (pt 0 152)(pt 16 152))
+	)
+	(port
+		(pt 0 136)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 128 40 143)(font "Arial" ))
+		(line (pt 0 136)(pt 16 136))
+	)
+	(port
+		(pt 0 120)
+		(input)
+		(text "en" (rect 0 0 16 15)(font "Arial" ))
+		(text "en" (rect 24 112 40 127)(font "Arial" ))
+		(line (pt 0 120)(pt 16 120))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "digit_0[6..0]" (rect 0 0 74 15)(font "Arial" ))
+		(text "digit_0[6..0]" (rect 21 19 95 34)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(input)
+		(text "digit_1[6..0]" (rect 0 0 74 15)(font "Arial" ))
+		(text "digit_1[6..0]" (rect 21 35 95 50)(font "Arial" ))
+		(line (pt 0 40)(pt 16 40)(line_width 3))
+	)
+	(port
+		(pt 0 56)
+		(input)
+		(text "digit_2[6..0]" (rect 0 0 74 15)(font "Arial" ))
+		(text "digit_2[6..0]" (rect 21 51 95 66)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56)(line_width 3))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "digit_3[6..0]" (rect 0 0 74 15)(font "Arial" ))
+		(text "digit_3[6..0]" (rect 21 67 95 82)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72)(line_width 3))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "dots[3..0]" (rect 0 0 59 15)(font "Arial" ))
+		(text "dots[3..0]" (rect 21 83 80 98)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
+	)
+	(port
+		(pt 224 80)
+		(output)
+		(text "segment_pins[7..0]" (rect 0 0 125 15)(font "Arial" ))
+		(text "segment_pins[7..0]" (rect 96 72 201 87)(font "Arial" ))
+		(line (pt 224 80)(pt 208 80)(line_width 3))
+	)
+	(port
+		(pt 224 96)
+		(output)
+		(text "select_pins[3..0]" (rect 0 0 106 15)(font "Arial" ))
+		(text "select_pins[3..0]" (rect 112 88 201 103)(font "Arial" ))
+		(line (pt 224 96)(pt 208 96)(line_width 3))
+	)
+	(parameter
+		"REFRESH_RATE"
+		"60"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"CLK_FREQ"
+		"1000"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(drawing
+		(rectangle (rect 16 16 208 160))
+	)
+	(annotation_block (parameter)(rect 240 -48 472 16))
+)

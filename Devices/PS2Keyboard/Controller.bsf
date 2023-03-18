@@ -1,0 +1,93 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2022  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 240 208)
+	(text "ps2_keyboard_controller" (rect 5 0 165 15)(font "Arial" ))
+	(text "inst" (rect 8 128 31 143)(font "Arial" ))
+	(port
+		(pt 0 120)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 112 41 127)(font "Arial" ))
+		(line (pt 0 120)(pt 16 120))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 80 40 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88))
+	)
+	(port
+		(pt 0 104)
+		(input)
+		(text "en" (rect 0 0 16 15)(font "Arial" ))
+		(text "en" (rect 24 96 40 111)(font "Arial" ))
+		(line (pt 0 104)(pt 16 104))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "data_req" (rect 0 0 57 15)(font "Arial" ))
+		(text "data_req" (rect 24 16 81 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24))
+	)
+	(port
+		(pt 176 64)
+		(input)
+		(text "data_pin" (rect 0 0 56 15)(font "Arial" ))
+		(text "data_pin" (rect 112 56 168 71)(font "Arial" ))
+		(line (pt 160 64)(pt 176 64))
+	)
+	(port
+		(pt 176 80)
+		(input)
+		(text "clk_pin" (rect 0 0 46 15)(font "Arial" ))
+		(text "clk_pin" (rect 120 72 166 87)(font "Arial" ))
+		(line (pt 160 80)(pt 176 80))
+	)
+	(port
+		(pt 0 40)
+		(output)
+		(text "data[7..0]" (rect 0 0 59 15)(font "Arial" ))
+		(text "data[7..0]" (rect 24 32 83 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(port
+		(pt 0 56)
+		(output)
+		(text "data_err" (rect 0 0 54 15)(font "Arial" ))
+		(text "data_err" (rect 24 48 78 63)(font "Arial" ))
+		(line (pt 16 56)(pt 0 56))
+	)
+	(port
+		(pt 0 72)
+		(output)
+		(text "data_ack" (rect 0 0 59 15)(font "Arial" ))
+		(text "data_ack" (rect 24 64 83 79)(font "Arial" ))
+		(line (pt 16 72)(pt 0 72))
+	)
+	(drawing
+		(rectangle (rect 16 16 160 128))
+	)
+)
