@@ -1,20 +1,14 @@
 module bus_arbitrator (
-	clk, rst,
-	cpu_req, dma_req,
-	cpu_grant, dma_grant,
-	addr_bus, data_bus, wr_bus, rd_bus, data_mask_bus, fc_bus
+	input clk, rst,
+	
+	input cpu_req, dma_req,
+	output cpu_grant, dma_grant,
+	
+	output [31:0] addr_bus, data_bus,
+	output wr_bus, rd_bus,
+	output [3:0] data_mask_bus,
+	output fc_bus
 );
-	input clk, rst;
-
-	input cpu_req, dma_req;
-	output cpu_grant, dma_grant;
-
-	output [31:0] addr_bus;
-	output [31:0] data_bus;
-	output wr_bus, rd_bus;
-	output [3:0] data_mask_bus;
-	output fc_bus;	
-
 	reg [1:0] state;
 	localparam STATE_IDLE	= 2'd0,
 			   STATE_CPU	= 2'd1,
@@ -22,6 +16,15 @@ module bus_arbitrator (
 
 	assign cpu_grant = state == STATE_CPU;
 	assign dma_grant = state == STATE_DMA;
+	
+	wire bus_used = state != STATE_IDLE;
+	
+	assign addr_bus = bus_used ? 32'bz : 32'b0;
+	assign data_bus = bus_used ? 32'bz : 32'b0;
+	assign wr_bus = bus_used ? 1'bz : 1'b0;
+	assign rd_bus = bus_used ? 1'bz : 1'b0;
+	assign data_mask_bus = bus_used ? 4'bz : 4'b0;
+	assign fc_bus = bus_used ? 1'bz : 1'b0;
 
 	task reset;
 		begin
@@ -60,13 +63,4 @@ module bus_arbitrator (
 		if (rst) reset;
 		else on_clock;
 	end
-
-	wire bus_used = state != STATE_IDLE;
-	
-	assign addr_bus = bus_used ? 32'bz : 32'b0;
-	assign data_bus = bus_used ? 32'bz : 32'b0;
-	assign wr_bus = bus_used ? 1'bz : 1'b0;
-	assign rd_bus = bus_used ? 1'bz : 1'b0;
-	assign data_mask_bus = bus_used ? 4'bz : 4'b0;
-	assign fc_bus = bus_used ? 1'bz : 1'b0;
 endmodule
