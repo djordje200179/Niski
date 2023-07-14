@@ -1,0 +1,73 @@
+transcript on
+if ![file isdirectory verilog_libs] {
+	file mkdir verilog_libs
+}
+
+vlib verilog_libs/altera_ver
+vmap altera_ver ./verilog_libs/altera_ver
+vlog -vlog01compat -work altera_ver {c:/quartus/quartus/eda/sim_lib/altera_primitives.v}
+
+vlib verilog_libs/lpm_ver
+vmap lpm_ver ./verilog_libs/lpm_ver
+vlog -vlog01compat -work lpm_ver {c:/quartus/quartus/eda/sim_lib/220model.v}
+
+vlib verilog_libs/sgate_ver
+vmap sgate_ver ./verilog_libs/sgate_ver
+vlog -vlog01compat -work sgate_ver {c:/quartus/quartus/eda/sim_lib/sgate.v}
+
+vlib verilog_libs/altera_mf_ver
+vmap altera_mf_ver ./verilog_libs/altera_mf_ver
+vlog -vlog01compat -work altera_mf_ver {c:/quartus/quartus/eda/sim_lib/altera_mf.v}
+
+vlib verilog_libs/altera_lnsim_ver
+vmap altera_lnsim_ver ./verilog_libs/altera_lnsim_ver
+vlog -sv -work altera_lnsim_ver {c:/quartus/quartus/eda/sim_lib/altera_lnsim.sv}
+
+vlib verilog_libs/cycloneive_ver
+vmap cycloneive_ver ./verilog_libs/cycloneive_ver
+vlog -vlog01compat -work cycloneive_ver {c:/quartus/quartus/eda/sim_lib/cycloneive_atoms.v}
+
+if {[file exists rtl_work]} {
+	vdel -lib rtl_work -all
+}
+vlib rtl_work
+vmap work rtl_work
+
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/MemoryAccess.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/RegFile.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/PC.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Memory {C:/Programiranje/Projekti/Niski/Memory/BusInterface.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Memory {C:/Programiranje/Projekti/Niski/Memory/ROM.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Components {C:/Programiranje/Projekti/Niski/Components/Clocks.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Components {C:/Programiranje/Projekti/Niski/Components/Counter.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Components {C:/Programiranje/Projekti/Niski/Components/Debouncer.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/Buttons {C:/Programiranje/Projekti/Niski/Devices/Buttons/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/Buzzer {C:/Programiranje/Projekti/Niski/Devices/Buzzer/BusInterface.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/Buzzer {C:/Programiranje/Projekti/Niski/Devices/Buzzer/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/LCD {C:/Programiranje/Projekti/Niski/Devices/LCD/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/LEDs {C:/Programiranje/Projekti/Niski/Devices/LEDs/BusInterface.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/LEDs {C:/Programiranje/Projekti/Niski/Devices/LEDs/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/PS2Keyboard {C:/Programiranje/Projekti/Niski/Devices/PS2Keyboard/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/SevSegDisplays {C:/Programiranje/Projekti/Niski/Devices/SevSegDisplays/BusInterface.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/SevSegDisplays {C:/Programiranje/Projekti/Niski/Devices/SevSegDisplays/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/IR {C:/Programiranje/Projekti/Niski/Devices/IR/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/UART {C:/Programiranje/Projekti/Niski/Devices/UART/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/UART/RX {C:/Programiranje/Projekti/Niski/Devices/UART/RX/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/UART/TX {C:/Programiranje/Projekti/Niski/Devices/UART/TX/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/CPU.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/BranchTester.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/ALU.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/CPU {C:/Programiranje/Projekti/Niski/CPU/IR.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Bus/Arbitrator {C:/Programiranje/Projekti/Niski/Bus/Arbitrator/Arbitrator.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/I2C {C:/Programiranje/Projekti/Niski/Devices/I2C/Controller.v}
+vlog -vlog01compat -work work +incdir+C:/Programiranje/Projekti/Niski/Devices/SDRAM {C:/Programiranje/Projekti/Niski/Devices/SDRAM/Controller.v}
+vlog -sv -work work +incdir+C:/Programiranje/Projekti/Niski/Memory {C:/Programiranje/Projekti/Niski/Memory/RAM.sv}
+
+vlog -sv -work work +incdir+C:/Programiranje/Projekti/Niski/Tests {C:/Programiranje/Projekti/Niski/Tests/CPU.sv}
+
+vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -voptargs="+acc"  cpu_tb
+
+add wave *
+view structure
+view signals
+run -all

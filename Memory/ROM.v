@@ -1,20 +1,19 @@
 module rom (
-	en,
+	clk,
 	addr, data_out
 );
-	parameter DATA_BITS = 8;
-	parameter SIZE = 2 ** 8;
+	parameter ADDR_BITS = 10;
 	parameter MEM_FILE = "";
 	
-	parameter ADDR_BITS = $clog2(SIZE);
-	
-	input en;
+	input clk;
 	
 	input [ADDR_BITS-1:0] addr;
-	output [DATA_BITS-1:0] data_out;
+	output reg [31:0] data_out;
 	
-	reg [DATA_BITS-1:0] memory [SIZE];
+	reg [31:0] memory [2**ADDR_BITS-1:0];
 	initial $readmemh(MEM_FILE, memory);
 	
-	assign data_out = en ? memory[addr] : {DATA_BITS{1'bz}};
+	always @(posedge clk) begin
+		data_out <= memory[addr];		
+	end
 endmodule

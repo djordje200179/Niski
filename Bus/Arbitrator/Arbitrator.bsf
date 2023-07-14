@@ -4,7 +4,7 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 2022  Intel Corporation. All rights reserved.
+Copyright (C) 2023  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
@@ -21,7 +21,7 @@ https://fpgasoftware.intel.com/eula.
 */
 (header "symbol" (version "1.2"))
 (symbol
-	(rect 64 64 360 240)
+	(rect 64 64 288 240)
 	(text "bus_arbitrator" (rect 5 0 95 15)(font "Arial" ))
 	(text "inst" (rect 8 160 31 175)(font "Arial" ))
 	(port
@@ -46,11 +46,11 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 24)(pt 16 24))
 	)
 	(port
-		(pt 0 64)
+		(pt 0 56)
 		(input)
 		(text "dma_req" (rect 0 0 59 15)(font "Arial" ))
-		(text "dma_req" (rect 24 56 83 71)(font "Arial" ))
-		(line (pt 0 64)(pt 16 64))
+		(text "dma_req" (rect 24 48 83 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
 	)
 	(port
 		(pt 0 40)
@@ -60,59 +60,55 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40))
 	)
 	(port
-		(pt 0 80)
+		(pt 0 72)
 		(output)
 		(text "dma_grant" (rect 0 0 70 15)(font "Arial" ))
-		(text "dma_grant" (rect 24 72 94 87)(font "Arial" ))
-		(line (pt 16 80)(pt 0 80))
+		(text "dma_grant" (rect 24 64 94 79)(font "Arial" ))
+		(line (pt 16 72)(pt 0 72))
+	)
+	(port
+		(pt 96 176)
+		(output)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 88 51 103 152)(font "Arial" )(vertical))
+		(line (pt 96 176)(pt 96 160)(line_width 3))
+	)
+	(port
+		(pt 112 176)
+		(output)
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 104 52 119 152)(font "Arial" )(vertical))
+		(line (pt 112 176)(pt 112 160)(line_width 3))
 	)
 	(port
 		(pt 144 176)
 		(output)
 		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
-		(text "wr_bus" (rect 136 112 151 160)(font "Arial" )(vertical))
+		(text "wr_bus" (rect 136 104 151 152)(font "Arial" )(vertical))
 		(line (pt 144 176)(pt 144 160))
+	)
+	(port
+		(pt 128 176)
+		(output)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 120 106 135 152)(font "Arial" )(vertical))
+		(line (pt 128 176)(pt 128 160))
 	)
 	(port
 		(pt 160 176)
 		(output)
-		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
-		(text "rd_bus" (rect 152 112 167 158)(font "Arial" )(vertical))
-		(line (pt 160 176)(pt 160 160))
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 152 16 167 152)(font "Arial" )(vertical))
+		(line (pt 160 176)(pt 160 160)(line_width 3))
 	)
 	(port
 		(pt 176 176)
 		(output)
 		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 168 112 183 155)(font "Arial" )(vertical))
+		(text "fc_bus" (rect 168 109 183 152)(font "Arial" )(vertical))
 		(line (pt 176 176)(pt 176 160))
 	)
-	(port
-		(pt 112 176)
-		(output)
-		(text "addr_bus[(ADDR_BUS_WIDTH-1)..0]" (rect 0 0 239 15)(font "Arial" ))
-		(text "addr_bus" (rect 104 96 119 158)(font "Arial" )(vertical))
-		(line (pt 112 176)(pt 112 161)(line_width 3))
-	)
-	(port
-		(pt 128 176)
-		(output)
-		(text "data_bus[(DATA_BUS_WIDTH-1)..0]" (rect 0 0 233 15)(font "Arial" ))
-		(text "data_bus" (rect 120 96 135 157)(font "Arial" )(vertical))
-		(line (pt 128 176)(pt 128 160)(line_width 3))
-	)
-	(parameter
-		"ADDR_BUS_WIDTH"
-		"32"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"DATA_BUS_WIDTH"
-		"8"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
 	(drawing
-		(rectangle (rect 16 16 280 160))
+		(rectangle (rect 16 16 208 160))
 	)
-	(annotation_block (parameter)(rect 312 -48 568 16))
 )

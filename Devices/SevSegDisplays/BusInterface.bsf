@@ -1,0 +1,149 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 312 240)
+	(text "sev_seg_bus_interface" (rect 5 0 157 15)(font "Arial" ))
+	(text "inst" (rect 8 160 31 175)(font "Arial" ))
+	(port
+		(pt 0 152)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 144 41 159)(font "Arial" ))
+		(line (pt 0 152)(pt 16 152))
+	)
+	(port
+		(pt 0 136)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 128 40 143)(font "Arial" ))
+		(line (pt 0 136)(pt 16 136))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 56)
+		(input)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 24 48 70 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
+		(text "wr_bus" (rect 24 64 72 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
+	)
+	(port
+		(pt 248 120)
+		(output)
+		(text "ctrl_en" (rect 0 0 43 15)(font "Arial" ))
+		(text "ctrl_en" (rect 192 112 228 127)(font "Arial" ))
+		(line (pt 248 120)(pt 232 120))
+	)
+	(port
+		(pt 248 24)
+		(output)
+		(text "ctrl_digit_0[6..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "ctrl_digit_0[6..0]" (rect 144 16 229 31)(font "Arial" ))
+		(line (pt 248 24)(pt 232 24)(line_width 3))
+	)
+	(port
+		(pt 248 40)
+		(output)
+		(text "ctrl_digit_1[6..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "ctrl_digit_1[6..0]" (rect 144 32 229 47)(font "Arial" ))
+		(line (pt 248 40)(pt 232 40)(line_width 3))
+	)
+	(port
+		(pt 248 56)
+		(output)
+		(text "ctrl_digit_2[6..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "ctrl_digit_2[6..0]" (rect 144 48 229 63)(font "Arial" ))
+		(line (pt 248 56)(pt 232 56)(line_width 3))
+	)
+	(port
+		(pt 248 72)
+		(output)
+		(text "ctrl_digit_3[6..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "ctrl_digit_3[6..0]" (rect 144 64 229 79)(font "Arial" ))
+		(line (pt 248 72)(pt 232 72)(line_width 3))
+	)
+	(port
+		(pt 248 88)
+		(output)
+		(text "ctrl_dots[3..0]" (rect 0 0 86 15)(font "Arial" ))
+		(text "ctrl_dots[3..0]" (rect 152 80 224 95)(font "Arial" ))
+		(line (pt 248 88)(pt 232 88)(line_width 3))
+	)
+	(port
+		(pt 0 104)
+		(output)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
+		(line (pt 16 104)(pt 0 104))
+	)
+	(port
+		(pt 0 40)
+		(bidir)
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"CONTROL_REG_ADDR"
+		"0"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"STATUS_REG_ADDR"
+		"1"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"DATA_DIGITS_REG_ADDR"
+		"2"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"DATA_DOTS_REG_ADDR"
+		"6"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(drawing
+		(rectangle (rect 16 16 232 160))
+	)
+	(annotation_block (parameter)(rect 264 -88 560 16))
+)

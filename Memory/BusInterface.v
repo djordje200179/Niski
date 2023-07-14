@@ -1,58 +1,56 @@
 module memory_bus_interface (
 	clk, rst,
-	mem_addr, mem_data_out, mem_data_in, mem_wr, mem_en,
-	addr_bus, data_bus, wr_bus, rd_bus, fc_bus
+	mem_addr, mem_data_out, mem_data_in, mem_wr, mem_wr_mask,
+	addr_bus, data_bus, wr_bus, rd_bus, data_mask_bus, fc_bus
 );
-	parameter ADDR_BUS_WIDTH = 32,
-			  DATA_BUS_WIDTH = 8;
+	parameter MEM_ADDR_WIDTH = 16;
+	localparam MEM_SIZE = 2 ** MEM_ADDR_WIDTH * 4;
 
-	parameter START_ADDR = 0,
-			  MEM_SIZE = 256;
-
-	parameter ADDR_MEM_WIDTH = $clog2(MEM_SIZE);
+	parameter START_ADDR = 0;
 
 	input clk, rst;
 
-	output [ADDR_MEM_WIDTH-1:0] mem_addr;
-	input [DATA_BUS_WIDTH-1:0] mem_data_out;
-	output [DATA_BUS_WIDTH-1:0] mem_data_in;
-	output mem_wr, mem_en;
+	output [MEM_ADDR_WIDTH-1:0] mem_addr;
+	input [31:0] mem_data_out;
+	output [31:0] mem_data_in;
+	output mem_wr;
+	output [3:0] mem_wr_mask;
 
-	input [ADDR_BUS_WIDTH-1:0] addr_bus;
-	inout [DATA_BUS_WIDTH-1:0] data_bus;
+	input [31:0] addr_bus;
+	inout [31:0] data_bus;
 	input wr_bus, rd_bus;
+	input [3:0] data_mask_bus;
 	output fc_bus;
 
 	wire addr_hit = (addr_bus >= START_ADDR) && (addr_bus < START_ADDR + MEM_SIZE);
 	wire req_valid = rd_bus ^ wr_bus;
 		 
 	wire req = addr_hit && req_valid,
-		 read_req = req && rd_bus,
-		 write_req = req && wr_bus;
+	 	 read_req = req && rd_bus,
+	 	 write_req = req && wr_bus;
 
-	assign mem_addr = addr_bus - START_ADDR,
-		   mem_data_in = data_bus,
+	reg transfer_completed;
+
+	assign data_bus = read_req ? mem_data_out >> (addr_bus[1:0] * 8) : 32'bz,
+		   fc_bus = req ? transfer_completed : 1'bz;
+
+	assign mem_addr = addr_bus >> 2,
+		   mem_data_in = data_bus << (addr_bus[1:0] * 8),
 		   mem_wr = write_req,
-		   mem_en = 1'b1;
-
-	reg data_written;
-
-	assign data_bus = read_req ? mem_data_out : {DATA_BUS_WIDTH{1'bz}},
-		   fc_bus = req ? (read_req || data_written) : 1'bz;
+		   mem_wr_mask = data_mask_bus << addr_bus[1:0];
 
 	task reset;
 		begin
-			data_written <= 1'b0;
+			transfer_completed <= 1'b0;
 		end
 	endtask
 
 	task on_clock;
 		begin
-			if (write_req)
-				data_written <= 1'b1;
-
-			if (data_written && !write_req)
-				data_written <= 1'b0;
+			if (transfer_completed && !req)
+				transfer_completed <= 1'b0;
+			else if (req)
+				transfer_completed <= 1'b1;
 		end
 	endtask
 

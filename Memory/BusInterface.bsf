@@ -4,7 +4,7 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 2022  Intel Corporation. All rights reserved.
+Copyright (C) 2023  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
@@ -21,22 +21,36 @@ https://fpgasoftware.intel.com/eula.
 */
 (header "symbol" (version "1.2"))
 (symbol
-	(rect 64 64 528 208)
+	(rect 64 64 424 240)
 	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
-	(text "inst" (rect 8 128 31 143)(font "Arial" ))
+	(text "inst" (rect 8 160 31 175)(font "Arial" ))
 	(port
-		(pt 0 120)
+		(pt 0 152)
 		(input)
 		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 112 41 127)(font "Arial" ))
-		(line (pt 0 120)(pt 16 120))
+		(text "clk" (rect 24 144 41 159)(font "Arial" ))
+		(line (pt 0 152)(pt 16 152))
 	)
 	(port
-		(pt 0 104)
+		(pt 0 136)
 		(input)
 		(text "rst" (rect 0 0 16 15)(font "Arial" ))
-		(text "rst" (rect 24 96 40 111)(font "Arial" ))
-		(line (pt 0 104)(pt 16 104))
+		(text "rst" (rect 24 128 40 143)(font "Arial" ))
+		(line (pt 0 136)(pt 16 136))
+	)
+	(port
+		(pt 360 40)
+		(input)
+		(text "mem_data_out[31..0]" (rect 0 0 138 15)(font "Arial" ))
+		(text "mem_data_out[31..0]" (rect 224 32 362 47)(font "Arial" ))
+		(line (pt 344 40)(pt 360 40)(line_width 3))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
 	)
 	(port
 		(pt 0 72)
@@ -53,69 +67,57 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 56)(pt 16 56))
 	)
 	(port
-		(pt 464 40)
+		(pt 0 88)
 		(input)
-		(text "mem_data_out[(DATA_BUS_WIDTH-1)..0]" (rect 0 0 271 15)(font "Arial" ))
-		(text "mem_data_out" (rect 360 32 459 47)(font "Arial" ))
-		(line (pt 448 40)(pt 464 40)(line_width 3))
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
 	)
 	(port
-		(pt 0 24)
-		(input)
-		(text "addr_bus[(ADDR_BUS_WIDTH-1)..0]" (rect 0 0 239 15)(font "Arial" ))
-		(text "addr_bus" (rect 24 16 86 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
+		(pt 360 56)
+		(output)
+		(text "mem_data_in[31..0]" (rect 0 0 129 15)(font "Arial" ))
+		(text "mem_data_in[31..0]" (rect 232 48 361 63)(font "Arial" ))
+		(line (pt 360 56)(pt 344 56)(line_width 3))
 	)
 	(port
-		(pt 464 72)
+		(pt 360 72)
 		(output)
 		(text "mem_wr" (rect 0 0 57 15)(font "Arial" ))
-		(text "mem_wr" (rect 392 64 449 79)(font "Arial" ))
-		(line (pt 464 72)(pt 448 72))
+		(text "mem_wr" (rect 288 64 345 79)(font "Arial" ))
+		(line (pt 360 72)(pt 344 72))
 	)
 	(port
-		(pt 464 104)
+		(pt 360 88)
 		(output)
-		(text "mem_en" (rect 0 0 59 15)(font "Arial" ))
-		(text "mem_en" (rect 392 96 451 111)(font "Arial" ))
-		(line (pt 464 104)(pt 448 104))
+		(text "mem_wr_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
+		(text "mem_wr_mask[3..0]" (rect 224 80 357 95)(font "Arial" ))
+		(line (pt 360 88)(pt 344 88)(line_width 3))
 	)
 	(port
-		(pt 0 88)
+		(pt 0 104)
 		(output)
 		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 24 80 67 95)(font "Arial" ))
-		(line (pt 16 88)(pt 0 88))
+		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
+		(line (pt 16 104)(pt 0 104))
 	)
 	(port
-		(pt 464 24)
+		(pt 360 24)
 		(output)
-		(text "mem_addr[(ADDR_MEM_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
-		(text "mem_addr" (rect 384 16 455 31)(font "Arial" ))
-		(line (pt 464 24)(pt 448 24)(line_width 3))
-	)
-	(port
-		(pt 464 56)
-		(output)
-		(text "mem_data_in[(DATA_BUS_WIDTH-1)..0]" (rect 0 0 263 15)(font "Arial" ))
-		(text "mem_data_in" (rect 368 48 458 63)(font "Arial" ))
-		(line (pt 464 56)(pt 448 56)(line_width 3))
+		(text "mem_addr[(MEM_ADDR_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
+		(text "mem_addr" (rect 280 16 351 31)(font "Arial" ))
+		(line (pt 360 24)(pt 344 24)(line_width 3))
 	)
 	(port
 		(pt 0 40)
 		(bidir)
-		(text "data_bus[(DATA_BUS_WIDTH-1)..0]" (rect 0 0 233 15)(font "Arial" ))
-		(text "data_bus" (rect 24 32 85 47)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"ADDR_BUS_WIDTH"
-		"32"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"DATA_BUS_WIDTH"
-		"8"
+		"MEM_ADDR_WIDTH"
+		"16"
 		""
 		(type "PARAMETER_SIGNED_DEC")	)
 	(parameter
@@ -123,18 +125,8 @@ https://fpgasoftware.intel.com/eula.
 		"0"
 		""
 		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"MEM_SIZE"
-		"256"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"ADDR_MEM_WIDTH"
-		""
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
 	(drawing
-		(rectangle (rect 16 16 448 128))
+		(rectangle (rect 16 16 344 160))
 	)
-	(annotation_block (parameter)(rect 528 -56 792 64))
+	(annotation_block (parameter)(rect 376 -48 640 16))
 )

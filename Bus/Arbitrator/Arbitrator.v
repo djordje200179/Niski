@@ -2,19 +2,18 @@ module bus_arbitrator (
 	clk, rst,
 	cpu_req, dma_req,
 	cpu_grant, dma_grant,
-	addr_bus, data_bus, wr_bus, rd_bus, fc_bus
+	addr_bus, data_bus, wr_bus, rd_bus, data_mask_bus, fc_bus
 );
-	parameter ADDR_BUS_WIDTH = 32,
-			  DATA_BUS_WIDTH = 8;
-
 	input clk, rst;
 
 	input cpu_req, dma_req;
 	output cpu_grant, dma_grant;
 
-	output [ADDR_BUS_WIDTH-1:0] addr_bus;
-	output [DATA_BUS_WIDTH-1:0] data_bus;
-	output wr_bus, rd_bus, fc_bus;	
+	output [31:0] addr_bus;
+	output [31:0] data_bus;
+	output wr_bus, rd_bus;
+	output [3:0] data_mask_bus;
+	output fc_bus;	
 
 	`include "States.vh"
 	reg [1:0] state;
@@ -62,9 +61,10 @@ module bus_arbitrator (
 
 	wire bus_used = state != STATE_IDLE;
 	
-	assign addr_bus = {ADDR_BUS_WIDTH{bus_used ? 1'bz : 1'b0}};
-	assign data_bus = {DATA_BUS_WIDTH{bus_used ? 1'bz : 1'b0}};
+	assign addr_bus = bus_used ? 32'bz : 32'b0;
+	assign data_bus = bus_used ? 32'bz : 32'b0;
 	assign wr_bus = bus_used ? 1'bz : 1'b0;
 	assign rd_bus = bus_used ? 1'bz : 1'b0;
+	assign data_mask_bus = bus_used ? 4'bz : 4'b0;
 	assign fc_bus = bus_used ? 1'bz : 1'b0;
 endmodule

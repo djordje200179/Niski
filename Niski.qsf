@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE EP4CE6E22C8
 set_global_assignment -name TOP_LEVEL_ENTITY Niski
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:42:07  OCTOBER 10, 2022"
-set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.1 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -92,7 +92,7 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
 set_global_assignment -name VHDL_SHOW_LMF_MAPPING_MESSAGES OFF
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH Counter -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH CPU -section_id eda_simulation
 set_global_assignment -name EDA_LAUNCH_CMD_LINE_TOOL OFF -section_id eda_simulation
 set_global_assignment -name EDA_MAP_ILLEGAL_CHARACTERS OFF -section_id eda_simulation
 set_global_assignment -name EDA_ENABLE_GLITCH_FILTERING OFF -section_id eda_simulation
@@ -137,34 +137,72 @@ set_location_assignment PIN_75 -to SDRAM_ADDR_PINS[10]
 set_location_assignment PIN_59 -to SDRAM_ADDR_PINS[11]
 set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
-set_global_assignment -name VERILOG_INPUT_VERSION SYSTEMVERILOG_2005
+set_global_assignment -name VERILOG_INPUT_VERSION VERILOG_2001
 set_global_assignment -name VERILOG_SHOW_LMF_MAPPING_MESSAGES OFF
-set_global_assignment -name EDA_TEST_BENCH_NAME Counter -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id Counter
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME counter_tb -section_id Counter
 set_global_assignment -name EDA_DESIGN_ENTRY_SYNTHESIS_TOOL "<None>"
 set_global_assignment -name EDA_INPUT_DATA_FORMAT EDIF -section_id eda_design_synthesis
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Counter.sv -section_id Counter -hdl_version SystemVerilog_2005
 set_location_assignment PIN_98 -to I2C_SDA_PIN
 set_location_assignment PIN_99 -to I2C_SCL_PIN
+set_global_assignment -name EDA_RUN_TOOL_AUTOMATICALLY OFF -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME CPU -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id CPU
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME cpu_tb -section_id CPU
+set_global_assignment -name EDA_NETLIST_WRITER_OUTPUT_DIR simulation -section_id eda_simulation
+set_global_assignment -name EDA_MAINTAIN_DESIGN_HIERARCHY ON -section_id eda_simulation
+set_global_assignment -name EDA_GENERATE_RTL_SIMULATION_COMMAND_SCRIPT ON -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU.sv -section_id CPU
+set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE AREA"
+set_global_assignment -name AUTO_RAM_RECOGNITION ON
+set_global_assignment -name AUTO_SHIFT_REGISTER_RECOGNITION AUTO
+set_global_assignment -name FITTER_EFFORT "AUTO FIT"
+set_global_assignment -name SEED 1
+set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 4
+set_global_assignment -name FITTER_AGGRESSIVE_ROUTABILITY_OPTIMIZATION AUTOMATICALLY
+set_global_assignment -name OPTIMIZE_TIMING OFF
+set_global_assignment -name CYCLONEII_OPTIMIZATION_TECHNIQUE AREA
+set_global_assignment -name ADV_NETLIST_OPT_SYNTH_WYSIWYG_REMAP OFF
+set_global_assignment -name REMOVE_REDUNDANT_LOGIC_CELLS ON
+set_global_assignment -name MUX_RESTRUCTURE ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC_FOR_AREA ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_MAP_LOGIC_TO_MEMORY_FOR_AREA ON
+set_global_assignment -name ENABLE_DRC_SETTINGS ON
+set_global_assignment -name AUTO_RAM_TO_LCELL_CONVERSION ON
+set_global_assignment -name AUTO_RESOURCE_SHARING ON
+set_location_assignment PIN_11 -to LCD_DATA_PINS[7]
+set_location_assignment PIN_7 -to LCD_DATA_PINS[6]
+set_location_assignment PIN_10 -to LCD_DATA_PINS[5]
+set_location_assignment PIN_2 -to LCD_DATA_PINS[4]
+set_location_assignment PIN_3 -to LCD_DATA_PINS[3]
+set_location_assignment PIN_144 -to LCD_DATA_PINS[2]
+set_location_assignment PIN_1 -to LCD_DATA_PINS[1]
+set_location_assignment PIN_142 -to LCD_DATA_PINS[0]
+set_location_assignment PIN_143 -to LCD_E_PIN
+set_location_assignment PIN_141 -to LCD_RS_PIN
+set_location_assignment PIN_138 -to LCD_RW_PIN
 set_global_assignment -name BDF_FILE Niski.bdf
 set_global_assignment -name VERILOG_FILE CPU/CPU.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/States.vh
-set_global_assignment -name VERILOG_FILE CPU/Registers/File.v
-set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Registers/GPRs.vh
+set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Instructions.vh
+set_global_assignment -name VERILOG_FILE CPU/BranchTester.v
+set_global_assignment -name VERILOG_FILE CPU/MemoryAccess.v
+set_global_assignment -name VERILOG_FILE CPU/RegFile.v
+set_global_assignment -name VERILOG_FILE CPU/ALU.v
+set_global_assignment -name VERILOG_FILE CPU/PC.v
+set_global_assignment -name VERILOG_FILE CPU/IR.v
 set_global_assignment -name VERILOG_FILE Bus/Arbitrator/Arbitrator.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Bus/Arbitrator/States.vh
 set_global_assignment -name VERILOG_FILE Memory/BusInterface.v
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/RAM.sv
 set_global_assignment -name VERILOG_FILE Memory/ROM.v
-set_global_assignment -name VERILOG_FILE Memory/RAM.v
 set_global_assignment -name VERILOG_FILE Components/Clocks.v
 set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v
 set_global_assignment -name VERILOG_FILE Components/PWM.v
-set_global_assignment -name SIGNALTAP_FILE Debugging.stp
 set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
+set_global_assignment -name VERILOG_FILE Devices/Buzzer/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/Controller.v
+set_global_assignment -name VERILOG_FILE Devices/LCD/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/LEDs/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/LEDs/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/I2C/Controller.v
@@ -172,6 +210,7 @@ set_global_assignment -name VERILOG_INCLUDE_FILE Devices/I2C/States.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/PS2Keyboard/Keys.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Mappers/Digit.v
+set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Mappers/Digit.v
 set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Mappers/HexNumber.v
@@ -183,5 +222,5 @@ set_global_assignment -name VERILOG_FILE Devices/IR/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/UART/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/UART/RX/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/UART/TX/Controller.v
-set_global_assignment -name SYSTEMVERILOG_FILE Tests/Counter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Tests/CPU.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

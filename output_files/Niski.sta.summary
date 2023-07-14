@@ -1,0 +1,245 @@
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'CLK_PIN'
+Slack : -38.264
+TNS   : -36698.028
+
+Type  : Slow 1200mV 85C Model Setup 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -3.328
+TNS   : -42.547
+
+Type  : Slow 1200mV 85C Model Setup 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -0.061
+TNS   : -0.061
+
+Type  : Slow 1200mV 85C Model Setup 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 0.026
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -2.733
+TNS   : -2.733
+
+Type  : Slow 1200mV 85C Model Hold 'CLK_PIN'
+Slack : -2.354
+TNS   : -2.354
+
+Type  : Slow 1200mV 85C Model Hold 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -2.141
+TNS   : -2.141
+
+Type  : Slow 1200mV 85C Model Hold 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 0.454
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -2.992
+TNS   : -14.960
+
+Type  : Slow 1200mV 85C Model Recovery 'CLK_PIN'
+Slack : -2.344
+TNS   : -205.710
+
+Type  : Slow 1200mV 85C Model Recovery 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -2.201
+TNS   : -4.402
+
+Type  : Slow 1200mV 85C Model Recovery 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.968
+TNS   : -3.936
+
+Type  : Slow 1200mV 85C Model Removal 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 2.319
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 2.564
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'CLK_PIN'
+Slack : 2.703
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : 2.821
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLK_PIN'
+Slack : -3.201
+TNS   : -1913.170
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -1.487
+TNS   : -26.766
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.487
+TNS   : -2.974
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -1.487
+TNS   : -2.974
+
+Type  : Slow 1200mV 0C Model Setup 'CLK_PIN'
+Slack : -36.181
+TNS   : -34794.168
+
+Type  : Slow 1200mV 0C Model Setup 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -3.013
+TNS   : -37.731
+
+Type  : Slow 1200mV 0C Model Setup 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 0.042
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 0.116
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -2.550
+TNS   : -2.550
+
+Type  : Slow 1200mV 0C Model Hold 'CLK_PIN'
+Slack : -2.175
+TNS   : -2.175
+
+Type  : Slow 1200mV 0C Model Hold 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -1.954
+TNS   : -1.954
+
+Type  : Slow 1200mV 0C Model Hold 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 0.401
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -2.631
+TNS   : -13.155
+
+Type  : Slow 1200mV 0C Model Recovery 'CLK_PIN'
+Slack : -2.064
+TNS   : -181.112
+
+Type  : Slow 1200mV 0C Model Recovery 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -1.942
+TNS   : -3.884
+
+Type  : Slow 1200mV 0C Model Recovery 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.694
+TNS   : -3.388
+
+Type  : Slow 1200mV 0C Model Removal 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 2.021
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 2.278
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'CLK_PIN'
+Slack : 2.397
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : 2.540
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLK_PIN'
+Slack : -3.201
+TNS   : -1913.170
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -1.487
+TNS   : -26.766
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.487
+TNS   : -2.974
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -1.487
+TNS   : -2.974
+
+Type  : Fast 1200mV 0C Model Setup 'CLK_PIN'
+Slack : -17.041
+TNS   : -16285.606
+
+Type  : Fast 1200mV 0C Model Setup 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -0.846
+TNS   : -9.052
+
+Type  : Fast 1200mV 0C Model Setup 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 0.539
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 0.579
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.216
+TNS   : -1.216
+
+Type  : Fast 1200mV 0C Model Hold 'CLK_PIN'
+Slack : -1.100
+TNS   : -1.100
+
+Type  : Fast 1200mV 0C Model Hold 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -0.989
+TNS   : -0.989
+
+Type  : Fast 1200mV 0C Model Hold 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 0.186
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -0.830
+TNS   : -4.150
+
+Type  : Fast 1200mV 0C Model Recovery 'CLK_PIN'
+Slack : -0.553
+TNS   : -48.287
+
+Type  : Fast 1200mV 0C Model Recovery 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -0.496
+TNS   : -0.992
+
+Type  : Fast 1200mV 0C Model Recovery 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -0.423
+TNS   : -0.846
+
+Type  : Fast 1200mV 0C Model Removal 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : 1.045
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : 1.122
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'CLK_PIN'
+Slack : 1.165
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : 1.262
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLK_PIN'
+Slack : -3.000
+TNS   : -1336.626
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:mhz_generator|slow_clk'
+Slack : -1.000
+TNS   : -18.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clocks:inst13|frequency_divider:khz_generator|slow_clk'
+Slack : -1.000
+TNS   : -2.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'sev_seg_displays_controller:inst10|frequency_divider:refresh_tick_generator|slow_clk'
+Slack : -1.000
+TNS   : -2.000
+
+------------------------------------------------------------

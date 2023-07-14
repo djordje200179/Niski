@@ -31,22 +31,21 @@ module sev_seg_displays_controller (
 		.en(1), 
 		.value(current_digit)
 	);
+	
+	reg [3:0] decoded_digit;
+	always @* begin
+		case (current_digit)
+		2'd0: decoded_digit = 4'b1110;
+		2'd1: decoded_digit = 4'b1101;
+		2'd2: decoded_digit = 4'b1011;
+		2'd3: decoded_digit = 4'b0111;
+		endcase
+	end
+
+	assign select_pins = en ? decoded_digit : 4'hf;
 
 	wire [6:0] segments [3:0];
 	assign {segments[3], segments[2], segments[1], segments[0]} = {digit_3, digit_2, digit_1, digit_0};
 
 	assign segment_pins = en ? ~{dots[current_digit], segments[current_digit]} : 8'hff;
-	
-	function [3:0] decode_select_pins(input [1:0] index);
-		begin
-			case (index)
-				2'd0: decode_select_pins = 4'b1110;
-				2'd1: decode_select_pins = 4'b1101;
-				2'd2: decode_select_pins = 4'b1011;
-				2'd3: decode_select_pins = 4'b0111;
-			endcase
-		end
-	endfunction
-	
-	assign select_pins = en ? decode_select_pins(current_digit) : 4'hf;
 endmodule

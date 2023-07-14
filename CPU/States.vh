@@ -1,9 +1,9 @@
-`ifndef CPU_STATES
-`define CPU_STATES
+localparam STATE_RD_INST_REQ = 8'd0,
+		   STATE_RD_INST_WAIT = 8'd1;
 
-localparam STATE_IDLE				= 5'd0,
-		   STATE_WAITING_BUS_GRANT	= 5'd1,
-		   STATE_WAITING_DATA		= 5'd2,
-		   STATE_ACCEPTED_DATA		= 5'd3;
+localparam STATE_EXEC_INST	= 8'd100,
+		   STATE_EXEC_INST_MEM_WAIT = 8'd101;
 
-`endif
+localparam STATE_CHECK_INTR	= 8'd200;
+
+localparam STATE_NEXT_INST	= 8'd255;

@@ -1,0 +1,183 @@
+Flow report for Niski
+Wed Jul 12 09:36:00 2023
+Quartus Prime Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. EDA Netlist Writer Summary
+  2. Legal Notice
+  3. Flow Summary
+  4. Flow Settings
+  5. Flow Non-Default Global Settings
+  6. Flow Elapsed Time
+  7. Flow OS Summary
+  8. Flow Log
+  9. Flow Messages
+ 10. Flow Suppressed Messages
+
+
+
++-------------------------------------------------------------------+
+; EDA Netlist Writer Summary                                        ;
++---------------------------+---------------------------------------+
+; EDA Netlist Writer Status ; Successful - Wed Jul 12 09:36:00 2023 ;
+; Revision Name             ; Niski                                 ;
+; Top-level Entity Name     ; Niski                                 ;
+; Family                    ; Cyclone IV E                          ;
+; Simulation Files Creation ; Successful                            ;
++---------------------------+---------------------------------------+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++-------------------------------------------------------------------------------------+
+; Flow Summary                                                                        ;
++------------------------------------+------------------------------------------------+
+; Flow Status                        ; Successful - Wed Jul 12 09:36:00 2023          ;
+; Quartus Prime Version              ; 22.1std.1 Build 917 02/14/2023 SC Lite Edition ;
+; Revision Name                      ; Niski                                          ;
+; Top-level Entity Name              ; Niski                                          ;
+; Family                             ; Cyclone IV E                                   ;
+; Device                             ; EP4CE6E22C8                                    ;
+; Timing Models                      ; Final                                          ;
+; Total logic elements               ; 3,079 / 6,272 ( 49 % )                         ;
+;     Total combinational functions  ; 3,079 / 6,272 ( 49 % )                         ;
+;     Dedicated logic registers      ; 1,242 / 6,272 ( 20 % )                         ;
+; Total registers                    ; 1242                                           ;
+; Total pins                         ; 79 / 92 ( 86 % )                               ;
+; Total virtual pins                 ; 0                                              ;
+; Total memory bits                  ; 143,360 / 276,480 ( 52 % )                     ;
+; Embedded Multiplier 9-bit elements ; 0 / 30 ( 0 % )                                 ;
+; Total PLLs                         ; 0 / 2 ( 0 % )                                  ;
++------------------------------------+------------------------------------------------+
+
+
++-----------------------------------------+
+; Flow Settings                           ;
++-------------------+---------------------+
+; Option            ; Setting             ;
++-------------------+---------------------+
+; Start date & time ; 07/12/2023 09:33:56 ;
+; Main task         ; Compilation         ;
+; Revision Name     ; Niski               ;
++-------------------+---------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                                                                ;
++-------------------------------------------------+----------------------------------------+--------------------+-------------+-----------------------------------+
+; Assignment Name                                 ; Value                                  ; Default Value      ; Entity Name ; Section Id                        ;
++-------------------------------------------------+----------------------------------------+--------------------+-------------+-----------------------------------+
+; ALM_REGISTER_PACKING_EFFORT                     ; High                                   ; Medium             ; --          ; --                                ;
+; AUTO_RAM_TO_LCELL_CONVERSION                    ; On                                     ; Off                ; --          ; --                                ;
+; AUTO_RESOURCE_SHARING                           ; On                                     ; Off                ; --          ; --                                ;
+; COMPILER_SIGNATURE_ID                           ; 9447192546437.168914723606888          ; --                 ; --          ; --                                ;
+; CYCLONEII_OPTIMIZATION_TECHNIQUE                ; Area                                   ; Balanced           ; --          ; --                                ;
+; EDA_DESIGN_INSTANCE_NAME                        ; NA                                     ; --                 ; --          ; CPU                               ;
+; EDA_ENABLE_GLITCH_FILTERING                     ; Off                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_GENERATE_FUNCTIONAL_NETLIST                 ; Off                                    ; --                 ; --          ; eda_board_design_timing           ;
+; EDA_GENERATE_FUNCTIONAL_NETLIST                 ; Off                                    ; --                 ; --          ; eda_board_design_boundary_scan    ;
+; EDA_GENERATE_FUNCTIONAL_NETLIST                 ; Off                                    ; --                 ; --          ; eda_board_design_signal_integrity ;
+; EDA_GENERATE_FUNCTIONAL_NETLIST                 ; Off                                    ; --                 ; --          ; eda_board_design_symbol           ;
+; EDA_GENERATE_RTL_SIMULATION_COMMAND_SCRIPT      ; On                                     ; --                 ; --          ; eda_simulation                    ;
+; EDA_INPUT_DATA_FORMAT                           ; Edif                                   ; --                 ; --          ; eda_design_synthesis              ;
+; EDA_LAUNCH_CMD_LINE_TOOL                        ; Off                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_MAINTAIN_DESIGN_HIERARCHY                   ; On                                     ; --                 ; --          ; eda_simulation                    ;
+; EDA_MAP_ILLEGAL_CHARACTERS                      ; Off                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_NATIVELINK_SIMULATION_TEST_BENCH            ; CPU                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_NETLIST_WRITER_OUTPUT_DIR                   ; simulation                             ; --                 ; --          ; eda_simulation                    ;
+; EDA_OUTPUT_DATA_FORMAT                          ; Systemverilog Hdl                      ; --                 ; --          ; eda_simulation                    ;
+; EDA_RUN_TOOL_AUTOMATICALLY                      ; Off                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_SIMULATION_TOOL                             ; QuestaSim (SystemVerilog)              ; <None>             ; --          ; --                                ;
+; EDA_TEST_BENCH_ENABLE_STATUS                    ; TEST_BENCH_MODE                        ; --                 ; --          ; eda_simulation                    ;
+; EDA_TEST_BENCH_FILE                             ; Tests/CPU.sv                           ; --                 ; --          ; CPU                               ;
+; EDA_TEST_BENCH_MODULE_NAME                      ; cpu_tb                                 ; --                 ; --          ; CPU                               ;
+; EDA_TEST_BENCH_NAME                             ; CPU                                    ; --                 ; --          ; eda_simulation                    ;
+; EDA_TIME_SCALE                                  ; 1 ps                                   ; --                 ; --          ; eda_simulation                    ;
+; ENABLE_DRC_SETTINGS                             ; On                                     ; Off                ; --          ; --                                ;
+; ENABLE_SIGNALTAP                                ; Off                                    ; --                 ; --          ; --                                ;
+; MAX_CORE_JUNCTION_TEMP                          ; 85                                     ; --                 ; --          ; --                                ;
+; MIN_CORE_JUNCTION_TEMP                          ; 0                                      ; --                 ; --          ; --                                ;
+; MUX_RESTRUCTURE                                 ; On                                     ; Auto               ; --          ; --                                ;
+; NOMINAL_CORE_SUPPLY_VOLTAGE                     ; 1.2V                                   ; --                 ; --          ; --                                ;
+; OPTIMIZATION_MODE                               ; Aggressive Area                        ; Balanced           ; --          ; --                                ;
+; OPTIMIZE_TIMING                                 ; Off                                    ; Normal compilation ; --          ; --                                ;
+; PARTITION_COLOR                                 ; -- (Not supported for targeted family) ; --                 ; --          ; Top                               ;
+; PARTITION_FITTER_PRESERVATION_LEVEL             ; -- (Not supported for targeted family) ; --                 ; --          ; Top                               ;
+; PARTITION_NETLIST_TYPE                          ; -- (Not supported for targeted family) ; --                 ; --          ; Top                               ;
+; PHYSICAL_SYNTHESIS_COMBO_LOGIC_FOR_AREA         ; On                                     ; Off                ; --          ; --                                ;
+; PHYSICAL_SYNTHESIS_MAP_LOGIC_TO_MEMORY_FOR_AREA ; On                                     ; Off                ; --          ; --                                ;
+; PLACEMENT_EFFORT_MULTIPLIER                     ; 4                                      ; 1.0                ; --          ; --                                ;
+; POWER_BOARD_THERMAL_MODEL                       ; None (CONSERVATIVE)                    ; --                 ; --          ; --                                ;
+; POWER_PRESET_COOLING_SOLUTION                   ; 23 MM HEAT SINK WITH 200 LFPM AIRFLOW  ; --                 ; --          ; --                                ;
+; PROJECT_OUTPUT_DIRECTORY                        ; output_files                           ; --                 ; --          ; --                                ;
+; REMOVE_REDUNDANT_LOGIC_CELLS                    ; On                                     ; Off                ; --          ; --                                ;
+; SMART_RECOMPILE                                 ; On                                     ; Off                ; --          ; --                                ;
+; USE_SIGNALTAP_FILE                              ; Debugging.stp                          ; --                 ; --          ; --                                ;
+; VERILOG_SHOW_LMF_MAPPING_MESSAGES               ; Off                                    ; --                 ; --          ; --                                ;
+; VHDL_INPUT_VERSION                              ; VHDL_2008                              ; VHDL_1993          ; --          ; --                                ;
+; VHDL_SHOW_LMF_MAPPING_MESSAGES                  ; Off                                    ; --                 ; --          ; --                                ;
++-------------------------------------------------+----------------------------------------+--------------------+-------------+-----------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                        ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis ; 00:00:56     ; 1.0                     ; 4853 MB             ; 00:01:17                           ;
+; Fitter               ; 00:00:27     ; 1.4                     ; 5707 MB             ; 00:00:23                           ;
+; Assembler            ; 00:00:03     ; 1.0                     ; 4708 MB             ; 00:00:01                           ;
+; Timing Analyzer      ; 00:00:11     ; 1.6                     ; 4870 MB             ; 00:00:08                           ;
+; Design Assistant     ; 00:00:05     ; 1.0                     ; 4668 MB             ; 00:00:02                           ;
+; EDA Netlist Writer   ; 00:00:08     ; 1.0                     ; 4668 MB             ; 00:00:05                           ;
+; Total                ; 00:01:50     ; --                      ; --                  ; 00:01:56                           ;
++----------------------+--------------+-------------------------+---------------------+------------------------------------+
+
+
++------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                    ;
++----------------------+------------------+------------+------------+----------------+
+; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++----------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
+; Fitter               ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
+; Assembler            ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
+; Timing Analyzer      ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
+; Design Assistant     ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
+; EDA Netlist Writer   ; Djordje          ; Windows 10 ; 10.0       ; x86_64         ;
++----------------------+------------------+------------+------------+----------------+
+
+
+------------
+; Flow Log ;
+------------
+quartus_map --read_settings_files=on --write_settings_files=off Niski -c Niski
+quartus_fit --read_settings_files=off --write_settings_files=off Niski -c Niski
+quartus_asm --read_settings_files=off --write_settings_files=off Niski -c Niski
+quartus_sta Niski -c Niski
+quartus_drc Niski -c Niski
+quartus_eda --read_settings_files=off --write_settings_files=off Niski -c Niski
+
+
+
