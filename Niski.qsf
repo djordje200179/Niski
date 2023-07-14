@@ -189,8 +189,7 @@ set_global_assignment -name VERILOG_FILE CPU/RegFile.v
 set_global_assignment -name VERILOG_FILE CPU/ALU.v
 set_global_assignment -name VERILOG_FILE CPU/PC.v
 set_global_assignment -name VERILOG_FILE CPU/IR.v
-set_global_assignment -name VERILOG_FILE Bus/Arbitrator/Arbitrator.v
-set_global_assignment -name VERILOG_INCLUDE_FILE Bus/Arbitrator/States.vh
+set_global_assignment -name VERILOG_FILE Bus/Arbitrator.v
 set_global_assignment -name VERILOG_FILE Memory/BusInterface.v
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/RAM.sv
 set_global_assignment -name VERILOG_FILE Memory/ROM.v

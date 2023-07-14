@@ -15,8 +15,10 @@ module bus_arbitrator (
 	output [3:0] data_mask_bus;
 	output fc_bus;	
 
-	`include "States.vh"
 	reg [1:0] state;
+	localparam STATE_IDLE	= 2'd0,
+			   STATE_CPU	= 2'd1,
+			   STATE_DMA	= 2'd2;
 
 	assign cpu_grant = state == STATE_CPU;
 	assign dma_grant = state == STATE_DMA;
