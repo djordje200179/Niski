@@ -34,7 +34,7 @@ module memory_bus_interface (
 	assign data_bus = read_req ? mem_data_out >> (addr_bus[1:0] * 8) : 32'bz,
 		   fc_bus = req ? transfer_completed : 1'bz;
 
-	assign mem_addr = addr_bus >> 2,
+	assign mem_addr = (addr_bus - START_ADDR) >> 2,
 		   mem_data_in = data_bus << (addr_bus[1:0] * 8),
 		   mem_wr = write_req,
 		   mem_wr_mask = data_mask_bus << addr_bus[1:0];

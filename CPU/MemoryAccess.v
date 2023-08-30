@@ -13,7 +13,7 @@ module cpu_memory_access (
 	input wr_req, rd_req,
 	input [31:0] addr,
 	input [31:0] data_out,
-	output reg [31:0] data_in,
+	output [31:0] data_in,
 	input [3:0] data_mask,
 	output done
 );
@@ -29,16 +29,18 @@ module cpu_memory_access (
 	reg is_wr;
 
 	assign addr_bus = bus_grant ? mar : 32'bz,
-		   data_bus = bus_grant && wr_req ? mdr: 32'bz,
+		   data_bus = (bus_grant && wr_req) ? mdr: 32'bz,
 		   rd_bus = bus_grant ? !is_wr : 1'bz,
 		   wr_bus = bus_grant ? is_wr : 1'bz,
 		   data_mask_bus = bus_grant ? mdr_mask : 4'bz;
 
-	assign done = state == STATE_DONE;
+	assign done = state == STATE_DONE,
+		   data_in = mdr;
 
 	task reset;
 		begin
 			state <= STATE_WAITING_REQ;
+			bus_req <= 1'b0;
 		end
 	endtask
 
@@ -67,7 +69,7 @@ module cpu_memory_access (
 
 					bus_req <= 1'b0;
 					if (!is_wr)
-						data_in <= mdr;
+						mdr <= data_bus;
 				end
 			end
 			STATE_DONE: begin

@@ -4,7 +4,7 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 2022  Intel Corporation. All rights reserved.
+Copyright (C) 2023  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
@@ -32,10 +32,17 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 88)(pt 16 88))
 	)
 	(port
-		(pt 0 72)
+		(pt 0 56)
 		(input)
 		(text "en" (rect 0 0 16 15)(font "Arial" ))
-		(text "en" (rect 24 64 40 79)(font "Arial" ))
+		(text "en" (rect 24 48 40 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 64 40 79)(font "Arial" ))
 		(line (pt 0 72)(pt 16 72))
 	)
 	(port

@@ -10,10 +10,12 @@ module buttons_controller (
 	output btn_0, btn_1, btn_2, btn_3, btn_rst;
 	
 	input [4:0] button_pins;
+
+	assign btn_rst = ~button_pins[4];
 	
 	generate
 		genvar i;
-		for(i = 0; i < 5; i = i + 1) begin : debouncers
+		for(i = 0; i < 4; i = i + 1) begin : debouncers
 			wire debounced_input;
 			
 			case (i)
@@ -21,7 +23,6 @@ module buttons_controller (
 			1: assign btn_1 = debounced_input;
 			2: assign btn_2 = debounced_input;
 			3: assign btn_3 = debounced_input;
-			4: assign btn_rst = debounced_input;
 			endcase
 			
 			debouncer#(DEBOUNCING_TICKS) debouncer (

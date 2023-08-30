@@ -41,6 +41,9 @@ module cpu (
 	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
 
+	`include "States.vh"
+	reg [7:0] state;
+
 	cpu_memory_access memory_access_unit (
 		.clk(clk), .rst(rst),
 
@@ -49,7 +52,7 @@ module cpu (
 		.rd_bus(rd_bus), .wr_bus(wr_bus), .fc_bus(fc_bus),
 
 		.wr_req(ma_wr_req), .rd_req(ma_rd_req),
-		.addr((state == STATE_RD_INST_REQ) ? pc : gpr_src1 + inst_imm), 
+		.addr((state == STATE_RD_INST_REQ || state == STATE_RD_INST_WAIT) ? pc : gpr_src1 + inst_imm), 
 		.data_out(gpr_src2), .data_in(ma_data), .data_mask(ma_mask),
 		.done(ma_done)
 	);
@@ -101,10 +104,7 @@ module cpu (
 		.operand_b(alu_operand_b),
 		.result(alu_out)
 	);
-
-	`include "States.vh"
-	reg [7:0] state;
-
+	
 	`include "Instructions.vh"
 
 	always @* begin
@@ -187,6 +187,8 @@ module cpu (
 	task reset;
 		begin
 			state <= STATE_RD_INST_REQ;
+			ma_wr_req <= 1'b0;
+			ma_rd_req <= 1'b0;
 		end
 	endtask
 

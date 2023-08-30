@@ -1,17 +1,17 @@
 module clocks (
-	clk, en, 
+	clk, rst, en, 
 	clk_50_mhz, clk_1_mhz, clk_1_khz, clk_1_hz
 );
 	parameter INPUT_FREQ = 50_000_000;
 	
-	input clk, en;
+	input clk, rst, en;
 	
 	output clk_50_mhz, clk_1_mhz, clk_1_khz, clk_1_hz;
 	
 	assign clk_50_mhz = clk;
-	frequency_divider#(50) mhz_generator (clk, 0, en, clk_1_mhz);
-	frequency_divider#(1000) khz_generator (clk_1_mhz, 0, en, clk_1_khz),
-							 hz_generator (clk_1_khz, 0, en, clk_1_hz);
+	frequency_divider#(50) mhz_generator (clk, rst, en, clk_1_mhz);
+	frequency_divider#(1000) khz_generator (clk_1_mhz, rst, en, clk_1_khz),
+							 hz_generator (clk_1_khz, rst, en, clk_1_hz);
 endmodule
 
 module frequency_divider (
