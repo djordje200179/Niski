@@ -1,14 +1,10 @@
 .global _entry
 .extern start
-
-.data
-.align 16
-.space 0x1000
-_main_stack:
+.extern STACK_END_ADDR
 
 .text
 _entry:
-    la sp, _main_stack
+    la sp, STACK_END_ADDR
 
     call start
 spin:

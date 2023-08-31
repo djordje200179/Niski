@@ -10,7 +10,7 @@ ASM_FLAGS = --warn --fatal-warnings -march=rv32em -mabi=ilp32e
 
 LD = riscv64-linux-gnu-ld
 LD_SCRIPT = linker.ld
-LD_FLAGS = -T $(LD_SCRIPT) -melf32lriscv -s
+LD_FLAGS = -T $(LD_SCRIPT) -melf32lriscv --print-memory-usage
 
 OBJDUMP = riscv64-linux-gnu-objdump
 OBJDUMP_FLAGS =
