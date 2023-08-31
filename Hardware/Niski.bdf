@@ -1882,46 +1882,6 @@ https://fpgasoftware.intel.com/eula.
 	(annotation_block (parameter)(rect 976 360 1181 400))
 )
 (symbol
-	(rect 976 664 1240 744)
-	(text "rom" (rect 5 0 30 15)(font "Arial" ))
-	(text "inst18" (rect 8 64 48 83)(font "Intel Clear" ))
-	(port
-		(pt 0 56)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 48 41 63)(font "Arial" ))
-		(line (pt 0 56)(pt 16 56))
-	)
-	(port
-		(pt 0 24)
-		(input)
-		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
-		(text "addr" (rect 24 16 53 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
-	)
-	(port
-		(pt 0 40)
-		(output)
-		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
-		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
-		(line (pt 16 40)(pt 0 40)(line_width 3))
-	)
-	(parameter
-		"ADDR_BITS"
-		"11"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"MEM_FILE"
-		"Software/out/rom.mem"
-		""
-		(type "PARAMETER_STRING")	)
-	(drawing
-		(rectangle (rect 16 16 248 64))
-	)
-	(annotation_block (parameter)(rect 976 600 1291 660))
-)
-(symbol
 	(rect 536 664 896 840)
 	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
 	(text "inst22" (rect 8 160 48 179)(font "Intel Clear" ))
@@ -2140,6 +2100,46 @@ https://fpgasoftware.intel.com/eula.
 		(rectangle (rect 16 16 344 160))
 	)
 	(annotation_block (parameter)(rect 536 336 822 396))
+)
+(symbol
+	(rect 976 664 1240 744)
+	(text "rom" (rect 5 0 30 15)(font "Arial" ))
+	(text "inst18" (rect 8 64 48 83)(font "Intel Clear" ))
+	(port
+		(pt 0 56)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 48 41 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
+		(text "addr" (rect 24 16 53 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(output)
+		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
+		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"ADDR_BITS"
+		"11"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"MEM_FILE"
+		"../Software/out/rom.mem"
+		""
+		(type "PARAMETER_STRING")	)
+	(drawing
+		(rectangle (rect 16 16 248 64))
+	)
+	(annotation_block (parameter)(rect 976 600 1302 660))
 )
 (connector
 	(pt 1976 672)
@@ -3031,6 +3031,6 @@ https://fpgasoftware.intel.com/eula.
 (rectangle (rect 632 -40 752 56))
 (rectangle (rect 456 872 1176 1144))
 (rectangle (rect 456 328 1264 584))
-(rectangle (rect 456 592 1296 848))
+(rectangle (rect 456 592 1312 848))
 (rectangle (rect 456 1160 1168 1424))
 (rectangle (rect 456 1432 1360 1736))

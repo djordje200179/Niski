@@ -237,7 +237,7 @@ rom	b2v_inst18(
 	.addr(SYNTHESIZED_WIRE_12),
 	.data_out(SYNTHESIZED_WIRE_18));
 	defparam	b2v_inst18.ADDR_BITS = 12;
-	defparam	b2v_inst18.MEM_FILE = "../Software/out/rom.mem";
+	defparam	b2v_inst18.MEM_FILE = "../../Software/out/rom.mem";
 
 
 
