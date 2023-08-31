@@ -1,7 +1,7 @@
 #include "devices/sev_seg.h"
 
 static char* ctrl_addr = (char*) 0x70000020;
-static uint32_t* data_digits_addr = (char*) 0x70000028;
+static uint32_t* data_digits_addr = (uint32_t*) 0x70000028;
 static char* data_dots_addr = (char*) 0x70000030;
 
 void sev_seg_on(void) {

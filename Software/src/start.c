@@ -1,4 +1,4 @@
-#include "devices/leds.c"
+#include "devices/sev_seg.h"
 
 void calculate() {
 	int a = 0, b = 1;
@@ -13,12 +13,12 @@ void calculate() {
 }
 
 void show() {
-	leds_on();
+	sev_seg_on();
 	
 	char value;
 	asm ("mv %0, s1" : "=r" (value));
 
-	leds_set(value);
+	sev_seg_set_number(value);
 }
 
 void start() {
