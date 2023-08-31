@@ -9,5 +9,5 @@ module buzzer_controller (
 	
 	output buzzer_pin;
 	
-	assign buzzer_pin = en ? buzz : 1'b0;
+	assign buzzer_pin = en ? ~buzz : 1'b1;
 endmodule
