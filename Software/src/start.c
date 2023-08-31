@@ -1,6 +1,6 @@
 #include "devices/sev_seg.h"
 
-void calculate() {
+int calculate() {
 	int a = 0, b = 1;
 
 	for (int i = 0; i < 10; i++) {
@@ -9,22 +9,16 @@ void calculate() {
 		b = c;
 	}
 
-	asm ("mv s1, %0" : : "r" (a));
+	return a;
 }
 
-void show() {
+void show(int value) {
 	sev_seg_on();
 	
-	char value;
-	asm ("mv %0, s1" : "=r" (value));
-
 	sev_seg_set_number(value);
 }
 
 void start() {
-	void (*fun)() = &calculate;
-	fun();
-
-	fun = &show;
-	fun();
+	int value = calculate();
+	show(value);
 }
