@@ -1,3 +1,5 @@
+#include "devices/leds.c"
+
 void calculate() {
 	int a = 0, b = 1;
 
@@ -11,15 +13,12 @@ void calculate() {
 }
 
 void show() {
-	char* leds_ctrl_addr = (char*) 0x70000000;
-	char* leds_data_addr = (char*) 0x70000008;
-
-	*leds_ctrl_addr = 0b1;
-
+	leds_on();
+	
 	char value;
 	asm ("mv %0, s1" : "=r" (value));
 
-	*leds_data_addr = value;
+	leds_set(value);
 }
 
 void start() {
