@@ -35,10 +35,10 @@ module sev_seg_displays_controller (
 	reg [3:0] decoded_digit;
 	always @* begin
 		case (current_digit)
-		2'd0: decoded_digit = 4'b1110;
-		2'd1: decoded_digit = 4'b1101;
-		2'd2: decoded_digit = 4'b1011;
-		2'd3: decoded_digit = 4'b0111;
+		2'd0: decoded_digit = 4'b0111;
+		2'd1: decoded_digit = 4'b1011;
+		2'd2: decoded_digit = 4'b1101;
+		2'd3: decoded_digit = 4'b1110;
 		endcase
 	end
 

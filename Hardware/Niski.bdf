@@ -1491,7 +1491,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (symbol
 	(rect 536 1544 784 1720)
-	(text "sev_seg_bus_interface" (rect 5 0 157 15)(font "Arial" ))
+	(text "sev_seg_displays_bus_interface" (rect 5 0 157 15)(font "Arial" ))
 	(text "inst7" (rect 8 160 39 175)(font "Arial" ))
 	(port
 		(pt 0 152)

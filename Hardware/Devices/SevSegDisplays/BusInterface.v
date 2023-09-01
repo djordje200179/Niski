@@ -1,4 +1,4 @@
-module sev_seg_bus_interface (
+module sev_seg_displays_bus_interface (
 	clk, rst,
     ctrl_en, ctrl_digit_0, ctrl_digit_1, ctrl_digit_2, ctrl_digit_3, ctrl_dots,
 	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus

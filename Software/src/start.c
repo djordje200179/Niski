@@ -1,4 +1,4 @@
-#include "devices/sev_seg.h"
+#include "devices/sev_seg_displays.h"
 
 int calculate() {
 	int a = 0, b = 1;
@@ -13,12 +13,12 @@ int calculate() {
 }
 
 void show(int value) {
-	sev_seg_on();
+	sev_seg_displays_on();
 	
-	sev_seg_set_digit(0, 0);
-	sev_seg_set_digit(1, 1);
-	sev_seg_set_digit(2, 2);
-	sev_seg_set_digit(3, 3);
+	sev_seg_displays_set_digit(0, 0);
+	sev_seg_displays_set_digit(1, 1);
+	sev_seg_displays_set_digit(2, 2);
+	sev_seg_displays_set_digit(3, 3);
 }
 
 void start() {
