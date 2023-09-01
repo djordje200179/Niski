@@ -23,8 +23,7 @@ module cpu (
 	wire ma_done;
 
 	wire [4:0] inst_rd, inst_rs1, inst_rs2;
-	wire [2:0] inst_oper;
-	wire [6:0] inst_mod;
+	wire [9:0] inst_mod;
 	wire [31:0] inst_imm;
 	wire inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
 		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, inst_system;
@@ -72,7 +71,7 @@ module cpu (
 		.wr(state == STATE_RD_INST_WAIT && ma_done),
 
 		.rd(inst_rd), .rs1(inst_rs1), .rs2(inst_rs2),
-		.oper(inst_oper), .mod(inst_mod),
+		.mod(inst_mod),
 		.imm(inst_imm),
 		
 		.inst_lui(inst_lui), .inst_auipc(inst_auipc), 
@@ -84,7 +83,7 @@ module cpu (
 	);
 	
 	cpu_branch_tester branch_tester_unit (
-		.operation(inst_oper),
+		.mod(inst_mod[2:0]),
 		.operand_a(gpr_src1), .operand_b(gpr_src2),
 		.condition_satisfied(branch_cond)
 	);
@@ -99,10 +98,8 @@ module cpu (
 	);
 
 	cpu_alu alu_unit (
-		.operation(inst_oper),
 		.mod(inst_mod),
-		.operand_a(gpr_src1),
-		.operand_b(alu_operand_b),
+		.operand_a(gpr_src1), .operand_b(alu_operand_b),
 		.result(alu_out)
 	);
 	
@@ -112,7 +109,7 @@ module cpu (
 		ma_mask = 4'b1111;
 
 		if (state == STATE_EXEC_INST) begin
-			case (inst_oper[1:0])
+			case (inst_mod[1:0])
 			2'b00: ma_mask = 4'b0001;
 			2'b01: ma_mask = 4'b0011;
 			endcase
@@ -175,7 +172,7 @@ module cpu (
 			else if (inst_arlog_imm || inst_arlog)
 				gpr_dst_in = alu_out;
 		end else begin
-			case (inst_oper)
+			case (inst_mod[2:0])
 			INST_LOAD_BYTE: 	gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
 			INST_LOAD_HALF: 	gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
 			INST_LOAD_WORD: 	gpr_dst_in = ma_data;
@@ -189,9 +186,9 @@ module cpu (
 		alu_operand_b = 32'b0;
 
 		if(inst_arlog_imm) begin
-			case (inst_oper)
-			INST_ARLOG_SL, 
-			INST_ARLOG_SR:
+			case (inst_mod[2:0])
+			3'b001, 
+			3'b101:
 				alu_operand_b = inst_rs2;
 			default:
 				alu_operand_b = inst_imm;

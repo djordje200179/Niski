@@ -5,8 +5,7 @@ module cpu_ir_reg (
     input wr,
 
     output [4:0] rd, rs1, rs2,
-	output [2:0] oper, 
-	output [6:0] mod,
+	output reg [9:0] mod,
 	output reg [32:0] imm,
 
 	output reg inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
@@ -19,7 +18,8 @@ module cpu_ir_reg (
 		   rs2 = ir[24:20];
 
 	wire [6:0] opcode = ir[6:0];
-	wire [6:0] funct3 = ir[31:25];
+	wire [6:0] funct7 = ir[31:25];
+	wire [3:0] funct3 = ir[14:12];
 	
 	wire [11:0] imm_i = ir[31:20];
 	wire [31:12] imm_u = ir[31:12];
@@ -57,8 +57,19 @@ module cpu_ir_reg (
 		endcase
 	end
 
-	assign oper = ir[14:12];
-	assign mod = (inst_arlog_imm && (oper == INST_ARLOG_SL || oper == INST_ARLOG_SR) || inst_arlog) ? funct3 : 7'b0;
+	always @* begin
+		mod = 10'b0;
+
+		mod[2:0] = funct3;
+		if (inst_arlog)
+			mod[9:3] = funct7;
+		else if (inst_arlog_imm) begin
+			if (funct3 == 3'b001 || funct3 == 3'b101)
+				mod[9:3] = funct7;
+			else
+				mod[9:3] = 7'b0;
+		end
+	end
 
 	always @* begin
 		imm = 32'b0;

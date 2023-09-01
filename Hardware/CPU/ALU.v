@@ -1,6 +1,5 @@
 module cpu_alu (
-	input [2:0] operation,
-	input [6:0] mod,
+	input [9:0] mod,
 	output reg invalid_opcode,
 
 	input [31:0] operand_a, operand_b,
@@ -11,53 +10,51 @@ module cpu_alu (
 	always @* begin
 		result = 32'b0;
 
-		case (operation)
-		INST_ARLOG_SL: 		result = operand_a << operand_b;
+		case (mod)
+		INST_ARLOG_ADD:		result = operand_a + operand_b;
+		INST_ARLOG_SUB:		result = operand_a - operand_b;
+		INST_ARLOG_SLL: 	result = operand_a << operand_b;
 		INST_ARLOG_SLT: 	result = $signed(operand_a) < $signed(operand_b);
 		INST_ARLOG_SLTU:	result = operand_a < operand_b;
 		INST_ARLOG_XOR: 	result = operand_a ^ operand_b;
+		INST_ARLOG_SRL: 	result = operand_a >> operand_b;
+		INST_ARLOG_SRA: 	result = $signed(operand_a) >>> operand_b;
 		INST_ARLOG_OR: 		result = operand_a | operand_b;
 		INST_ARLOG_AND: 	result = operand_a & operand_b;
-		INST_ARLOG_ADD: begin
-			case (mod)
-			INST_ADD_MOD_ADD: result = operand_a + operand_b;
-			INST_ADD_MOD_SUB: result = operand_a - operand_b;
-			endcase
-		end
-		INST_ARLOG_SR: begin
-			case (mod)
-			INST_SR_MOD_L: result = operand_a >> operand_b;
-			INST_SR_MOD_A: result = operand_a >>> operand_b;
-			endcase
-		end
+		// INST_ARLOG_MUL: 	result = $signed(operand_a) * $signed(operand_b);
+		// INST_ARLOG_MULH: 	result = ($signed(operand_a) * $signed(operand_b)) >> 32;
+		// INST_ARLOG_MULHSU: 	result = ($signed(operand_a) * operand_b) >> 32;
+		// INST_ARLOG_MULHU: 	result = (operand_a * operand_b) >> 32;
+		// INST_ARLOG_DIV: 	result = $signed(operand_a) / $signed(operand_b);
+		// INST_ARLOG_DIVU: 	result = operand_a / operand_b;
+		// INST_ARLOG_REM: 	result = $signed(operand_a) % $signed(operand_b);
+		// INST_ARLOG_REMU: 	result = operand_a % operand_b;
 		endcase
 	end
 	
 	always @* begin
 		invalid_opcode = 1'b1;
 
-		case (operation)
-		INST_ARLOG_SL, 
-		INST_ARLOG_SLT, 
-		INST_ARLOG_SLTU, 
-		INST_ARLOG_XOR, 
-		INST_ARLOG_OR, 
-		INST_ARLOG_AND:
-			invalid_opcode = 1'b0; 
-		INST_ARLOG_ADD: begin
-			case (mod)
-			INST_ADD_MOD_ADD, 
-			INST_ADD_MOD_SUB:
-				invalid_opcode = 1'b0;
-			endcase 
-		end
-		INST_ARLOG_SR: begin
-			case (mod)
-			INST_SR_MOD_L,
-			INST_SR_MOD_A:
-				invalid_opcode = 1'b0;
-			endcase
-		end
+		case (mod)
+		INST_ARLOG_ADD,
+		INST_ARLOG_SUB,
+		INST_ARLOG_SLL,
+		INST_ARLOG_SLT,
+		INST_ARLOG_SLTU,
+		INST_ARLOG_XOR,
+		INST_ARLOG_SRL,
+		INST_ARLOG_SRA,
+		INST_ARLOG_OR,
+		INST_ARLOG_AND,
+		INST_ARLOG_MUL,
+		INST_ARLOG_MULH,
+		INST_ARLOG_MULHSU,
+		INST_ARLOG_MULHU,
+		INST_ARLOG_DIV,
+		INST_ARLOG_DIVU,
+		INST_ARLOG_REM,
+		INST_ARLOG_REMU:
+			invalid_opcode = 1'b0;
 		endcase
 	end
 endmodule
