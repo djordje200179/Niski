@@ -5,5 +5,3 @@ localparam STATE_EXEC_INST	= 8'd100,
 		   STATE_EXEC_INST_MEM_WAIT = 8'd101;
 
 localparam STATE_CHECK_INTR	= 8'd200;
-
-localparam STATE_NEXT_INST	= 8'd255;

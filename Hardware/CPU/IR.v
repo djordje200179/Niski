@@ -66,13 +66,13 @@ module cpu_ir_reg (
 		if (inst_lui || inst_auipc)
 			imm = {imm_u, 12'b0};
 		else if (inst_jal)
-			imm = {{12{imm_j[20]}}, imm_j, 1'b0};
+			imm = {{11{imm_j[20]}}, imm_j, 1'b0};
 		else if (inst_jalr  || inst_load || inst_arlog_imm)
-			imm = {{19{imm_i[11]}}, imm_i};
+			imm = {{20{imm_i[11]}}, imm_i};
 		else if (inst_branch)
-			imm = {{18{imm_b[11]}}, imm_b, 1'b0};
+			imm = {{19{imm_b[11]}}, imm_b, 1'b0};
 		else if (inst_store)
-			imm = {{19{imm_s[11]}}, imm_s};
+			imm = {{20{imm_s[11]}}, imm_s};
 	end
 
 	always @(posedge clk) begin

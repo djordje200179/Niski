@@ -28,15 +28,16 @@ module cpu (
 	wire [31:0] inst_imm;
 	wire inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
 		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, inst_system;
-	wire single_cycle_inst = inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog;
 
 	wire branch_cond;
 	reg pc_wr;
+	reg pc_changed;
 	reg [31:0] next_pc;
 	wire [31:0] pc;
 
 	wire [31:0] gpr_src1, gpr_src2;
 	reg [31:0] gpr_dst_in;
+	reg gpr_wr;
 
 	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
@@ -94,7 +95,7 @@ module cpu (
 		.addr_rd1(inst_rs1), .addr_rd2(inst_rs2), .addr_wr(inst_rd),
 		.data_rd1(gpr_src1), .data_rd2(gpr_src2),
 		.data_wr(gpr_dst_in), 
-		.wr(state == STATE_EXEC_INST && single_cycle_inst || state == STATE_EXEC_INST_MEM_WAIT && ma_rd_req && ma_done)
+		.wr(gpr_wr)
 	);
 
 	cpu_alu alu_unit (
@@ -128,22 +129,37 @@ module cpu (
 			else if (inst_branch)
 				pc_wr = branch_cond;
 		end
-		STATE_NEXT_INST: pc_wr = 1'b1;
+		STATE_CHECK_INTR: begin
+			if (!pc_changed)
+				pc_wr = 1'b1;
+		end
 		endcase
 	end
 	
 	always @* begin
-		next_pc = 32'b0;
-
-		if (state == STATE_EXEC_INST) begin
-			if (inst_jal)
-				next_pc = pc + inst_imm;
-			else if (inst_jalr)
-				next_pc = (gpr_src1 + inst_imm) & ~32'h1;
-			else if (inst_branch)
-				next_pc = pc + inst_imm;
-		end else
+		if (inst_jal)
+			next_pc = pc + inst_imm;
+		else if (inst_jalr)
+			next_pc = (gpr_src1 + inst_imm) & ~32'h1;
+		else if (inst_branch)
+			next_pc = pc + inst_imm;
+		else
 			next_pc = pc + 4;
+	end
+
+	always @* begin
+		gpr_wr = 1'b0;
+
+		case (state)
+		STATE_EXEC_INST: begin
+			if (inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog)
+				gpr_wr = 1'b1;
+		end
+		STATE_EXEC_INST_MEM_WAIT: begin
+			if (ma_rd_req && ma_done)
+				gpr_wr = 1'b1;
+		end
+		endcase
 	end
 
 	always @* begin
@@ -189,6 +205,7 @@ module cpu (
 			state <= STATE_RD_INST_REQ;
 			ma_wr_req <= 1'b0;
 			ma_rd_req <= 1'b0;
+			pc_changed <= 1'b0;
 		end
 	endtask
 
@@ -198,6 +215,7 @@ module cpu (
 			STATE_RD_INST_REQ: begin
 				state <= STATE_RD_INST_WAIT;
 				ma_rd_req <= 1'b1;
+				pc_changed <= 1'b0;
 			end
 			STATE_RD_INST_WAIT: begin
 				if (ma_done) begin
@@ -214,6 +232,9 @@ module cpu (
 					ma_wr_req <= 1'b1;
 				end else
 					state <= STATE_CHECK_INTR;
+
+				if (inst_jal || inst_jalr || inst_branch && branch_cond)
+					pc_changed = 1'b1;				
 			end
 			STATE_EXEC_INST_MEM_WAIT: begin
 				if (ma_done) begin
@@ -223,9 +244,6 @@ module cpu (
 				end
 			end
 			STATE_CHECK_INTR: begin
-				state <= STATE_NEXT_INST;
-			end
-			STATE_NEXT_INST: begin
 				state <= STATE_RD_INST_REQ;
 			end
 			endcase

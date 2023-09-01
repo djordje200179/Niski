@@ -20,6 +20,8 @@ OBJDUMP_FLAGS =
 OBJCOPY = riscv64-linux-gnu-objcopy
 OBJCOPY_FLAGS =-O verilog --verilog-data-width=4 --reverse-bytes=4
 
+MEMFILE_CORRECTOR = ./memfile_corrector.py
+
 OUT_DIR = out
 EXE_OUT = $(OUT_DIR)/out.elf
 ROM_OUT = $(OUT_DIR)/rom.mem
@@ -36,9 +38,11 @@ all: $(EXE_OUT) $(ROM_OUT) $(RAM_OUT)
 
 $(ROM_OUT): $(EXE_OUT) 
 	$(OBJCOPY) $(OBJCOPY_FLAGS) -j .rom.* --change-addresses -0x40000000 $< $@
+	$(MEMFILE_CORRECTOR) $@
 
 $(RAM_OUT): $(EXE_OUT)
 	$(OBJCOPY) $(OBJCOPY_FLAGS) -j .data.* --change-addresses -0x50000000 $< $@
+	$(MEMFILE_CORRECTOR) $@
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)
 	mkdir -p $(dir $@)

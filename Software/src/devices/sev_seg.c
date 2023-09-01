@@ -13,7 +13,7 @@ void sev_seg_off(void) {
 }
 
 void sev_seg_set_single(uint8_t digit, uint8_t segments) {
-    data_digits_addr[digit] = segments;
+    ((char*)data_digits_addr)[digit] = segments;
 }
 
 void sev_seg_set(uint32_t segments) {
@@ -48,7 +48,7 @@ void sev_seg_set_digit(uint8_t digit, uint8_t value) {
 }
 
 void sev_seg_set_number(uint16_t number) {    
-    for (uint8_t i = 3; i >= 0; i--) {
+    for (int8_t i = 3; i >= 0; i--) {
         uint8_t digit = number % 10;
         number /= 10;
         sev_seg_set_digit(i, digit);

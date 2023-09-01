@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Wed Aug 30 22:31:29 2023"
+// CREATED		"Thu Aug 31 19:51:09 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -103,9 +103,9 @@ wire	SYNTHESIZED_WIRE_8;
 wire	SYNTHESIZED_WIRE_9;
 wire	SYNTHESIZED_WIRE_10;
 wire	SYNTHESIZED_WIRE_11;
-wire	[11:0] SYNTHESIZED_WIRE_12;
+wire	[10:0] SYNTHESIZED_WIRE_12;
 wire	SYNTHESIZED_WIRE_13;
-wire	[9:0] SYNTHESIZED_WIRE_14;
+wire	[11:0] SYNTHESIZED_WIRE_14;
 wire	[31:0] SYNTHESIZED_WIRE_15;
 wire	[3:0] SYNTHESIZED_WIRE_16;
 wire	[31:0] SYNTHESIZED_WIRE_17;
@@ -136,7 +136,7 @@ i2c_controller	b2v_inst(
 
 
 sev_seg_displays_controller	b2v_inst10(
-	.clk(clk_1_khz),
+	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.en(SYNTHESIZED_WIRE_0),
 	.digit_0(SYNTHESIZED_WIRE_1),
@@ -236,7 +236,7 @@ rom	b2v_inst18(
 	.clk(clk_50_mhz),
 	.addr(SYNTHESIZED_WIRE_12),
 	.data_out(SYNTHESIZED_WIRE_18));
-	defparam	b2v_inst18.ADDR_BITS = 12;
+	defparam	b2v_inst18.ADDR_BITS = 11;
 	defparam	b2v_inst18.MEM_FILE = "../../Software/out/rom.mem";
 
 
@@ -248,7 +248,7 @@ ram	b2v_inst20(
 	.data_in(SYNTHESIZED_WIRE_15),
 	.wr_mask(SYNTHESIZED_WIRE_16),
 	.data_out(SYNTHESIZED_WIRE_17));
-	defparam	b2v_inst20.ADDR_BITS = 10;
+	defparam	b2v_inst20.ADDR_BITS = 12;
 
 
 memory_bus_interface	b2v_inst21(
@@ -266,8 +266,8 @@ memory_bus_interface	b2v_inst21(
 	.mem_addr(SYNTHESIZED_WIRE_14),
 	.mem_data_in(SYNTHESIZED_WIRE_15),
 	.mem_wr_mask(SYNTHESIZED_WIRE_16));
-	defparam	b2v_inst21.MEM_ADDR_WIDTH = 10;
-	defparam	b2v_inst21.START_ADDR = 32'b10000000000000000000000000000000;
+	defparam	b2v_inst21.MEM_ADDR_WIDTH = 12;
+	defparam	b2v_inst21.START_ADDR = 32'b01010000000000000000000000000000;
 
 
 memory_bus_interface	b2v_inst22(
@@ -285,7 +285,7 @@ memory_bus_interface	b2v_inst22(
 	.mem_addr(SYNTHESIZED_WIRE_12)
 	
 	);
-	defparam	b2v_inst22.MEM_ADDR_WIDTH = 12;
+	defparam	b2v_inst22.MEM_ADDR_WIDTH = 11;
 	defparam	b2v_inst22.START_ADDR = 32'b01000000000000000000000000000000;
 
 
