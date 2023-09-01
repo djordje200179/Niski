@@ -5,20 +5,23 @@ OBJ_DIR = obj
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 CC = riscv64-linux-gnu-gcc
-C_FLAGS = -march=rv32e -mabi=ilp32e -Wall -Wextra -I$(I_DIR) -O3
+CC_FLAGS = -std=c2x -I$(I_DIR)
+CC_FLAGS += -march=rv32e -mabi=ilp32e
+CC_FLAGS += -Wall -Wextra 
+CC_FLAGS += -O3 -flto
+CC_FLAGS += -fanalyzer
 
-ASM = riscv64-linux-gnu-as
-ASM_FLAGS = --warn --fatal-warnings -march=rv32e -mabi=ilp32e
-
-LD = riscv64-linux-gnu-ld
 LD_SCRIPT = linker.ld
-LD_FLAGS = -T $(LD_SCRIPT) -melf32lriscv --print-memory-usage
+LD_FLAGS = -T $(LD_SCRIPT) 
+LD_FLAGS += -fno-pie
+LD_FLAGS += -nostartfiles -nodefaultlibs -nolibc -nostdlib 
+LD_FLAGS += -Xlinker --print-memory-usage
 
 OBJDUMP = riscv64-linux-gnu-objdump
 OBJDUMP_FLAGS =
 
 OBJCOPY = riscv64-linux-gnu-objcopy
-OBJCOPY_FLAGS =-O verilog --verilog-data-width=4 --reverse-bytes=4
+OBJCOPY_FLAGS = -O verilog --verilog-data-width=4 --reverse-bytes=4
 
 MEMFILE_CORRECTOR = ./memfile_corrector.py
 
@@ -46,20 +49,20 @@ $(RAM_OUT): $(EXE_OUT)
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)
 	mkdir -p $(dir $@)
-	$(LD) $(LD_FLAGS) -o $@ $^
+	$(CC) $(CC_FLAGS) $(LD_FLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(C_FLAGS) -c -o $@ $<
+	$(CC) $(CC_FLAGS) -c -o $@ $<
 	rm -f $(SRC_DIR)/$*.d
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
 	mkdir -p $(dir $@)
-	$(ASM) $(ASM_FLAGS) -c -o $@ $<
+	$(CC) $(CC_FLAGS) -c -o $@ $<
 	rm -f $(SRC_DIR)/$*.d
 
 %.d: %.c
-	$(CC) -MM -MT $(OBJ_DIR)/$*.o $< $(C_FLAGS) > $@
+	$(CC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
 
 include $(DEP)
 
