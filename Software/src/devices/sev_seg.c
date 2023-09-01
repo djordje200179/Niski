@@ -13,10 +13,12 @@ void sev_seg_off(void) {
 }
 
 void sev_seg_set_single(uint8_t digit, uint8_t segments) {
+    segments &= 0b01111111;
     ((char*)data_digits_addr)[digit] = segments;
 }
 
 void sev_seg_set(uint32_t segments) {
+    segments &= 0b01111111011111110111111101111111;
     *data_digits_addr = segments;
 }
 
@@ -24,27 +26,9 @@ void sev_seg_set_dots(uint8_t states) {
     *data_dots_addr = states;
 }
 
-static uint8_t digit_segments[] = {
-    [0] = 0b1111110,
-    [1] = 0b0110000,
-    [2] = 0b1101101,
-    [3] = 0b1111001,
-    [4] = 0b0110011,
-    [5] = 0b1011011,
-    [6] = 0b1011111,
-    [7] = 0b1110000,
-    [8] = 0b1111111,
-    [9] = 0b1111011,
-    [10] = 0b1110111,
-    [11] = 0b0011111,
-    [12] = 0b1001110,
-    [13] = 0b0111101,
-    [14] = 0b1001111,
-    [15] = 0b1000111
-};
-
 void sev_seg_set_digit(uint8_t digit, uint8_t value) {
-    sev_seg_set_single(digit, digit_segments[value]);
+    value |= 0b10000000;
+    ((char*)data_digits_addr)[digit] = value;
 }
 
 void sev_seg_set_number(uint16_t number) {    

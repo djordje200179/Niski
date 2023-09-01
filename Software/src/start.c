@@ -15,7 +15,10 @@ int calculate() {
 void show(int value) {
 	sev_seg_on();
 	
-	sev_seg_set_number(value);
+	sev_seg_set_digit(0, 0);
+	sev_seg_set_digit(1, 1);
+	sev_seg_set_digit(2, 2);
+	sev_seg_set_digit(3, 3);
 }
 
 void start() {

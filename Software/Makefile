@@ -5,10 +5,10 @@ OBJ_DIR = obj
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 CC = riscv64-linux-gnu-gcc
-C_FLAGS = -march=rv32em -mabi=ilp32e -Werror -I$(I_DIR) -O3
+C_FLAGS = -march=rv32e -mabi=ilp32e -Werror -I$(I_DIR) -O3
 
 ASM = riscv64-linux-gnu-as
-ASM_FLAGS = --warn --fatal-warnings -march=rv32em -mabi=ilp32e
+ASM_FLAGS = --warn --fatal-warnings -march=rv32e -mabi=ilp32e
 
 LD = riscv64-linux-gnu-ld
 LD_SCRIPT = linker.ld
