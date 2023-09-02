@@ -1,4 +1,5 @@
-#include "devices/sev_seg_displays.h"
+#include "devices/leds.h"
+
 static int calculate() {
 	int a = 0, b = 1;
 
@@ -12,12 +13,17 @@ static int calculate() {
 }
 
 static void show(int value) {
-	sev_seg_displays_on();
+	//sev_seg_displays_on();
+	leds_on();
+	leds_set(0b0101);
 	
-	sev_seg_displays_set_number(value);
+	//sev_seg_displays_set_number(value);
+	//sev_seg_displays_set_dots(0b1010);
 }
 
 void start() {
-	int value = calculate();
-	show(value);
+	// int value = calculate();
+	// show(value);
+	leds_on();
+	leds_set(0b0101);
 }

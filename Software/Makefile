@@ -17,7 +17,7 @@ GCC_FLAGS += -std=c2x --no-pic
 
 LD_FLAGS = $(GCC_FLAGS)
 LD_FLAGS += -T $(LD_SCRIPT)
-LD_FLAGS += -flinker-output=exec
+LD_FLAGS += -flinker-output=exec -no-pie
 LD_FLAGS += -nostartfiles -nodefaultlibs -nolibc -nostdlib 
 LD_FLAGS += -Xlinker --print-memory-usage
 LD_FLAGS += -Xlinker --build-id=none

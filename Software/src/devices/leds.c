@@ -1,18 +1,20 @@
 #include "devices/leds.h"
 
-static uint32_t* ctrl_reg = (uint32_t*) 0x70000000;
-static uint32_t* data_reg = (uint32_t*) 0x70000008;
+extern uint32_t LEDS_CTRL_REG;
+extern uint32_t LEDS_DATA_REG;
+
+#define LEDS_DATA_ARRAY ((uint8_t*)&LEDS_DATA_REG)
 
 void leds_on(void) {
-    *ctrl_reg = 0b1;
+    LEDS_CTRL_REG = 0b1;
 }
 
 void leds_off(void) {
-    *ctrl_reg = 0b0;
+    LEDS_CTRL_REG = 0b0;
 }
 
 void leds_set_single(uint8_t led, bool state) {
-    ((uint8_t*)data_reg)[led] = state;
+    LEDS_DATA_ARRAY[led] = state;
 }
 
 void leds_set(uint8_t states) {
@@ -20,5 +22,5 @@ void leds_set(uint8_t states) {
     for (int i = 0; i < 4; i++)
         data |= ((states >> i) & 0b1) << (i * 8);
     
-    *data_reg = data;
+    LEDS_DATA_REG = data;
 }
