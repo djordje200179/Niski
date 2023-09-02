@@ -15,10 +15,10 @@ module ram (
 	output reg [31:0] data_out;
 	
 	reg [3:0][7:0] memory [2**ADDR_BITS];
-	// initial begin
-	// 	if (MEM_FILE) 
-	// 		$readmemh(MEM_FILE, memory);
-	// end
+	initial begin
+		if (MEM_FILE != "")
+			$readmemh(MEM_FILE, memory);
+	end
 	
 	always_ff @(posedge clk) begin
 		if (wr) begin

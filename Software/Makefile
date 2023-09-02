@@ -50,7 +50,7 @@ $(ROM_OUT): $(EXE_OUT)
 	$(MEMFILE_CORRECTOR) $@
 
 $(RAM_OUT): $(EXE_OUT)
-	$(OBJCOPY) $(OBJCOPY_FLAGS) -j .data.* --change-addresses -0x50000000 $< $@
+	$(OBJCOPY) $(OBJCOPY_FLAGS) -j .ram.* --change-addresses -0x50000000 $< $@
 	$(MEMFILE_CORRECTOR) $@
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)

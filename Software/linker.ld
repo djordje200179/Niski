@@ -14,14 +14,17 @@ SECTIONS {
 	} > ROM
 
 	.rom.rodata : {
+		*(.srodata)
 		*(.rodata)
 	} > ROM
 
 	.ram.bss : {
+		*(.sbss)
 		*(.bss)
 	} > RAM
 
 	.ram.data : {
+		*(.sdata)
 		*(.data)
 	} > RAM
 
