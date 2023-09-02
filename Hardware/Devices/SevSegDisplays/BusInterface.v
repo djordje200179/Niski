@@ -1,26 +1,30 @@
 module sev_seg_displays_bus_interface (
-	clk, rst,
-    ctrl_en, ctrl_digit_0, ctrl_digit_1, ctrl_digit_2, ctrl_digit_3, ctrl_dots,
-	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus
+	input clk, rst,
+
+    output ctrl_en, 
+	output [6:0] ctrl_digit_0, ctrl_digit_1, ctrl_digit_2, ctrl_digit_3, 
+	output [3:0] ctrl_dots,
+
+	input [31:0] addr_bus, 
+	inout [31:0] data_bus, 
+	input rd_bus, wr_bus, 
+	input [3:0] data_mask_bus, 
+	output fc_bus
 );
 	parameter CONTROL_REG_ADDR		= 32'h0,
-			  STATUS_REG_ADDR		= 32'h4,
-			  DATA_DIGITS_REG_ADDR	= 32'h8,
-			  DATA_DOTS_REG_ADDR 	= 32'hC;
+			  DATA_DIGITS_REG_ADDR	= 32'h4,
+			  DATA_DOTS_REG_ADDR 	= 32'h8;
 
-	input clk, rst;
-	
-	output reg ctrl_en;
-    output [6:0] ctrl_digit_0, ctrl_digit_1, ctrl_digit_2, ctrl_digit_3;
-    output reg [3:0] ctrl_dots;
-	
-	input [31:0] addr_bus;
-	inout [31:0] data_bus;
-	input rd_bus, wr_bus;
-	input [3:0] data_mask_bus;
-	output fc_bus;
+	reg [7:0] ctrl_reg;
+	reg [31:0] data_digits_reg;
+	reg [7:0] data_dots_reg;
 
-	reg [7:0] digits_data [0:3];
+	wire [7:0] digits_data [0:3];
+	assign digits_data[0] = data_digits_reg[7:0];
+	assign digits_data[1] = data_digits_reg[15:8];
+	assign digits_data[2] = data_digits_reg[23:16];
+	assign digits_data[3] = data_digits_reg[31:24];
+
 	wire [6:0] digit_segments [0:3];
 
 	assign ctrl_digit_0 = digits_data[0][7] ? digit_segments[0] : digits_data[0][6:0];
@@ -44,13 +48,10 @@ module sev_seg_displays_bus_interface (
 	always @* begin
 		addr_hit = 1'b0;
 
-		if (addr_bus >= DATA_DIGITS_REG_ADDR && addr_bus < DATA_DIGITS_REG_ADDR + 32'd4)
-			addr_hit = 1'b1;
-
-		case (addr_bus)
-		CONTROL_REG_ADDR,
-		STATUS_REG_ADDR,
-        DATA_DOTS_REG_ADDR: 
+		case (addr_bus[31:2])
+		CONTROL_REG_ADDR >> 2,
+		DATA_DIGITS_REG_ADDR >> 2,
+		DATA_DOTS_REG_ADDR >> 2:    
 			addr_hit = 1'b1;
 		endcase
 	end
@@ -65,14 +66,20 @@ module sev_seg_displays_bus_interface (
 	always @* begin
 		data_out = 32'b0;
 
-		if (addr_bus == CONTROL_REG_ADDR)
-			data_out = {31'b0, ctrl_en};
-		else if (addr_bus == STATUS_REG_ADDR)
-			data_out = 32'b1;
-		else if (addr_bus >= DATA_DIGITS_REG_ADDR && addr_bus < DATA_DIGITS_REG_ADDR + 32'd4)
-			data_out = digits_data_out[addr_bus[1:0] * 8 +: 32];
-		else if (addr_bus == DATA_DOTS_REG_ADDR)
-			data_out = {28'b0, ctrl_dots};
+		case (addr_bus[31:2])
+		CONTROL_REG_ADDR >> 2:
+			data_out[7:0] = ctrl_reg;
+		DATA_DIGITS_REG_ADDR >> 2:
+			data_out = digits_data_out;
+		DATA_DOTS_REG_ADDR >> 2:
+			data_out[7:0] = data_dots_reg;
+		endcase
+
+		case (addr_bus[1:0])
+		2'b01: data_out = {8'b0, data_out[31:8]};
+		2'b10: data_out = {16'b0, data_out[31:16]};
+		2'b11: data_out = {24'b0, data_out[31:24]};
+		endcase
 	end
 
 	reg data_written;
@@ -82,13 +89,10 @@ module sev_seg_displays_bus_interface (
 	task reset;
 		begin
 			data_written <= 1'b0;
-			ctrl_en <= 1'b0;
-			ctrl_dots <= 4'b0;
 
-			digits_data[0] <= 8'b0;
-			digits_data[1] <= 8'b0;
-			digits_data[2] <= 8'b0;
-			digits_data[3] <= 8'b0;
+			ctrl_reg <= 8'b0;
+			data_digits_reg <= 32'b0;
+			data_dots_reg <= 8'b0;
 		end
 	endtask
 
@@ -100,46 +104,30 @@ module sev_seg_displays_bus_interface (
 				data_written <= 1'b1;
 
 				case (addr_bus)
-				CONTROL_REG_ADDR: 
-					if (data_mask_bus[0])
-						ctrl_en <= data_bus[0];
-				STATUS_REG_ADDR: ; // TODO: Interrupt!!
+				CONTROL_REG_ADDR: begin
+					if (data_mask_bus[0]) ctrl_reg <= data_bus[7:0];
+				end
 				DATA_DIGITS_REG_ADDR: begin
-					if (data_mask_bus[0])
-						digits_data[0] <= data_bus[0+:8];
-					if (data_mask_bus[1])
-						digits_data[1] <= data_bus[8+:8];
-					if (data_mask_bus[2])
-						digits_data[2] <= data_bus[16+:8];
-					if (data_mask_bus[3])
-						digits_data[3] <= data_bus[24+:8];
+					if (data_mask_bus[0]) data_digits_reg[7:0] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_digits_reg[15:8] <= data_bus[15:8];
+					if (data_mask_bus[2]) data_digits_reg[23:16] <= data_bus[23:16];
+					if (data_mask_bus[3]) data_digits_reg[31:24] <= data_bus[31:24];
 				end
 				DATA_DIGITS_REG_ADDR + 32'd1: begin
-					if (data_mask_bus[0])
-						digits_data[1] <= data_bus[0+:8];
-					if (data_mask_bus[1])
-						digits_data[2] <= data_bus[8+:8];
-					if (data_mask_bus[2])
-						digits_data[3] <= data_bus[16+:8];
-
-					if (data_mask_bus[3]); // TODO: Interrupt!!
+					if (data_mask_bus[0]) data_digits_reg[15:8] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_digits_reg[23:16] <= data_bus[15:8];
+					if (data_mask_bus[2]) data_digits_reg[31:24] <= data_bus[23:16];
 				end
 				DATA_DIGITS_REG_ADDR + 32'd2: begin
-					if (data_mask_bus[0])
-						digits_data[2] <= data_bus[0+:8];
-					if (data_mask_bus[1])
-						digits_data[3] <= data_bus[8+:8];
-					if (data_mask_bus[2] || data_mask_bus[3]); // TODO: Interrupt!!
+					if (data_mask_bus[0]) data_digits_reg[23:16] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_digits_reg[31:24] <= data_bus[15:8];
 				end
 				DATA_DIGITS_REG_ADDR + 32'd3: begin
-					if (data_mask_bus[0])
-						digits_data[3] <= data_bus[0+:8];
-
-					if (data_mask_bus[1] || data_mask_bus[2] || data_mask_bus[3]); // TODO: Interrupt!!
+					if (data_mask_bus[0]) data_digits_reg[31:24] <= data_bus[7:0];
 				end
-				DATA_DOTS_REG_ADDR:
-					if (data_mask_bus[0])
-						ctrl_dots <= data_bus[3:0];
+				DATA_DOTS_REG_ADDR: begin
+					if (data_mask_bus[0]) data_dots_reg[7:0] <= data_bus[7:0];
+				end
 				endcase
 			end
 		end

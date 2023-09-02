@@ -1,30 +1,30 @@
 module buzzer_bus_interface (
-	clk, rst,
-	ctrl_en, ctrl_buzz,
-	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus
+	input clk, rst,
+	
+	output ctrl_en, ctrl_buzz,
+	
+	input [31:0] addr_bus, 
+	inout [31:0] data_bus, 
+	input rd_bus, wr_bus,
+	input [3:0] data_mask_bus, 
+	output fc_bus
 );
 	parameter CONTROL_REG_ADDR	= 32'h0,
-			  STATUS_REG_ADDR	= 32'h4,
-			  DATA_REG_ADDR		= 32'h8;
+			  DATA_REG_ADDR		= 32'h4;
 
-	input clk, rst;
-	
-	output reg ctrl_en, ctrl_buzz;
-	
-	input [31:0] addr_bus;
-	inout [31:0] data_bus;
-	input rd_bus, wr_bus;
-	input [3:0] data_mask_bus;
-	output fc_bus;
+	reg [7:0] ctrl_reg;
+	reg [7:0] data_reg;
+
+	assign ctrl_en = ctrl_reg[0];
+	assign ctrl_buzz = data_reg[0];
 
 	reg addr_hit;
 	always @* begin
 		addr_hit = 1'b0;
 
-		case (addr_bus)
-		CONTROL_REG_ADDR,
-		STATUS_REG_ADDR,
-		DATA_REG_ADDR: 
+		case (addr_bus[31:2])
+		CONTROL_REG_ADDR >> 2,
+		DATA_REG_ADDR >> 2:
 			addr_hit = 1'b1;
 		endcase
 	end
@@ -39,11 +39,17 @@ module buzzer_bus_interface (
 	always @* begin
 		data_out = 32'b0;
 
-		case (addr_bus)
-		CONTROL_REG_ADDR: data_out = {31'b0, ctrl_en};
-		STATUS_REG_ADDR:  data_out = 32'b1;
-		DATA_REG_ADDR: 
-			data_out = {31'b0, ctrl_buzz};
+		case (addr_bus[31:2])
+		CONTROL_REG_ADDR >> 2:
+			data_out[7:0] = ctrl_reg;
+		DATA_REG_ADDR >> 2:
+			data_out[7:0] = data_reg;
+		endcase
+
+		case (addr_bus[1:0])
+		2'b01: data_out = {8'b0, data_out[31:8]};
+		2'b10: data_out = {16'b0, data_out[31:16]};
+		2'b11: data_out = {24'b0, data_out[31:24]};
 		endcase
 	end
 
@@ -54,8 +60,9 @@ module buzzer_bus_interface (
 	task reset;
 		begin
 			data_written <= 1'b0;
-			ctrl_en <= 1'b0;
-			ctrl_buzz <= 1'b0;
+			
+			ctrl_reg <= 8'b0;
+			data_reg <= 8'b0;
 		end
 	endtask
 
@@ -67,11 +74,12 @@ module buzzer_bus_interface (
 				data_written <= 1'b1;
 
 				case (addr_bus)
-				CONTROL_REG_ADDR: 
-					ctrl_en <= data_bus[0];
-				STATUS_REG_ADDR: ; // TODO: Interrupt!!
-				DATA_REG_ADDR:
-					ctrl_buzz <= data_bus[0];
+				CONTROL_REG_ADDR: begin
+					if (data_mask_bus[0]) ctrl_reg[7:0] <= data_bus[7:0];
+				end
+				DATA_REG_ADDR: begin
+					if (data_mask_bus[0]) data_reg[7:0] <= data_bus[7:0];
+				end
 				endcase
 			end
 		end

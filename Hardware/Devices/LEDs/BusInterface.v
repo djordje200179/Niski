@@ -10,11 +10,9 @@ module leds_bus_interface (
 	output fc_bus
 );
 	parameter CONTROL_REG_ADDR	= 32'h0,
-			  STATUS_REG_ADDR	= 32'h4,
-			  DATA_REG_ADDR		= 32'h8;
+			  DATA_REG_ADDR		= 32'h4;
 
-	reg [31:0] ctrl_reg;
-	reg [31:0] status_reg;
+	reg [7:0] ctrl_reg;
 	reg [31:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
@@ -26,7 +24,6 @@ module leds_bus_interface (
 
 		case (addr_bus[31:2])
 		CONTROL_REG_ADDR >> 2,
-		STATUS_REG_ADDR >> 2,
 		DATA_REG_ADDR >> 2:    
 			addr_hit = 1'b1;
 		endcase
@@ -44,17 +41,15 @@ module leds_bus_interface (
 
 		case (addr_bus[31:2])
 		CONTROL_REG_ADDR >> 2:
-			data_out = ctrl_reg;
-		STATUS_REG_ADDR >> 2:
-			data_out = status_reg;
+			data_out[7:0] = ctrl_reg;
 		DATA_REG_ADDR >> 2:   
 			data_out = data_reg;
 		endcase
 
 		case (addr_bus[1:0])
-		2'b01: data_out = {8'b0, ctrl_reg[31:8]};
-		2'b10: data_out = {16'b0, ctrl_reg[31:16]};
-		2'b11: data_out = {24'b0, ctrl_reg[31:24]};
+		2'b01: data_out = {8'b0, data_out[31:8]};
+		2'b10: data_out = {16'b0, data_out[31:16]};
+		2'b11: data_out = {24'b0, data_out[31:24]};
 		endcase
 	end
 
@@ -65,8 +60,8 @@ module leds_bus_interface (
 	task reset;
 		begin
 			data_written <= 1'b0;
-			ctrl_reg <= 32'b0;
-			status_reg <= 32'b0;
+
+			ctrl_reg <= 8'b0;
 			data_reg <= 32'b0;
 		end
 	endtask
@@ -79,43 +74,27 @@ module leds_bus_interface (
 				data_written <= 1'b1;
 
 				case (addr_bus)
-					CONTROL_REG_ADDR: begin
-						if (data_mask_bus[0]) ctrl_reg[7:0] <= data_bus[7:0];
-						if (data_mask_bus[1]) ctrl_reg[15:8] <= data_bus[15:8];
-						if (data_mask_bus[2]) ctrl_reg[23:16] <= data_bus[23:16];
-						if (data_mask_bus[3]) ctrl_reg[31:24] <= data_bus[31:24];
-					end
-					CONTROL_REG_ADDR + 32'b1: begin
-						if (data_mask_bus[0]) ctrl_reg[15:8] <= data_bus[7:0];
-						if (data_mask_bus[1]) ctrl_reg[23:16] <= data_bus[15:8];
-						if (data_mask_bus[2]) ctrl_reg[31:24] <= data_bus[23:16];
-					end
-					CONTROL_REG_ADDR + 32'b10: begin
-						if (data_mask_bus[0]) ctrl_reg[23:16] <= data_bus[7:0];
-						if (data_mask_bus[1]) ctrl_reg[31:24] <= data_bus[15:8];
-					end
-					CONTROL_REG_ADDR + 32'b11: begin
-						if (data_mask_bus[0]) ctrl_reg[31:24] <= data_bus[7:0];
-					end
-					STATUS_REG_ADDR: ; // TODO: Interrupt!!
-					DATA_REG_ADDR: begin
-						if (data_mask_bus[0]) data_reg[7:0] <= data_bus[7:0];
-						if (data_mask_bus[1]) data_reg[15:8] <= data_bus[15:8];
-						if (data_mask_bus[2]) data_reg[23:16] <= data_bus[23:16];
-						if (data_mask_bus[3]) data_reg[31:24] <= data_bus[31:24];
-					end
-					DATA_REG_ADDR + 32'b1: begin
-						if (data_mask_bus[0]) data_reg[15:8] <= data_bus[7:0];
-						if (data_mask_bus[1]) data_reg[23:16] <= data_bus[15:8];
-						if (data_mask_bus[2]) data_reg[31:24] <= data_bus[23:16];
-					end
-					DATA_REG_ADDR + 32'b10: begin
-						if (data_mask_bus[0]) data_reg[23:16] <= data_bus[7:0];
-						if (data_mask_bus[1]) data_reg[31:24] <= data_bus[15:8];
-					end
-					DATA_REG_ADDR + 32'b11: begin
-						if (data_mask_bus[0]) data_reg[31:24] <= data_bus[7:0];
-					end
+				CONTROL_REG_ADDR: begin
+					if (data_mask_bus[0]) ctrl_reg[7:0] <= data_bus[7:0];
+				end
+				DATA_REG_ADDR: begin
+					if (data_mask_bus[0]) data_reg[7:0] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_reg[15:8] <= data_bus[15:8];
+					if (data_mask_bus[2]) data_reg[23:16] <= data_bus[23:16];
+					if (data_mask_bus[3]) data_reg[31:24] <= data_bus[31:24];
+				end
+				DATA_REG_ADDR + 32'b1: begin
+					if (data_mask_bus[0]) data_reg[15:8] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_reg[23:16] <= data_bus[15:8];
+					if (data_mask_bus[2]) data_reg[31:24] <= data_bus[23:16];
+				end
+				DATA_REG_ADDR + 32'b10: begin
+					if (data_mask_bus[0]) data_reg[23:16] <= data_bus[7:0];
+					if (data_mask_bus[1]) data_reg[31:24] <= data_bus[15:8];
+				end
+				DATA_REG_ADDR + 32'b11: begin
+					if (data_mask_bus[0]) data_reg[31:24] <= data_bus[7:0];
+				end
 				endcase
 			end
 		end
