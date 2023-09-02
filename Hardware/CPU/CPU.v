@@ -108,7 +108,7 @@ module cpu (
 	always @* begin
 		ma_mask = 4'b1111;
 
-		if (state == STATE_EXEC_INST) begin
+		if (state == STATE_EXEC_INST || state == STATE_EXEC_INST_MEM_WAIT) begin
 			case (inst_mod[1:0])
 			2'b00: ma_mask = 4'b0001;
 			2'b01: ma_mask = 4'b0011;
@@ -134,14 +134,16 @@ module cpu (
 	end
 	
 	always @* begin
-		if (inst_jal)
-			next_pc = pc + inst_imm;
-		else if (inst_jalr)
-			next_pc = (gpr_src1 + inst_imm) & ~32'h1;
-		else if (inst_branch)
-			next_pc = pc + inst_imm;
-		else
-			next_pc = pc + 4;
+		next_pc = pc + 32'h4;
+
+		if (state == STATE_EXEC_INST) begin
+			if (inst_jal)
+				next_pc = pc + inst_imm;
+			else if (inst_jalr)
+				next_pc = (gpr_src1 + inst_imm) & ~32'h1;
+			else if (inst_branch)
+				next_pc = pc + inst_imm;
+		end
 	end
 
 	always @* begin

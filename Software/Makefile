@@ -1,21 +1,27 @@
 I_DIR = h
 SRC_DIR = src
 OBJ_DIR = obj
+LD_SCRIPT = linker.ld
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
-CC = riscv64-linux-gnu-gcc
-CC_FLAGS = -std=c2x -I$(I_DIR)
-CC_FLAGS += -march=rv32e -mabi=ilp32e
-CC_FLAGS += -Wall -Wextra 
-CC_FLAGS += -O3 -flto
-CC_FLAGS += -fanalyzer
+GCC = riscv64-linux-gnu-gcc
 
-LD_SCRIPT = linker.ld
-LD_FLAGS = -T $(LD_SCRIPT) 
-LD_FLAGS += -fno-pie
+GCC_FLAGS = -march=rv32e -mabi=ilp32e
+GCC_FLAGS += -Wall -Wextra
+GCC_FLAGS += -O3
+
+CC_FLAGS = $(GCC_FLAGS)
+CC_FLAGS += -I$(I_DIR)
+GCC_FLAGS += -std=c2x --no-pic
+
+LD_FLAGS = $(GCC_FLAGS)
+LD_FLAGS += -T $(LD_SCRIPT)
+LD_FLAGS += -flinker-output=exec
 LD_FLAGS += -nostartfiles -nodefaultlibs -nolibc -nostdlib 
 LD_FLAGS += -Xlinker --print-memory-usage
+LD_FLAGS += -Xlinker --build-id=none
+LD_FLAGS += -Xlinker --gc-sections
 
 OBJDUMP = riscv64-linux-gnu-objdump
 OBJDUMP_FLAGS =
@@ -49,20 +55,20 @@ $(RAM_OUT): $(EXE_OUT)
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)
 	mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) $(LD_FLAGS) -o $@ $^
+	$(GCC) $(LD_FLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -c -o $@ $<
+	$(GCC) $(CC_FLAGS) -c -o $@ $<
 	rm -f $(SRC_DIR)/$*.d
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
 	mkdir -p $(dir $@)
-	$(CC) $(CC_FLAGS) -c -o $@ $<
+	$(GCC) $(CC_FLAGS) -c -o $@ $<
 	rm -f $(SRC_DIR)/$*.d
 
 %.d: %.c
-	$(CC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
+	$(GCC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
 
 include $(DEP)
 

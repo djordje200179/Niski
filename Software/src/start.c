@@ -1,6 +1,5 @@
 #include "devices/sev_seg_displays.h"
-
-int calculate() {
+static int calculate() {
 	int a = 0, b = 1;
 
 	for (int i = 0; i < 10; i++) {
@@ -12,7 +11,7 @@ int calculate() {
 	return a;
 }
 
-void show(int value) {
+static void show(int value) {
 	sev_seg_displays_on();
 	
 	sev_seg_displays_set_number(value);

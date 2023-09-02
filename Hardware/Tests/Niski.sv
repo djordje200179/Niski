@@ -23,7 +23,7 @@ niski_dut dut (
 
 initial begin
 	$stop;
-	#4000;
+	#6000;
 	$stop;
 end
 

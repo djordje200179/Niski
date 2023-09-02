@@ -19,7 +19,7 @@ module cpu_ir_reg (
 
 	wire [6:0] opcode = ir[6:0];
 	wire [6:0] funct7 = ir[31:25];
-	wire [3:0] funct3 = ir[14:12];
+	wire [2:0] funct3 = ir[14:12];
 	
 	wire [11:0] imm_i = ir[31:20];
 	wire [31:12] imm_u = ir[31:12];
