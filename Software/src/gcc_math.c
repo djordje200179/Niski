@@ -1,4 +1,9 @@
 unsigned long __udivmoddi4 (unsigned long a, unsigned long b, unsigned long *c) {
+	if (b == 0) {
+		*c = a;
+		return 0xffffffff;
+	}
+
 	unsigned long count = 0;
 	while (a >= b) {
 		a -= b;
@@ -10,6 +15,11 @@ unsigned long __udivmoddi4 (unsigned long a, unsigned long b, unsigned long *c) 
 }
 
 unsigned long long __udivmodti4 (unsigned long long a, unsigned long long b, unsigned long long *c) {
+	if (b == 0) {
+		*c = a;
+		return 0xffffffffffffffff;
+	}
+
 	unsigned long long count = 0;
 	while (a >= b) {
 		a -= b;
@@ -51,6 +61,9 @@ unsigned long long __umodti3 (unsigned long long a, unsigned long long b) {
 }
 
 long __divdi3 (long a, long b) {
+	if (b == 0)
+		return -1;
+
 	if ((a < 0 && b < 0) || (a > 0 && b > 0))
 		return __udivdi3(a, b);
 	else
@@ -62,6 +75,9 @@ int __divsi3 (int a, int b) {
 }
 
 long long __divti3 (long long a, long long b) {
+	if (b == 0)
+		return -1;
+
 	if ((a < 0 && b < 0) || (a > 0 && b > 0))
 		return __udivti3(a, b);
 	else
@@ -69,6 +85,9 @@ long long __divti3 (long long a, long long b) {
 }
 
 long __moddi3 (long a, long b) {
+	if (b == 0)
+		return a;
+
 	if ((a < 0 && b < 0) || (a > 0 && b > 0))
 		return __umoddi3(a, b);
 	else
@@ -80,6 +99,9 @@ int __modsi3 (int a, int b) {
 }
 
 long long __modti3 (long long a, long long b) {
+	if (b == 0)
+		return a;
+		
 	if ((a < 0 && b < 0) || (a > 0 && b > 0))
 		return __umodti3(a, b);
 	else
