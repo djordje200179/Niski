@@ -7,8 +7,8 @@ reg rst;
 
 wire [4:0] btns = {~rst, 4'b0};
 wire [3:0] leds;
-wire [6:0] sev_seg_segments;
-wire [3:0] sev_seg_select;
+wire [6:0] ssds_segments;
+wire [3:0] ssds_select;
 
 `include "NiskiDUT.v"
 niski_dut dut (
@@ -17,8 +17,8 @@ niski_dut dut (
 	.BTN_PINS(btns),
 	.LED_PINS(leds),
 
-	.SEVSEG_SEG_PINS(sev_seg_segments),
-	.SEVSEG_SEL_PINS(sev_seg_select)
+	.SEVSEG_SEG_PINS(ssds_segments),
+	.SEVSEG_SEL_PINS(ssds_select)
 );
 
 initial begin

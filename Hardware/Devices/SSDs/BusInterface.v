@@ -1,4 +1,4 @@
-module sev_seg_displays_bus_interface (
+module ssds_bus_interface (
 	input clk, rst,
 
     output ctrl_en, 
@@ -38,7 +38,7 @@ module sev_seg_displays_bus_interface (
 	generate
 		genvar i;
 		for (i = 0; i < 4; i = i + 1) begin: digit_mappers
-			sev_seg_digit_mapper digit_mapper (
+			ssds_digit_mapper digit_mapper (
 				.digit(digits_data[i]),
 				.segments(digit_segments[i])
 			);

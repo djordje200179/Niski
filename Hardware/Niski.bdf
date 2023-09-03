@@ -628,7 +628,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (symbol
 	(rect 856 1472 1080 1648)
-	(text "sev_seg_displays_controller" (rect 5 0 191 15)(font "Arial" ))
+	(text "ssds_controller" (rect 5 0 191 15)(font "Arial" ))
 	(text "inst10" (rect 8 160 48 175)(font "Arial" ))
 	(port
 		(pt 0 152)
@@ -2011,7 +2011,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (symbol
 	(rect 536 1472 784 1648)
-	(text "sev_seg_displays_bus_interface" (rect 5 0 219 15)(font "Arial" ))
+	(text "ssds_bus_interface" (rect 5 0 219 15)(font "Arial" ))
 	(text "inst7" (rect 8 160 39 175)(font "Arial" ))
 	(port
 		(pt 0 152)

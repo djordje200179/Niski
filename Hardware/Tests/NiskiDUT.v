@@ -135,7 +135,7 @@ i2c_controller	b2v_inst(
 
 
 
-sev_seg_displays_controller	b2v_inst10(
+ssds_controller	b2v_inst10(
 	.clk(clk_1_khz),
 	.rst(btn_rst),
 	.en(SYNTHESIZED_WIRE_0),
@@ -365,7 +365,7 @@ uart_controller	b2v_inst6(
 	defparam	b2v_inst6.BAUD_RATE = 9600;
 
 
-sev_seg_displays_bus_interface	b2v_inst7(
+ssds_bus_interface	b2v_inst7(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.rd_bus(rd_bus),

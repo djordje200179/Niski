@@ -221,11 +221,11 @@ set_global_assignment -name VERILOG_INCLUDE_FILE Devices/I2C/States.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/PS2Keyboard/Keys.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Mappers/Digit.v
-set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Mappers/Digit.v
-set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Mappers/HexNumber.v
-set_global_assignment -name VERILOG_FILE Devices/SevSegDisplays/Mappers/DecNumber.v
+set_global_assignment -name VERILOG_FILE Devices/SSDs/BusInterface.v
+set_global_assignment -name VERILOG_FILE Devices/SSDs/Controller.v
+set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/Digit.v
+set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/HexNumber.v
+set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/DecNumber.v
 set_global_assignment -name VERILOG_FILE Devices/SDRAM/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/SDRAM/States.vh
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/SDRAM/Commands.vh

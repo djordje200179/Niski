@@ -3,3 +3,4 @@ incremental_db
 simulation
 output_files
 *.qws
+*.bak

@@ -1,4 +1,4 @@
-module sev_seg_displays_controller (
+module ssds_controller (
 	clk, rst, en, 
 	digit_0, digit_1, digit_2, digit_3, dots, 
 	segment_pins, select_pins

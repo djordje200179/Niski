@@ -22,7 +22,7 @@ https://fpgasoftware.intel.com/eula.
 (header "symbol" (version "1.2"))
 (symbol
 	(rect 64 64 312 240)
-	(text "sev_seg_displays_bus_interface" (rect 5 0 157 15)(font "Arial" ))
+	(text "ssds_bus_interface" (rect 5 0 157 15)(font "Arial" ))
 	(text "inst" (rect 8 160 31 175)(font "Arial" ))
 	(port
 		(pt 0 152)

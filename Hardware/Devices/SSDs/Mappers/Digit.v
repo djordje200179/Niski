@@ -1,4 +1,4 @@
-module sev_seg_digit_mapper (digit, segments);
+module ssds_digit_mapper (digit, segments);
 	input [3:0] digit;
 	
 	output reg [6:0] segments;

@@ -1,4 +1,4 @@
-module sev_seg_dec_number_mapper (
+module ssds_dec_number_mapper (
 	number, 
 	digit0, digit1, digit2, digit3
 );
@@ -6,7 +6,7 @@ module sev_seg_dec_number_mapper (
 	
 	output [6:0] digit0, digit1, digit2, digit3;
 	
-	sev_seg_digit_mapper ones (number / 1 	% 10, digit0), 
+	ssds_digit_mapper ones (number / 1 	% 10, digit0), 
 						 tens (number / 10 % 10, digit1),
 						 hundreds (number / 100 % 10, digit2),
 						 thousands (number / 1000 % 10, digit3);
