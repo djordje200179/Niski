@@ -15,9 +15,9 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Thu Aug 31 19:51:09 2023"
+// CREATED		"Sun Sep  3 11:13:53 2023"
 
-module niski_dut(
+module niski_dut (
 	CLK_PIN,
 	UART_RX_PIN,
 	PS2_CLK_PIN,
@@ -136,7 +136,7 @@ i2c_controller	b2v_inst(
 
 
 sev_seg_displays_controller	b2v_inst10(
-	.clk(clk_50_mhz),
+	.clk(clk_1_khz),
 	.rst(btn_rst),
 	.en(SYNTHESIZED_WIRE_0),
 	.digit_0(SYNTHESIZED_WIRE_1),
@@ -163,8 +163,7 @@ buzzer_bus_interface	b2v_inst11(
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst11.CONTROL_REG_ADDR = 32'b01110000000000000000000000010000;
-	defparam	b2v_inst11.DATA_REG_ADDR = 32'b01110000000000000000000000011000;
-	defparam	b2v_inst11.STATUS_REG_ADDR = 32'b01110000000000000000000000010100;
+	defparam	b2v_inst11.DATA_REG_ADDR = 32'b01110000000000000000000000010100;
 
 
 leds_controller	b2v_inst12(
@@ -203,8 +202,7 @@ leds_bus_interface	b2v_inst14(
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst14.CONTROL_REG_ADDR = 32'b01110000000000000000000000000000;
-	defparam	b2v_inst14.DATA_REG_ADDR = 32'b01110000000000000000000000001000;
-	defparam	b2v_inst14.STATUS_REG_ADDR = 32'b01110000000000000000000000000100;
+	defparam	b2v_inst14.DATA_REG_ADDR = 32'b01110000000000000000000000000100;
 
 
 bus_arbitrator	b2v_inst16(
@@ -249,6 +247,7 @@ ram	b2v_inst20(
 	.wr_mask(SYNTHESIZED_WIRE_16),
 	.data_out(SYNTHESIZED_WIRE_17));
 	defparam	b2v_inst20.ADDR_BITS = 12;
+	defparam	b2v_inst20.MEM_FILE = "../../Software/out/ram.mem";
 
 
 memory_bus_interface	b2v_inst21(
@@ -383,9 +382,8 @@ sev_seg_displays_bus_interface	b2v_inst7(
 	.ctrl_dots(SYNTHESIZED_WIRE_5)
 	);
 	defparam	b2v_inst7.CONTROL_REG_ADDR = 32'b01110000000000000000000000100000;
-	defparam	b2v_inst7.DATA_DIGITS_REG_ADDR = 32'b01110000000000000000000000101000;
-	defparam	b2v_inst7.DATA_DOTS_REG_ADDR = 32'b01110000000000000000000000101100;
-	defparam	b2v_inst7.STATUS_REG_ADDR = 32'b01110000000000000000000000100100;
+	defparam	b2v_inst7.DATA_DIGITS_REG_ADDR = 32'b01110000000000000000000000100100;
+	defparam	b2v_inst7.DATA_DOTS_REG_ADDR = 32'b01110000000000000000000000101000;
 
 
 ir_controller	b2v_inst8(
