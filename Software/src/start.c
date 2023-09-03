@@ -6,11 +6,14 @@ static int b = 1;
 void start() {
 	sev_seg_displays_on();
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
 		int c = a + b;
 		a = b;
 		b = c;
 
-		sev_seg_displays_set_number(c);
+		volatile int j;
+		for (j = 0; j < 200000; j++);
+
+		sev_seg_displays_set_number(a);
 	}
 }

@@ -7,6 +7,10 @@ module cpu_alu (
 );
 	`include "Instructions.vh"
 
+	wire [63:0] uu_multiplication_result = operand_a * operand_b,
+				ss_multiplication_result = $signed(operand_a) * $signed(operand_b),
+				su_multiplication_result = $signed(operand_a) * operand_b;
+
 	always @* begin
 		result = 32'b0;
 
@@ -21,10 +25,10 @@ module cpu_alu (
 		INST_ARLOG_SRA: 	result = $signed(operand_a) >>> operand_b[4:0];
 		INST_ARLOG_OR: 		result = operand_a | operand_b;
 		INST_ARLOG_AND: 	result = operand_a & operand_b;
-		// INST_ARLOG_MUL: 	result = $signed(operand_a) * $signed(operand_b);
-		// INST_ARLOG_MULH: 	result = ($signed(operand_a) * $signed(operand_b)) >> 32;
-		// INST_ARLOG_MULHSU: 	result = ($signed(operand_a) * operand_b) >> 32;
-		// INST_ARLOG_MULHU: 	result = (operand_a * operand_b) >> 32;
+		INST_ARLOG_MUL: 	result = ss_multiplication_result[31:0];
+		INST_ARLOG_MULH: 	result = ss_multiplication_result[63:32];
+		INST_ARLOG_MULHSU: 	result = su_multiplication_result[63:32];
+		INST_ARLOG_MULHU: 	result = uu_multiplication_result[63:32];
 		// INST_ARLOG_DIV: 	result = $signed(operand_a) / $signed(operand_b);
 		// INST_ARLOG_DIVU: 	result = operand_a / operand_b;
 		// INST_ARLOG_REM: 	result = $signed(operand_a) % $signed(operand_b);

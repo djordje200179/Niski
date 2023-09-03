@@ -7,7 +7,7 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 
 GCC = riscv64-linux-gnu-gcc
 
-GCC_FLAGS = -march=rv32e -mabi=ilp32e
+GCC_FLAGS = -march=rv32em -mabi=ilp32e -mno-div
 GCC_FLAGS += -Wall -Wextra
 GCC_FLAGS += -O3
 
