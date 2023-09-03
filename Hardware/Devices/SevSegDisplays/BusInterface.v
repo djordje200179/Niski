@@ -32,6 +32,9 @@ module sev_seg_displays_bus_interface (
 	assign ctrl_digit_2 = digits_data[2][7] ? digit_segments[2] : digits_data[2][6:0];
 	assign ctrl_digit_3 = digits_data[3][7] ? digit_segments[3] : digits_data[3][6:0];
 
+	assign ctrl_dots = data_dots_reg[3:0];
+	assign ctrl_en = ctrl_reg[0];
+
 	generate
 		genvar i;
 		for (i = 0; i < 4; i = i + 1) begin: digit_mappers
