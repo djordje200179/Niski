@@ -13,12 +13,12 @@ module cpu_alu (
 		case (mod)
 		INST_ARLOG_ADD:		result = operand_a + operand_b;
 		INST_ARLOG_SUB:		result = operand_a - operand_b;
-		INST_ARLOG_SLL: 	result = operand_a << operand_b;
+		INST_ARLOG_SLL: 	result = operand_a << operand_b[4:0];
 		INST_ARLOG_SLT: 	result = $signed(operand_a) < $signed(operand_b);
 		INST_ARLOG_SLTU:	result = operand_a < operand_b;
 		INST_ARLOG_XOR: 	result = operand_a ^ operand_b;
-		INST_ARLOG_SRL: 	result = operand_a >> operand_b;
-		INST_ARLOG_SRA: 	result = $signed(operand_a) >>> operand_b;
+		INST_ARLOG_SRL: 	result = operand_a >> operand_b[4:0];
+		INST_ARLOG_SRA: 	result = $signed(operand_a) >>> operand_b[4:0];
 		INST_ARLOG_OR: 		result = operand_a | operand_b;
 		INST_ARLOG_AND: 	result = operand_a & operand_b;
 		// INST_ARLOG_MUL: 	result = $signed(operand_a) * $signed(operand_b);
