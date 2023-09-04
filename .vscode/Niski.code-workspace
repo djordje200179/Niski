@@ -7,5 +7,12 @@
 			"path": "../Software"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"makefile.configurations": [
+			{
+				"name": "Default"
+			}
+		],
+		"makefile.makefilePath": "../Software/Makefile"
+	}
 }
