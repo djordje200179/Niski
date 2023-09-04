@@ -16,11 +16,11 @@ module cpu_reg_file#(
 		end
 	endgenerate
 
-	assign data_rd1 = addr_rd1 ? registers.regs[addr_rd1] : 32'b0;
-	assign data_rd2 = addr_rd2 ? registers.regs[addr_rd2] : 32'b0;
+	assign data_rd1 = |addr_rd1 ? registers.regs[addr_rd1] : 32'b0;
+	assign data_rd2 = |addr_rd2 ? registers.regs[addr_rd2] : 32'b0;
 
 	always @(posedge clk) begin
-		if (wr && addr_wr)
+		if (wr && |addr_wr)
 			registers.regs[addr_wr] <= data_wr;
 	end	
 endmodule
