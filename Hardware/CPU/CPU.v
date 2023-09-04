@@ -39,6 +39,11 @@ module cpu (
 	reg [31:0] gpr_dst_in;
 	reg gpr_wr;
 
+	reg [31:0] csr_data_in;
+	wire [31:0] csr_data_out;
+	wire csr_wr;
+	wire csr_incr_inst_count;
+
 	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
 
@@ -97,6 +102,14 @@ module cpu (
 		.data_rd1(gpr_src1), .data_rd2(gpr_src2),
 		.data_wr(gpr_dst_in), 
 		.wr(gpr_wr)
+	);
+
+	cpu_csrs csrs (
+		.clk(clk), .rst(rst),
+
+		.addr(inst_imm),
+		.data_in(csr_data_in), .data_out(csr_data_out),
+		.wr(csr_wr), .incr_inst_count(csr_incr_inst_count)
 	);
 
 	cpu_alu alu_unit (
@@ -175,6 +188,8 @@ module cpu (
 				gpr_dst_in = pc + 4;
 			else if (inst_arlog_imm || inst_arlog)
 				gpr_dst_in = alu_out;
+			else if (inst_system)
+				gpr_dst_in = csr_data_out;
 		end else begin
 			case (inst_funct3)
 			INST_LOAD_FUNCT3_BYTE: 	gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
@@ -185,6 +200,23 @@ module cpu (
 			endcase
 		end
 	end
+
+	always @* begin
+		csr_data_in = 32'b0;
+
+		case (inst_funct3)
+		INST_SYSTEM_FUNCT3_CSRRW: 	csr_data_in = gpr_src1;
+		INST_SYSTEM_FUNCT3_CSRRS: 	csr_data_in = csr_data_out | gpr_src1;
+		INST_SYSTEM_FUNCT3_CSRRC: 	csr_data_in = csr_data_out & ~gpr_src1;
+		INST_SYSTEM_FUNCT3_CSRRWI: 	csr_data_in = {27'b0, inst_rs1};
+		INST_SYSTEM_FUNCT3_CSRRSI: 	csr_data_in = csr_data_out | {27'b0, inst_rs1};
+		INST_SYSTEM_FUNCT3_CSRRCI: 	csr_data_in = csr_data_out & ~{27'b0, inst_rs1};
+		endcase
+	end
+
+	assign csr_wr = state == STATE_EXEC_INST && inst_system && |inst_funct3;
+
+	assign csr_incr_inst_count = state == STATE_CHECK_INTR;
 
 	always @* begin
 		alu_operand_b = 32'b0;
