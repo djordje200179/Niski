@@ -22,8 +22,9 @@ module cpu (
 	reg ma_wr_req, ma_rd_req;
 	wire ma_done;
 
+	wire [9:0] inst_funct;
+	wire [2:0] inst_funct3 = inst_funct[2:0];
 	wire [4:0] inst_rd, inst_rs1, inst_rs2;
-	wire [9:0] inst_mod;
 	wire [31:0] inst_imm;
 	wire inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
 		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, inst_system;
@@ -67,11 +68,12 @@ module cpu (
 
 	cpu_ir_reg ir_reg_unit (
 		.clk(clk),
+
 		.data_in(ma_data), 
 		.wr(state == STATE_RD_INST_WAIT && ma_done),
 
+		.funct(inst_funct),
 		.rd(inst_rd), .rs1(inst_rs1), .rs2(inst_rs2),
-		.mod(inst_mod),
 		.imm(inst_imm),
 		
 		.inst_lui(inst_lui), .inst_auipc(inst_auipc), 
@@ -83,7 +85,7 @@ module cpu (
 	);
 	
 	cpu_branch_tester branch_tester_unit (
-		.mod(inst_mod[2:0]),
+		.funct3(inst_funct3),
 		.operand_a(gpr_src1), .operand_b(gpr_src2),
 		.condition_satisfied(branch_cond)
 	);
@@ -98,7 +100,7 @@ module cpu (
 	);
 
 	cpu_alu alu_unit (
-		.mod(inst_mod),
+		.funct(inst_funct),
 		.operand_a(gpr_src1), .operand_b(alu_operand_b),
 		.result(alu_out)
 	);
@@ -109,7 +111,7 @@ module cpu (
 		ma_mask = 4'b1111;
 
 		if (state == STATE_EXEC_INST || state == STATE_EXEC_INST_MEM_WAIT) begin
-			case (inst_mod[1:0])
+			case (inst_funct3[1:0])
 			2'b00: ma_mask = 4'b0001;
 			2'b01: ma_mask = 4'b0011;
 			endcase
@@ -174,12 +176,12 @@ module cpu (
 			else if (inst_arlog_imm || inst_arlog)
 				gpr_dst_in = alu_out;
 		end else begin
-			case (inst_mod[2:0])
-			INST_LOAD_BYTE: 	gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
-			INST_LOAD_HALF: 	gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
-			INST_LOAD_WORD: 	gpr_dst_in = ma_data;
-			INST_LOAD_BYTE_UNS:	gpr_dst_in = {{24{1'b0}}, ma_data[7:0]};
-			INST_LOAD_HALF_UNS:	gpr_dst_in = {{16{1'b0}}, ma_data[15:0]};
+			case (inst_funct3)
+			INST_LOAD_FUNCT3_BYTE: 	gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
+			INST_LOAD_FUNCT3_HALF: 	gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
+			INST_LOAD_FUNCT3_WORD: 	gpr_dst_in = ma_data;
+			INST_LOAD_FUNCT3_BYTE_UNS:	gpr_dst_in = {{24{1'b0}}, ma_data[7:0]};
+			INST_LOAD_FUNCT3_HALF_UNS:	gpr_dst_in = {{16{1'b0}}, ma_data[15:0]};
 			endcase
 		end
 	end
@@ -188,7 +190,7 @@ module cpu (
 		alu_operand_b = 32'b0;
 
 		if(inst_arlog_imm) begin
-			case (inst_mod[2:0])
+			case (inst_funct3)
 			3'b001, 
 			3'b101:
 				alu_operand_b = inst_rs2;

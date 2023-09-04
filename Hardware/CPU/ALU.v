@@ -1,5 +1,5 @@
 module cpu_alu (
-	input [9:0] mod,
+	input [9:0] funct,
 	output reg invalid_opcode,
 
 	input [31:0] operand_a, operand_b,
@@ -14,50 +14,50 @@ module cpu_alu (
 	always @* begin
 		result = 32'b0;
 
-		case (mod)
-		INST_ARLOG_ADD:		result = operand_a + operand_b;
-		INST_ARLOG_SUB:		result = operand_a - operand_b;
-		INST_ARLOG_SLL: 	result = operand_a << operand_b[4:0];
-		INST_ARLOG_SLT: 	result = $signed(operand_a) < $signed(operand_b);
-		INST_ARLOG_SLTU:	result = operand_a < operand_b;
-		INST_ARLOG_XOR: 	result = operand_a ^ operand_b;
-		INST_ARLOG_SRL: 	result = operand_a >> operand_b[4:0];
-		INST_ARLOG_SRA: 	result = $signed(operand_a) >>> operand_b[4:0];
-		INST_ARLOG_OR: 		result = operand_a | operand_b;
-		INST_ARLOG_AND: 	result = operand_a & operand_b;
-		INST_ARLOG_MUL: 	result = ss_multiplication_result[31:0];
-		INST_ARLOG_MULH: 	result = ss_multiplication_result[63:32];
-		INST_ARLOG_MULHSU: 	result = su_multiplication_result[63:32];
-		INST_ARLOG_MULHU: 	result = uu_multiplication_result[63:32];
-		// INST_ARLOG_DIV: 	result = $signed(operand_a) / $signed(operand_b);
-		// INST_ARLOG_DIVU: 	result = operand_a / operand_b;
-		// INST_ARLOG_REM: 	result = $signed(operand_a) % $signed(operand_b);
-		// INST_ARLOG_REMU: 	result = operand_a % operand_b;
+		case (funct)
+		INST_ARLOG_FUNCT_ADD:		result = operand_a + operand_b;
+		INST_ARLOG_FUNCT_SUB:		result = operand_a - operand_b;
+		INST_ARLOG_FUNCT_SLL: 	result = operand_a << operand_b[4:0];
+		INST_ARLOG_FUNCT_SLT: 	result = $signed(operand_a) < $signed(operand_b);
+		INST_ARLOG_FUNCT_SLTU:	result = operand_a < operand_b;
+		INST_ARLOG_FUNCT_XOR: 	result = operand_a ^ operand_b;
+		INST_ARLOG_FUNCT_SRL: 	result = operand_a >> operand_b[4:0];
+		INST_ARLOG_FUNCT_SRA: 	result = $signed(operand_a) >>> operand_b[4:0];
+		INST_ARLOG_FUNCT_OR: 		result = operand_a | operand_b;
+		INST_ARLOG_FUNCT_AND: 	result = operand_a & operand_b;
+		INST_ARLOG_FUNCT_MUL: 	result = ss_multiplication_result[31:0];
+		INST_ARLOG_FUNCT_MULH: 	result = ss_multiplication_result[63:32];
+		INST_ARLOG_FUNCT_MULHSU: 	result = su_multiplication_result[63:32];
+		INST_ARLOG_FUNCT_MULHU: 	result = uu_multiplication_result[63:32];
+		// INST_ARLOG_FUNCT_DIV: 	result = $signed(operand_a) / $signed(operand_b);
+		// INST_ARLOG_FUNCT_DIVU: 	result = operand_a / operand_b;
+		// INST_ARLOG_FUNCT_REM: 	result = $signed(operand_a) % $signed(operand_b);
+		// INST_ARLOG_FUNCT_REMU: 	result = operand_a % operand_b;
 		endcase
 	end
 	
 	always @* begin
 		invalid_opcode = 1'b1;
 
-		case (mod)
-		INST_ARLOG_ADD,
-		INST_ARLOG_SUB,
-		INST_ARLOG_SLL,
-		INST_ARLOG_SLT,
-		INST_ARLOG_SLTU,
-		INST_ARLOG_XOR,
-		INST_ARLOG_SRL,
-		INST_ARLOG_SRA,
-		INST_ARLOG_OR,
-		INST_ARLOG_AND,
-		INST_ARLOG_MUL,
-		INST_ARLOG_MULH,
-		INST_ARLOG_MULHSU,
-		INST_ARLOG_MULHU,
-		INST_ARLOG_DIV,
-		INST_ARLOG_DIVU,
-		INST_ARLOG_REM,
-		INST_ARLOG_REMU:
+		case (funct)
+		INST_ARLOG_FUNCT_ADD,
+		INST_ARLOG_FUNCT_SUB,
+		INST_ARLOG_FUNCT_SLL,
+		INST_ARLOG_FUNCT_SLT,
+		INST_ARLOG_FUNCT_SLTU,
+		INST_ARLOG_FUNCT_XOR,
+		INST_ARLOG_FUNCT_SRL,
+		INST_ARLOG_FUNCT_SRA,
+		INST_ARLOG_FUNCT_OR,
+		INST_ARLOG_FUNCT_AND,
+		INST_ARLOG_FUNCT_MUL,
+		INST_ARLOG_FUNCT_MULH,
+		INST_ARLOG_FUNCT_MULHSU,
+		INST_ARLOG_FUNCT_MULHU,
+		INST_ARLOG_FUNCT_DIV,
+		INST_ARLOG_FUNCT_DIVU,
+		INST_ARLOG_FUNCT_REM,
+		INST_ARLOG_FUNCT_REMU:
 			invalid_opcode = 1'b0;
 		endcase
 	end
