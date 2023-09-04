@@ -628,7 +628,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (symbol
 	(rect 856 1472 1080 1648)
-	(text "ssds_controller" (rect 5 0 191 15)(font "Arial" ))
+	(text "ssds_controller" (rect 5 0 106 15)(font "Arial" ))
 	(text "inst10" (rect 8 160 48 175)(font "Arial" ))
 	(port
 		(pt 0 152)
@@ -1338,95 +1338,6 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 112 232 336 376)
-	(text "cpu" (rect 5 0 28 15)(font "Arial" ))
-	(text "inst23" (rect 8 128 48 143)(font "Arial" ))
-	(port
-		(pt 0 120)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 112 41 127)(font "Arial" ))
-		(line (pt 0 120)(pt 16 120))
-	)
-	(port
-		(pt 0 104)
-		(input)
-		(text "rst" (rect 0 0 16 15)(font "Arial" ))
-		(text "rst" (rect 24 96 40 111)(font "Arial" ))
-		(line (pt 0 104)(pt 16 104))
-	)
-	(port
-		(pt 0 40)
-		(input)
-		(text "bus_grant" (rect 0 0 66 15)(font "Arial" ))
-		(text "bus_grant" (rect 24 32 90 47)(font "Arial" ))
-		(line (pt 0 40)(pt 16 40))
-	)
-	(port
-		(pt 224 112)
-		(input)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 168 104 211 119)(font "Arial" ))
-		(line (pt 208 112)(pt 224 112))
-	)
-	(port
-		(pt 0 24)
-		(output)
-		(text "bus_req" (rect 0 0 54 15)(font "Arial" ))
-		(text "bus_req" (rect 24 16 78 31)(font "Arial" ))
-		(line (pt 16 24)(pt 0 24))
-	)
-	(port
-		(pt 224 32)
-		(output)
-		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
-		(text "addr_bus[31..0]" (rect 120 24 221 39)(font "Arial" ))
-		(line (pt 224 32)(pt 208 32)(line_width 3))
-	)
-	(port
-		(pt 224 80)
-		(output)
-		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
-		(text "wr_bus" (rect 168 72 216 87)(font "Arial" ))
-		(line (pt 224 80)(pt 208 80))
-	)
-	(port
-		(pt 224 64)
-		(output)
-		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
-		(text "rd_bus" (rect 168 56 214 71)(font "Arial" ))
-		(line (pt 224 64)(pt 208 64))
-	)
-	(port
-		(pt 224 96)
-		(output)
-		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
-		(text "data_mask_bus[3..0]" (rect 88 88 224 103)(font "Arial" ))
-		(line (pt 224 96)(pt 208 96)(line_width 3))
-	)
-	(port
-		(pt 224 48)
-		(bidir)
-		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
-		(text "data_bus[31..0]" (rect 120 40 220 55)(font "Arial" ))
-		(line (pt 224 48)(pt 208 48)(line_width 3))
-	)
-	(parameter
-		"EXEC_START_ADDR"
-		"40000000"
-		""
-		(type "PARAMETER_UNSIGNED_HEX")	)
-	(parameter
-		"MORE_REGISTERS"
-		"0"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(drawing
-		(rectangle (rect 16 16 208 128))
-	)
-	(annotation_block (parameter)(rect 112 168 399 228))
-)
-(symbol
 	(rect 1008 40 1160 152)
 	(text "clocks" (rect 5 0 46 15)(font "Arial" ))
 	(text "inst13" (rect 8 96 48 111)(font "Arial" ))
@@ -2011,7 +1922,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (symbol
 	(rect 536 1472 784 1648)
-	(text "ssds_bus_interface" (rect 5 0 219 15)(font "Arial" ))
+	(text "ssds_bus_interface" (rect 5 0 134 15)(font "Arial" ))
 	(text "inst7" (rect 8 160 39 175)(font "Arial" ))
 	(port
 		(pt 0 152)
@@ -2130,6 +2041,95 @@ https://fpgasoftware.intel.com/eula.
 		(rectangle (rect 16 16 232 160))
 	)
 	(annotation_block (parameter)(rect 536 1392 848 1472))
+)
+(symbol
+	(rect 112 232 336 376)
+	(text "cpu" (rect 5 0 28 15)(font "Arial" ))
+	(text "inst23" (rect 8 128 48 143)(font "Arial" ))
+	(port
+		(pt 0 120)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 112 41 127)(font "Arial" ))
+		(line (pt 0 120)(pt 16 120))
+	)
+	(port
+		(pt 0 104)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 96 40 111)(font "Arial" ))
+		(line (pt 0 104)(pt 16 104))
+	)
+	(port
+		(pt 0 40)
+		(input)
+		(text "bus_grant" (rect 0 0 66 15)(font "Arial" ))
+		(text "bus_grant" (rect 24 32 90 47)(font "Arial" ))
+		(line (pt 0 40)(pt 16 40))
+	)
+	(port
+		(pt 224 112)
+		(input)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 168 104 211 119)(font "Arial" ))
+		(line (pt 208 112)(pt 224 112))
+	)
+	(port
+		(pt 0 24)
+		(output)
+		(text "bus_req" (rect 0 0 54 15)(font "Arial" ))
+		(text "bus_req" (rect 24 16 78 31)(font "Arial" ))
+		(line (pt 16 24)(pt 0 24))
+	)
+	(port
+		(pt 224 32)
+		(output)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 120 24 221 39)(font "Arial" ))
+		(line (pt 224 32)(pt 208 32)(line_width 3))
+	)
+	(port
+		(pt 224 80)
+		(output)
+		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
+		(text "wr_bus" (rect 168 72 216 87)(font "Arial" ))
+		(line (pt 224 80)(pt 208 80))
+	)
+	(port
+		(pt 224 64)
+		(output)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 168 56 214 71)(font "Arial" ))
+		(line (pt 224 64)(pt 208 64))
+	)
+	(port
+		(pt 224 96)
+		(output)
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 88 88 224 103)(font "Arial" ))
+		(line (pt 224 96)(pt 208 96)(line_width 3))
+	)
+	(port
+		(pt 224 48)
+		(bidir)
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 120 40 220 55)(font "Arial" ))
+		(line (pt 224 48)(pt 208 48)(line_width 3))
+	)
+	(parameter
+		"EXEC_START_ADDR"
+		"40000000"
+		""
+		(type "PARAMETER_UNSIGNED_HEX")	)
+	(parameter
+		"MORE_REGISTERS"
+		"1"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(drawing
+		(rectangle (rect 16 16 208 128))
+	)
+	(annotation_block (parameter)(rect 112 168 399 228))
 )
 (connector
 	(pt 1976 672)

@@ -136,7 +136,7 @@ i2c_controller	b2v_inst(
 
 
 ssds_controller	b2v_inst10(
-	.clk(clk_1_khz),
+	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.en(SYNTHESIZED_WIRE_0),
 	.digit_0(SYNTHESIZED_WIRE_1),
@@ -301,7 +301,7 @@ cpu	b2v_inst23(
 	
 	.data_mask_bus(data_mask_bus));
 	defparam	b2v_inst23.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
-	defparam	b2v_inst23.MORE_REGISTERS = 0;
+	defparam	b2v_inst23.MORE_REGISTERS = 1;
 
 
 ps2_keyboard_controller	b2v_inst3(
