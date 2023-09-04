@@ -7,13 +7,15 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 
 GCC = riscv64-linux-gnu-gcc
 
-GCC_FLAGS = -march=rv32em -mabi=ilp32e -mno-div
-GCC_FLAGS += -Wall -Wextra
-GCC_FLAGS += -O3
+GCC_FLAGS = -march=rv32imzicsr -mabi=ilp32e -mno-div
+GCC_FLAGS += --no-pic
+GCC_FLAGS += -std=c2x
 
 CC_FLAGS = $(GCC_FLAGS)
 CC_FLAGS += -I$(I_DIR)
-GCC_FLAGS += -std=c2x --no-pic
+CC_FLAGS += -O3
+CC_FLAGS += -Wall -Wextra
+CC_FLAGS += -Werror-implicit-function-declaration
 
 LD_FLAGS = $(GCC_FLAGS)
 LD_FLAGS += -T $(LD_SCRIPT)

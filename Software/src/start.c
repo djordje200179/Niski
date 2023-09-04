@@ -1,19 +1,13 @@
 #include "devices/ssds.h"
-
-static int a = 0;
-static int b = 1;
+#include "cpu/counters.h"
 
 void start() {
 	ssds_on();
 
-	for (int i = 0; i < 20; i++) {
-		int c = a + b;
-		a = b;
-		b = c;
+	while (true) {
+		uint64_t seconds = get_cpu_seconds();
+		ssds_set_digit(3, seconds);
 
-		volatile int j;
-		for (j = 0; j < 200000; j++);
-
-		ssds_set_number(a);
+		for(volatile int i = 0; i < 200000; i++);
 	}
 }
