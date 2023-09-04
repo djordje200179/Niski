@@ -166,7 +166,7 @@ module cpu (
 
 		case (state)
 		STATE_EXEC_INST: begin
-			if (inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog)
+			if (inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog || inst_system)
 				gpr_wr = 1'b1;
 		end
 		STATE_EXEC_INST_MEM_WAIT: begin
@@ -192,9 +192,9 @@ module cpu (
 				gpr_dst_in = csr_data_out;
 		end else begin
 			case (inst_funct3)
-			INST_LOAD_FUNCT3_BYTE: 	gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
-			INST_LOAD_FUNCT3_HALF: 	gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
-			INST_LOAD_FUNCT3_WORD: 	gpr_dst_in = ma_data;
+			INST_LOAD_FUNCT3_BYTE: 		gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
+			INST_LOAD_FUNCT3_HALF: 		gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
+			INST_LOAD_FUNCT3_WORD: 		gpr_dst_in = ma_data;
 			INST_LOAD_FUNCT3_BYTE_UNS:	gpr_dst_in = {{24{1'b0}}, ma_data[7:0]};
 			INST_LOAD_FUNCT3_HALF_UNS:	gpr_dst_in = {{16{1'b0}}, ma_data[15:0]};
 			endcase
@@ -266,7 +266,7 @@ module cpu (
 				end else
 					state <= STATE_CHECK_INTR;
 
-				if (inst_jal || inst_jalr || inst_branch && branch_cond)
+				if (pc_wr)
 					pc_changed = 1'b1;				
 			end
 			STATE_EXEC_INST_MEM_WAIT: begin
