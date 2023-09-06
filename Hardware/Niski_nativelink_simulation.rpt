@@ -18,6 +18,6 @@ Sim dir               :  simulation\questa
 
 Info: Starting NativeLink simulation with Questasim software
 Sourced NativeLink script c:/quartus/quartus/common/tcl/internal/nativelink/modelsim.tcl
-Warning: File Niski_run_msim_rtl_verilog.do already exists - backing up current file as Niski_run_msim_rtl_verilog.do.bak11
+Warning: File Niski_run_msim_rtl_verilog.do already exists - backing up current file as Niski_run_msim_rtl_verilog.do.bak
 Info: Spawning QuestaSim Simulation software 
 Info: NativeLink simulation flow was successful

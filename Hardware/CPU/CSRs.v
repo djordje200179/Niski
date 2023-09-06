@@ -7,7 +7,7 @@ module cpu_csrs (
 	output reg [31:0] data_out,
 	input wr, 
 	
-	input incr_inst_count, incr_timer
+	input inst_tick, timer_tick
 );
 	localparam CYCLE_ADDR		= 12'hC00,
 			   CYCLEH_ADDR 		= 12'hC80,
@@ -33,6 +33,8 @@ module cpu_csrs (
 	// TODO: Add scounteren, senvcfg, scontext, satp
 
 	reg [63:0] cycle_cnt, time_cnt, inst_cnt;
+
+	reg time_incr_done, inst_incr_done;
 
 	reg [31:0] sstatus, sie, stvec, sscratch, sepc, scause, stval, sip;
 
@@ -60,6 +62,11 @@ module cpu_csrs (
 	task reset;
 		begin
 			cycle_cnt <= 64'h0;
+			time_cnt <= 64'h0;
+			inst_cnt <= 64'h0;
+
+			time_incr_done <= 1'b0;
+			inst_incr_done <= 1'b0;
 		end
 	endtask
 
@@ -78,6 +85,18 @@ module cpu_csrs (
 				endcase
 			end
 
+			if (timer_tick && !time_incr_done) begin
+				time_cnt <= time_cnt + 32'b1;
+				time_incr_done <= 1'b1;
+			end else if (!timer_tick) 
+				time_incr_done <= 1'b0;
+
+			if (inst_tick && !inst_incr_done) begin
+				inst_cnt <= inst_cnt + 32'b1;
+				inst_incr_done <= 1'b1;
+			end else if (!inst_tick) 
+				inst_incr_done <= 1'b0;
+
 			cycle_cnt <= cycle_cnt + 32'b1;
 		end
 	endtask
@@ -85,15 +104,5 @@ module cpu_csrs (
 	always @(posedge clk or posedge rst) begin
 		if (rst) reset;
 		else on_clock;
-	end
-
-	always @(posedge incr_timer or posedge rst) begin
-		if (rst) time_cnt <= 64'h0;
-		else time_cnt <= time_cnt + 32'b1;
-	end
-
-	always @(posedge incr_inst_count or posedge rst) begin
-		if (rst) inst_cnt <= 64'h0;
-		else inst_cnt <= inst_cnt + 32'b1;
 	end
 endmodule

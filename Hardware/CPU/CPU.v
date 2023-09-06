@@ -46,7 +46,6 @@ module cpu (
 	reg [31:0] csr_data_in;
 	wire [31:0] csr_data_out;
 	wire csr_wr;
-	wire csr_incr_inst_count, csr_incr_time;
 
 	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
@@ -119,8 +118,8 @@ module cpu (
 		.data_in(csr_data_in), .data_out(csr_data_out),
 		.wr(csr_wr), 
 		
-		.incr_inst_count(csr_incr_inst_count),
-		.incr_timer(csr_incr_time)
+		.inst_tick(state == STATE_CHECK_INTR),
+		.timer_tick(clk_1_hz)
 	);
 
 	cpu_alu alu_unit (
@@ -226,9 +225,6 @@ module cpu (
 	end
 
 	assign csr_wr = state == STATE_EXEC_INST && inst_system && |inst_funct3;
-
-	assign csr_incr_inst_count = state == STATE_CHECK_INTR;
-	assign csr_incr_time = clk_1_hz;
 
 	always @* begin
 		alu_operand_b = 32'b0;
