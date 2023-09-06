@@ -290,7 +290,7 @@ memory_bus_interface	b2v_inst22(
 
 cpu	b2v_inst23(
 	.clk(clk_50_mhz),
-	.clk_1_hz(clk_1_hz),
+	.clk_1_hz(clk_1_mhz),
 	.rst(btn_rst),
 	.bus_grant(SYNTHESIZED_WIRE_19),
 	.fc_bus(fc_bus),

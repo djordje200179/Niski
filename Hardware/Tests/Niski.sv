@@ -23,7 +23,7 @@ niski_dut dut (
 
 initial begin
 	$stop;
-	#6000;
+	#10000;
 	$stop;
 end
 
@@ -46,7 +46,7 @@ string register_names[32] = {
 
 always begin
 	wait (dut.wr_bus && dut.addr_bus[31:4] == 28'h7000002);
-	$strobe("PC: %h, MEM[%h] = %h (%d), (Mask: %b)", dut.b2v_inst23.pc, dut.addr_bus, dut.data_bus, dut.data_bus, dut.data_mask_bus);
+	$strobe("at %t -> PC: %h, MEM[%h] = %h (%d), (Mask: %b)", $time, dut.b2v_inst23.pc, dut.addr_bus, dut.data_bus, dut.data_bus, dut.data_mask_bus);
 	wait (!dut.wr_bus);
 end
 
