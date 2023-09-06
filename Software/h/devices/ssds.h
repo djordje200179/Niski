@@ -1,7 +1,6 @@
 #pragma once
 
-#include "stdbool.h"
-#include "stdint.h"
+#include <stdint.h>
 
 void ssds_on(void);
 void ssds_off(void);

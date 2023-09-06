@@ -10,8 +10,6 @@ inline static unsigned long long get_cpu_millis() {
     return get_cpu_cycles() / 50000;
 }
 
-inline static unsigned long long get_cpu_seconds() {
-    return get_cpu_cycles() / 50000000;
-}
+unsigned long long get_cpu_seconds();
 
 unsigned long long get_cpu_inst_count();

@@ -5,30 +5,32 @@ LD_SCRIPT = linker.ld
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
-GCC = riscv64-linux-gnu-gcc
+GCC = riscv64-unknown-elf-gcc
 
-GCC_FLAGS = -march=rv32imzicsr -mabi=ilp32e -mno-div
+GCC_FLAGS = -march=rv32im -mabi=ilp32 -mno-div
 GCC_FLAGS += --no-pic
-GCC_FLAGS += -std=c2x
+GCC_FLAGS += -std=c2x -ffreestanding -nostdlib
 
 CC_FLAGS = $(GCC_FLAGS)
 CC_FLAGS += -I$(I_DIR)
 CC_FLAGS += -O3
 CC_FLAGS += -Wall -Wextra
 CC_FLAGS += -Werror-implicit-function-declaration
+CC_FLAGS += -mstrict-align
+CC_FLAGS += -mriscv-attribute
 
 LD_FLAGS = $(GCC_FLAGS)
 LD_FLAGS += -T $(LD_SCRIPT)
-LD_FLAGS += -flinker-output=exec -no-pie
-LD_FLAGS += -nostartfiles -nodefaultlibs -nolibc -nostdlib 
+LD_FLAGS += --enable-multilib -flinker-output=exec -no-pie
 LD_FLAGS += -Xlinker --print-memory-usage
 LD_FLAGS += -Xlinker --build-id=none
 LD_FLAGS += -Xlinker --gc-sections
+LD_LIBS = -lgcc
 
-OBJDUMP = riscv64-linux-gnu-objdump
+OBJDUMP = riscv64-unknown-elf-objdump
 OBJDUMP_FLAGS =
 
-OBJCOPY = riscv64-linux-gnu-objcopy
+OBJCOPY = riscv64-unknown-elf-objcopy
 OBJCOPY_FLAGS = -O verilog --verilog-data-width=4 --reverse-bytes=4
 
 MEMFILE_CORRECTOR = ./memfile_corrector.py
@@ -57,7 +59,7 @@ $(RAM_OUT): $(EXE_OUT)
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)
 	mkdir -p $(dir $@)
-	$(GCC) $(LD_FLAGS) -o $@ $^
+	$(GCC) $(LD_FLAGS) -o $@ $^ $(LD_LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(dir $@)
@@ -78,9 +80,9 @@ dissasemble:
 	$(OBJDUMP) -d $(EXE_OUT)
 
 clean:
-	rm -f *.d
+	rm -rf $(DEP)
 	rm -rf $(OBJ_DIR)
 	rm -rf $(OUT_DIR)
-	rm -f *~
+	rm -rf *~
 
 .PHONY: clean dissasemble all

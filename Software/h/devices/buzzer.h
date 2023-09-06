@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdbool.h"
+#include <stdbool.h>
 
 void buzzer_on(void);
 void buzzer_off(void);

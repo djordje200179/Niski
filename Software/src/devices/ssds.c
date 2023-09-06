@@ -34,9 +34,15 @@ void ssds_set_digit(uint8_t digit, uint8_t value) {
 }
 
 void ssds_set_number(uint16_t number) {
+	uint64_t value = 0;
 	for (int8_t i = 3; i >= 0; i--) {
 		uint8_t digit = number % 10;
 		number /= 10;
-		ssds_set_digit(i, digit);
+
+		value <<= 8;
+		value |= digit; 
 	}
+
+	value |= 0b10000000100000001000000010000000;
+	SSDS_DATA_DIGITS_REG = value;
 }

@@ -1,5 +1,5 @@
 #include "devices/buzzer.h"
-#include "stdint.h"
+#include <stdint.h>
 
 extern uint32_t BUZZER_CTRL_REG;
 extern uint32_t BUZZER_DATA_REG;
