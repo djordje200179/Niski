@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Sun Sep  3 11:13:53 2023"
+// CREATED		"Wed Sep  6 00:14:54 2023"
 
 module niski_dut (
 	CLK_PIN,
@@ -136,7 +136,7 @@ i2c_controller	b2v_inst(
 
 
 ssds_controller	b2v_inst10(
-	.clk(clk_50_mhz),
+	.clk(clk_1_khz),
 	.rst(btn_rst),
 	.en(SYNTHESIZED_WIRE_0),
 	.digit_0(SYNTHESIZED_WIRE_1),
@@ -181,8 +181,8 @@ clocks	b2v_inst13(
 	.rst(btn_rst),
 	.clk_50_mhz(clk_50_mhz),
 	.clk_1_mhz(clk_1_mhz),
-	.clk_1_khz(clk_1_khz)
-	);
+	.clk_1_khz(clk_1_khz),
+	.clk_1_hz(clk_1_hz));
 	defparam	b2v_inst13.INPUT_FREQ = 50000000;
 
 
@@ -290,6 +290,7 @@ memory_bus_interface	b2v_inst22(
 
 cpu	b2v_inst23(
 	.clk(clk_50_mhz),
+	.clk_1_hz(clk_1_hz),
 	.rst(btn_rst),
 	.bus_grant(SYNTHESIZED_WIRE_19),
 	.fc_bus(fc_bus),

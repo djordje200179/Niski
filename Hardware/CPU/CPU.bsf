@@ -32,6 +32,13 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 120)(pt 16 120))
 	)
 	(port
+		(pt 0 72)
+		(input)
+		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
+		(text "clk_1_hz" (rect 24 64 80 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
 		(pt 0 104)
 		(input)
 		(text "rst" (rect 0 0 16 15)(font "Arial" ))

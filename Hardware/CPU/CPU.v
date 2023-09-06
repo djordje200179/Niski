@@ -1,7 +1,9 @@
 module cpu (
 	clk, rst,
 	bus_req, bus_grant,
-	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus
+	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus,
+
+	clk_1_hz
 );
 	parameter EXEC_START_ADDR = 32'h40000000;
 	parameter MORE_REGISTERS = 1'b1;
@@ -16,6 +18,8 @@ module cpu (
 	output rd_bus, wr_bus;
 	output [3:0] data_mask_bus;
 	input fc_bus;
+
+	input clk_1_hz;
 
 	wire [31:0] ma_data;
 	reg [3:0] ma_mask;
@@ -42,13 +46,17 @@ module cpu (
 	reg [31:0] csr_data_in;
 	wire [31:0] csr_data_out;
 	wire csr_wr;
-	wire csr_incr_inst_count;
+	wire csr_incr_inst_count, csr_incr_time;
 
 	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
 
-	`include "States.vh"
-	reg [7:0] state;
+	reg [2:0] state;
+	localparam STATE_RD_INST_REQ = 3'd0,
+			   STATE_RD_INST_WAIT = 3'd1,
+			   STATE_EXEC_INST	= 3'd2,
+			   STATE_EXEC_INST_MEM_WAIT = 3'd3,
+			   STATE_CHECK_INTR	= 3'd4;
 
 	cpu_memory_access memory_access_unit (
 		.clk(clk), .rst(rst),
@@ -107,9 +115,12 @@ module cpu (
 	cpu_csrs csrs (
 		.clk(clk), .rst(rst),
 
-		.addr(inst_imm),
+		.addr(inst_imm[11:0]),
 		.data_in(csr_data_in), .data_out(csr_data_out),
-		.wr(csr_wr), .incr_inst_count(csr_incr_inst_count)
+		.wr(csr_wr), 
+		
+		.incr_inst_count(csr_incr_inst_count),
+		.incr_timer(csr_incr_time)
 	);
 
 	cpu_alu alu_unit (
@@ -217,6 +228,7 @@ module cpu (
 	assign csr_wr = state == STATE_EXEC_INST && inst_system && |inst_funct3;
 
 	assign csr_incr_inst_count = state == STATE_CHECK_INTR;
+	assign csr_incr_time = clk_1_hz;
 
 	always @* begin
 		alu_operand_b = 32'b0;

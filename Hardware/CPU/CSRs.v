@@ -5,7 +5,9 @@ module cpu_csrs (
 
 	input [31:0] data_in,
 	output reg [31:0] data_out,
-	input wr, incr_inst_count
+	input wr, 
+	
+	input incr_inst_count, incr_timer
 );
 	localparam CYCLE_ADDR		= 12'hC00,
 			   CYCLEH_ADDR 		= 12'hC80,
@@ -30,8 +32,7 @@ module cpu_csrs (
 	// TODO: Add performance counters (hpmcounter3-hpmcounter31)
 	// TODO: Add scounteren, senvcfg, scontext, satp
 
-	reg [63:0] CYCLE = 64'h0,
-			   TIME, INSTRET;
+	reg [63:0] cycle_cnt, time_cnt, inst_cnt;
 
 	reg [31:0] sstatus, sie, stvec, sscratch, sepc, scause, stval, sip;
 
@@ -39,12 +40,12 @@ module cpu_csrs (
 		data_out = 32'b0;
 
 		case (addr)
-		CYCLE_ADDR:     data_out = CYCLE[31:0];
-		CYCLEH_ADDR:    data_out = CYCLE[63:32];
-		TIME_ADDR:      data_out = TIME[31:0];
-		TIMEH_ADDR:     data_out = TIME[63:32];
-		INSTRET_ADDR:   data_out = INSTRET[31:0];
-		INSTRETH_ADDR:  data_out = INSTRET[63:32];
+		CYCLE_ADDR:     data_out = cycle_cnt[31:0];
+		CYCLEH_ADDR:    data_out = cycle_cnt[63:32];
+		TIME_ADDR:      data_out = time_cnt[31:0];
+		TIMEH_ADDR:     data_out = time_cnt[63:32];
+		INSTRET_ADDR:   data_out = inst_cnt[31:0];
+		INSTRETH_ADDR:  data_out = inst_cnt[63:32];
 		SSTATUS_ADDR:	data_out = sstatus;
 		SIE_ADDR:      	data_out = sie;
 		STVEC_ADDR:    	data_out = stvec;
@@ -58,8 +59,7 @@ module cpu_csrs (
 
 	task reset;
 		begin
-			TIME <= 64'h0;
-			INSTRET <= 64'h0;
+			cycle_cnt <= 64'h0;
 		end
 	endtask
 
@@ -78,16 +78,22 @@ module cpu_csrs (
 				endcase
 			end
 
-			CYCLE <= CYCLE + 32'b1;
-			TIME <= TIME + 32'b1;
-
-			if (incr_inst_count)
-				INSTRET <= INSTRET + 32'b1;
+			cycle_cnt <= cycle_cnt + 32'b1;
 		end
 	endtask
 
-	always @(posedge clk or posedge rst) begin 
+	always @(posedge clk or posedge rst) begin
 		if (rst) reset;
 		else on_clock;
+	end
+
+	always @(posedge incr_timer or posedge rst) begin
+		if (rst) time_cnt <= 64'h0;
+		else time_cnt <= time_cnt + 32'b1;
+	end
+
+	always @(posedge incr_inst_count or posedge rst) begin
+		if (rst) inst_cnt <= 64'h0;
+		else inst_cnt <= inst_cnt + 32'b1;
 	end
 endmodule

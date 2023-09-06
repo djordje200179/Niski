@@ -2054,6 +2054,13 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 120)(pt 16 120))
 	)
 	(port
+		(pt 0 72)
+		(input)
+		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
+		(text "clk_1_hz" (rect 24 64 80 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
 		(pt 0 104)
 		(input)
 		(text "rst" (rect 0 0 16 15)(font "Arial" ))
@@ -2974,6 +2981,11 @@ https://fpgasoftware.intel.com/eula.
 	(text "fc_bus" (rect 409 1712 428 1754)(font "Intel Clear" )(vertical))
 	(pt 432 1576)
 	(pt 432 1768)
+)
+(connector
+	(text "clk_1_hz" (rect 59 288 114 307)(font "Intel Clear" ))
+	(pt 112 304)
+	(pt 56 304)
 )
 (junction (pt 352 424))
 (junction (pt 368 440))
