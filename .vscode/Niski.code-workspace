@@ -13,6 +13,11 @@
 				"name": "Default"
 			}
 		],
-		"makefile.makefilePath": "../Software/Makefile"
+		"makefile.makefilePath": "../Software/Makefile",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "sameLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.namespace": "sameLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "sameLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "sameLine",
+		"C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "sameLine"
 	}
 }
