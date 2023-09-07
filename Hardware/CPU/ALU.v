@@ -17,17 +17,17 @@ module cpu_alu (
 		case (funct)
 		INST_ARLOG_FUNCT_ADD:		result = operand_a + operand_b;
 		INST_ARLOG_FUNCT_SUB:		result = operand_a - operand_b;
-		INST_ARLOG_FUNCT_SLL: 	result = operand_a << operand_b[4:0];
-		INST_ARLOG_FUNCT_SLT: 	result = $signed(operand_a) < $signed(operand_b);
-		INST_ARLOG_FUNCT_SLTU:	result = operand_a < operand_b;
-		INST_ARLOG_FUNCT_XOR: 	result = operand_a ^ operand_b;
-		INST_ARLOG_FUNCT_SRL: 	result = operand_a >> operand_b[4:0];
-		INST_ARLOG_FUNCT_SRA: 	result = $signed(operand_a) >>> operand_b[4:0];
+		INST_ARLOG_FUNCT_SLL: 		result = operand_a << operand_b[4:0];
+		INST_ARLOG_FUNCT_SLT: 		result = $signed(operand_a) < $signed(operand_b);
+		INST_ARLOG_FUNCT_SLTU:		result = operand_a < operand_b;
+		INST_ARLOG_FUNCT_XOR: 		result = operand_a ^ operand_b;
+		INST_ARLOG_FUNCT_SRL:	 	result = operand_a >> operand_b[4:0];
+		INST_ARLOG_FUNCT_SRA: 		result = $signed(operand_a) >>> operand_b[4:0];
 		INST_ARLOG_FUNCT_OR: 		result = operand_a | operand_b;
-		INST_ARLOG_FUNCT_AND: 	result = operand_a & operand_b;
-		INST_ARLOG_FUNCT_MUL: 	result = ss_multiplication_result[31:0];
-		INST_ARLOG_FUNCT_MULH: 	result = ss_multiplication_result[63:32];
-		INST_ARLOG_FUNCT_MULHSU: 	result = su_multiplication_result[63:32];
+		INST_ARLOG_FUNCT_AND: 		result = operand_a & operand_b;
+		INST_ARLOG_FUNCT_MUL: 		result = ss_multiplication_result[31:0];
+		INST_ARLOG_FUNCT_MULH: 		result = ss_multiplication_result[63:32];
+		INST_ARLOG_FUNCT_MULHSU:	result = su_multiplication_result[63:32];
 		INST_ARLOG_FUNCT_MULHU: 	result = uu_multiplication_result[63:32];
 		// INST_ARLOG_FUNCT_DIV: 	result = $signed(operand_a) / $signed(operand_b);
 		// INST_ARLOG_FUNCT_DIVU: 	result = operand_a / operand_b;

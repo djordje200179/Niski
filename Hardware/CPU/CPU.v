@@ -47,7 +47,6 @@ module cpu (
 	wire [31:0] csr_data_out;
 	wire csr_wr;
 
-	reg [31:0] alu_operand_b;
 	wire [31:0] alu_out;
 
 	reg [2:0] state;
@@ -124,7 +123,7 @@ module cpu (
 
 	cpu_alu alu_unit (
 		.funct(inst_funct),
-		.operand_a(gpr_src1), .operand_b(alu_operand_b),
+		.operand_a(gpr_src1), .operand_b(inst_arlog_imm ? inst_imm : gpr_src2),
 		.result(alu_out)
 	);
 	
@@ -225,21 +224,6 @@ module cpu (
 	end
 
 	assign csr_wr = state == STATE_EXEC_INST && inst_system && |inst_funct3;
-
-	always @* begin
-		alu_operand_b = 32'b0;
-
-		if(inst_arlog_imm) begin
-			case (inst_funct3)
-			3'b001, 
-			3'b101:
-				alu_operand_b = inst_rs2;
-			default:
-				alu_operand_b = inst_imm;
-			endcase
-		end else
-			alu_operand_b = gpr_src2;
-	end
 
 	task reset;
 		begin
