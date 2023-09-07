@@ -81,7 +81,7 @@ module cpu_ir_reg (
 		else if (inst_jalr  || inst_load || inst_arlog_imm || inst_system)
 			imm = {{20{imm_i[11]}}, imm_i};
 		else if (inst_branch)
-			imm = {{19{imm_b[11]}}, imm_b, 1'b0};
+			imm = {{19{imm_b[12]}}, imm_b, 1'b0};
 		else if (inst_store)
 			imm = {{20{imm_s[11]}}, imm_s};
 	end
