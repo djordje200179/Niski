@@ -15,12 +15,12 @@ void ssds_off(void) {
 }
 
 void ssds_set_single(uint8_t digit, uint8_t segments) {
-	segments &= 0b01111111;
+	segments &= 0b01111111u;
 	SSDS_DATA_DIGITS_ARRAY[digit] = segments;
 }
 
 void ssds_set_all(uint32_t segments) {
-	segments &= 0b01111111011111110111111101111111;
+	segments &= 0b01111111011111110111111101111111u;
 	SSDS_DATA_DIGITS_REG = segments;
 }
 
@@ -29,20 +29,21 @@ void ssds_set_dots(uint8_t states) {
 }
 
 void ssds_set_digit(uint8_t digit, uint8_t value) {
-	value |= 0b10000000;
+	value |= 0b10000000u;
 	SSDS_DATA_DIGITS_ARRAY[digit] = value;
 }
 
-void ssds_set_number(uint16_t number) {
-	uint64_t value = 0;
-	for (int8_t i = 3; i >= 0; i--) {
-		uint8_t digit = number % 10;
-		number /= 10;
+void __attribute__((optimize("O1"))) ssds_set_number(uint16_t number) {
+	uint32_t value = 0;
+	for (uint8_t i = 0; i < 4; i++) {
+		uint16_t digit = number % 10;
+		digit |= 0b10000000u;
 
 		value <<= 8;
-		value |= digit; 
+		value |= digit;
+		
+		number /= 10;
 	}
 
-	value |= 0b10000000100000001000000010000000;
 	SSDS_DATA_DIGITS_REG = value;
 }
