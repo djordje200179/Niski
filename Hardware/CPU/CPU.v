@@ -50,16 +50,16 @@ module cpu (
 
 	wire [31:0] alu_out;
 
-	reg has_interrupt;
-	reg [31:0] interrupt_cause, interrupt_pc, interrupt_value;
-	wire [31:0] interrupt_handler_addr, interrupt_continue_addr;
+	reg has_exception;
+	reg [31:0] exc_cause, exc_pc, exc_value;
+	wire [31:0] exc_handler_addr, exc_continue_addr;
 
 	reg [2:0] state;
 	localparam STATE_RD_INST_REQ = 3'd0,
 			   STATE_RD_INST_WAIT = 3'd1,
 			   STATE_EXEC_INST	= 3'd2,
 			   STATE_EXEC_INST_MEM_WAIT = 3'd3,
-			   STATE_CHECK_INTR	= 3'd4;
+			   STATE_CHECK_EXC	= 3'd4;
 
 	cpu_memory_access memory_access_unit (
 		.clk(clk), .rst(rst),
@@ -124,12 +124,12 @@ module cpu (
 		.data_in(csr_data_in), .data_out(csr_data_out),
 		.wr(csr_wr), 
 		
-		.inst_tick(state == STATE_CHECK_INTR),
+		.inst_tick(state == STATE_CHECK_EXC),
 		.timer_tick(clk_1_hz),
 
-		.interrupt(has_interrupt), .interrupt_cause(interrupt_cause),
-		.interrupt_pc(interrupt_pc), .interrupt_value(interrupt_value),
-		.interrupt_handler_addr(interrupt_handler_addr), .interrupt_continue_addr(interrupt_continue_addr)
+		.exception(has_exception), .exc_cause(exc_cause),
+		.exc_pc(exc_pc), .exc_value(exc_value),
+		.exc_handler_addr(exc_handler_addr), .exc_continue_addr(exc_continue_addr)
 	);
 
 	cpu_alu alu_unit (
@@ -163,8 +163,8 @@ module cpu (
 			else if (inst_system_sret)
 				pc_wr = 1'b1;
 		end
-		STATE_CHECK_INTR: begin
-			if (!pc_changed || has_interrupt)
+		STATE_CHECK_EXC: begin
+			if (!pc_changed || has_exception)
 				pc_wr = 1'b1;
 		end
 		endcase
@@ -182,11 +182,11 @@ module cpu (
 			else if (inst_branch)
 				next_pc = pc + inst_imm;
 			else if (inst_system_sret)
-				next_pc = interrupt_continue_addr;
+				next_pc = exc_continue_addr;
 		end
-		STATE_CHECK_INTR: begin
-			if (has_interrupt)
-				next_pc = interrupt_handler_addr;
+		STATE_CHECK_EXC: begin
+			if (has_exception)
+				next_pc = exc_handler_addr;
 		end
 		endcase
 	end
@@ -277,13 +277,13 @@ module cpu (
 					state <= STATE_EXEC_INST_MEM_WAIT;
 					ma_wr_req <= 1'b1;
 				end else
-					state <= STATE_CHECK_INTR;
+					state <= STATE_CHECK_EXC;
 
 				if (inst_system_ecall) begin
-					has_interrupt <= 1'b1;
-					interrupt_cause <= 32'h9;
-					interrupt_pc <= pc;
-					interrupt_value <= 32'h0;
+					has_exception <= 1'b1;
+					exc_cause <= 32'h9;
+					exc_pc <= pc;
+					exc_value <= 32'h0;
 				end
 
 				if (pc_wr)
@@ -291,16 +291,16 @@ module cpu (
 			end
 			STATE_EXEC_INST_MEM_WAIT: begin
 				if (ma_done) begin
-					state <= STATE_CHECK_INTR;
+					state <= STATE_CHECK_EXC;
 					ma_rd_req <= 1'b0;
 					ma_wr_req <= 1'b0;
 				end
 			end
-			STATE_CHECK_INTR: begin
+			STATE_CHECK_EXC: begin
 				state <= STATE_RD_INST_REQ;
 
-				if (has_interrupt)
-					has_interrupt <= 1'b0;
+				if (has_exception)
+					has_exception <= 1'b0;
 			end
 			endcase
 		end
