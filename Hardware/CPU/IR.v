@@ -9,7 +9,8 @@ module cpu_ir_reg (
 	output reg [32:0] imm,
 
 	output reg inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
-			   inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, inst_system
+			   inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, 
+			   inst_system_ecall, inst_system_sret, inst_system_csrrw
 );
     reg [31:0] ir;
 
@@ -27,6 +28,8 @@ module cpu_ir_reg (
 	wire [12:1] imm_b = {ir[31], ir[7], ir[30:25], ir[11:8]};
 	wire [20:1] imm_j = {ir[31], ir[19:12], ir[20], ir[30:21]};
 
+	reg inst_system;
+
 	`include "Instructions.vh"
 
 	always @* begin
@@ -42,6 +45,10 @@ module cpu_ir_reg (
 		inst_misc_mem = 1'b0;
 		inst_system = 1'b0;
 
+		inst_system_ecall = 1'b0;
+		inst_system_sret = 1'b0;
+		inst_system_csrrw = 1'b0;
+
 		case (opcode)
 		INST_LUI: 				inst_lui = 1'b1;
 		INST_AUIPC: 			inst_auipc = 1'b1;
@@ -53,7 +60,16 @@ module cpu_ir_reg (
 		INST_GROUP_ARLOG_IMM:	inst_arlog_imm = 1'b1;
 		INST_GROUP_ARLOG: 		inst_arlog = 1'b1;
 		INST_GROUP_MISC_MEM: 	inst_misc_mem = 1'b1;
-		INST_GROUP_SYSTEM: 		inst_system = 1'b1;
+		INST_GROUP_SYSTEM: begin
+			inst_system = 1'b1;
+
+			if (|funct3)
+				inst_system_csrrw = 1'b1;
+			else if (imm == 12'b0)
+				inst_system_ecall = 1'b1;
+			else if (imm == 12'b000100000010)
+				inst_system_sret = 1'b1;
+		end
 		endcase
 	end
 

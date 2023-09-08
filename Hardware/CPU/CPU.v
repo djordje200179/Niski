@@ -31,7 +31,8 @@ module cpu (
 	wire [4:0] inst_rd, inst_rs1, inst_rs2;
 	wire [31:0] inst_imm;
 	wire inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
-		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, inst_system;
+		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, 
+		 inst_system_ecall, inst_system_sret, inst_system_csrrw;
 
 	wire branch_cond;
 	reg pc_wr;
@@ -48,6 +49,10 @@ module cpu (
 	wire csr_wr;
 
 	wire [31:0] alu_out;
+
+	reg has_interrupt;
+	reg [31:0] interrupt_cause, interrupt_pc, interrupt_value;
+	wire [31:0] interrupt_handler_addr, interrupt_continue_addr;
 
 	reg [2:0] state;
 	localparam STATE_RD_INST_REQ = 3'd0,
@@ -92,7 +97,9 @@ module cpu (
 		.inst_branch(inst_branch),
 		.inst_load(inst_load), .inst_store(inst_store),
 		.inst_arlog_imm(inst_arlog_imm), .inst_arlog(inst_arlog),
-		.inst_misc_mem(inst_misc_mem), .inst_system(inst_system)
+		.inst_misc_mem(inst_misc_mem), 
+		.inst_system_ecall(inst_system_ecall), .inst_system_sret(inst_system_sret),
+		.inst_system_csrrw(inst_system_csrrw)
 	);
 	
 	cpu_branch_tester branch_tester_unit (
@@ -118,7 +125,11 @@ module cpu (
 		.wr(csr_wr), 
 		
 		.inst_tick(state == STATE_CHECK_INTR),
-		.timer_tick(clk_1_hz)
+		.timer_tick(clk_1_hz),
+
+		.interrupt(has_interrupt), .interrupt_cause(interrupt_cause),
+		.interrupt_pc(interrupt_pc), .interrupt_value(interrupt_value),
+		.interrupt_handler_addr(interrupt_handler_addr), .interrupt_continue_addr(interrupt_continue_addr)
 	);
 
 	cpu_alu alu_unit (
@@ -149,9 +160,11 @@ module cpu (
 				pc_wr = 1'b1;
 			else if (inst_branch)
 				pc_wr = branch_cond;
+			else if (inst_system_sret)
+				pc_wr = 1'b1;
 		end
 		STATE_CHECK_INTR: begin
-			if (!pc_changed)
+			if (!pc_changed || has_interrupt)
 				pc_wr = 1'b1;
 		end
 		endcase
@@ -160,14 +173,22 @@ module cpu (
 	always @* begin
 		next_pc = pc + 32'h4;
 
-		if (state == STATE_EXEC_INST) begin
+		case (state)
+		STATE_EXEC_INST: begin
 			if (inst_jal)
 				next_pc = pc + inst_imm;
 			else if (inst_jalr)
 				next_pc = (gpr_src1 + inst_imm) & ~32'h1;
 			else if (inst_branch)
 				next_pc = pc + inst_imm;
+			else if (inst_system_sret)
+				next_pc = interrupt_continue_addr;
 		end
+		STATE_CHECK_INTR: begin
+			if (has_interrupt)
+				next_pc = interrupt_handler_addr;
+		end
+		endcase
 	end
 
 	always @* begin
@@ -175,7 +196,7 @@ module cpu (
 
 		case (state)
 		STATE_EXEC_INST: begin
-			if (inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog || inst_system)
+			if (inst_lui || inst_auipc || inst_jal || inst_jalr || inst_arlog_imm || inst_arlog || inst_system_csrrw)
 				gpr_wr = 1'b1;
 		end
 		STATE_EXEC_INST_MEM_WAIT: begin
@@ -197,7 +218,7 @@ module cpu (
 				gpr_dst_in = pc + 4;
 			else if (inst_arlog_imm || inst_arlog)
 				gpr_dst_in = alu_out;
-			else if (inst_system)
+			else if (inst_system_csrrw)
 				gpr_dst_in = csr_data_out;
 		end else begin
 			case (inst_funct3)
@@ -223,7 +244,7 @@ module cpu (
 		endcase
 	end
 
-	assign csr_wr = state == STATE_EXEC_INST && inst_system && |inst_funct3;
+	assign csr_wr = state == STATE_EXEC_INST && inst_system_csrrw;
 
 	task reset;
 		begin
@@ -258,6 +279,13 @@ module cpu (
 				end else
 					state <= STATE_CHECK_INTR;
 
+				if (inst_system_ecall) begin
+					has_interrupt <= 1'b1;
+					interrupt_cause <= 32'h9;
+					interrupt_pc <= pc;
+					interrupt_value <= 32'h0;
+				end
+
 				if (pc_wr)
 					pc_changed = 1'b1;				
 			end
@@ -270,6 +298,9 @@ module cpu (
 			end
 			STATE_CHECK_INTR: begin
 				state <= STATE_RD_INST_REQ;
+
+				if (has_interrupt)
+					has_interrupt <= 1'b0;
 			end
 			endcase
 		end

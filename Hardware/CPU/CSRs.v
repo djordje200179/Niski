@@ -7,7 +7,11 @@ module cpu_csrs (
 	output reg [31:0] data_out,
 	input wr, 
 	
-	input inst_tick, timer_tick
+	input inst_tick, timer_tick,
+
+	input interrupt,
+	input [31:0] interrupt_cause, interrupt_pc, interrupt_value,
+	output [31:0] interrupt_handler_addr, interrupt_continue_addr
 );
 	localparam CYCLE_ADDR		= 12'hC00,
 			   CYCLEH_ADDR 		= 12'hC80,
@@ -33,10 +37,12 @@ module cpu_csrs (
 	// TODO: Add scounteren, senvcfg, scontext, satp
 
 	reg [63:0] cycle_cnt, time_cnt, inst_cnt;
-
 	reg time_incr_done, inst_incr_done;
 
 	reg [31:0] sstatus, sie, stvec, sscratch, sepc, scause, stval, sip;
+
+	assign interrupt_handler_addr = stvec;
+	assign interrupt_continue_addr = sepc;
 
 	always @* begin
 		data_out = 32'b0;
@@ -83,6 +89,12 @@ module cpu_csrs (
 				STVAL_ADDR:		stval <= data_in;
 				SIP_ADDR:		sip <= data_in;
 				endcase
+			end
+
+			if (interrupt) begin
+				sepc <= interrupt_pc;
+				scause <= interrupt_cause;
+				stval <= interrupt_value;
 			end
 
 			if (timer_tick && !time_incr_done) begin
