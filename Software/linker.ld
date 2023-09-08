@@ -1,6 +1,6 @@
 OUTPUT_ARCH("riscv")
 
-ENTRY(_entry)
+ENTRY(entry)
 
 MEMORY {
 	ROM (rx) : ORIGIN = 0x40000000, LENGTH = 4 * 2K
@@ -9,8 +9,8 @@ MEMORY {
 
 SECTIONS {
 	.rom.text : { 
-		obj/entry.o(.text)
-		*(.text)
+		obj/kernel/entry.o(.text)
+		*(.text*)
 	} > ROM
 
 	.rom.rodata : {
@@ -29,9 +29,16 @@ SECTIONS {
 	} > RAM
 
 	.ram.stack : {
+		. = ALIGN(4);
 		STACK_START_ADDR = .;
 		. += 4K;
 		STACK_END_ADDR = .;
+	} > RAM
+
+	.ram.kstack : {
+		. = ALIGN(4);
+		. += 1K;
+		KERNEL_START_END_ADDR = .;
 	} > RAM
 }
 

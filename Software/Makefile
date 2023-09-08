@@ -55,6 +55,7 @@ OBJ_S = $(patsubst $(SRC_DIR)/%.S, $(OBJ_DIR)/%.o, $(SRC_S))
 all: $(EXE_OUT) $(ROM_OUT) $(RAM_OUT)
 
 clean:
+	find . -name "*.d" -type f -delete
 	rm -rf $(OBJ_DIR)
 	rm -rf $(OUT_DIR)
 	rm -rf *~
