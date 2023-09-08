@@ -28,18 +28,22 @@ SECTIONS {
 		*(.data)
 	} > RAM
 
+	. = ALIGN(16);
 	.ram.stack : {
-		. = ALIGN(4);
 		STACK_START_ADDR = .;
 		. += 4K;
 		STACK_END_ADDR = .;
 	} > RAM
 
 	.ram.kstack : {
-		. = ALIGN(4);
 		. += 1K;
 		KERNEL_START_END_ADDR = .;
 	} > RAM
+
+	. = ALIGN(64);
+	HEAP_START_ADDR = .;
+	. = ORIGIN(RAM) + LENGTH(RAM);
+	HEAP_END_ADDR = .;
 }
 
 LEDS_CTRL_REG = 0x70000000;
