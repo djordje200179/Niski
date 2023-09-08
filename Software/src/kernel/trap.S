@@ -2,7 +2,7 @@
 
 .extern trap_handler
 .extern thread_current
-.extern KERNEL_START_END_ADDR
+.extern KERNEL_STACK_END_ADDR
 
 .text
 .align 4
@@ -18,8 +18,10 @@ trap:
 	csrr t5, sepc
 	sw t5, 32 * 4 (t6)
 
-	la sp, KERNEL_START_END_ADDR
-	call trap_handler
+	la sp, KERNEL_STACK_END_ADDR
+
+	csrr a0, scause
+	call exception_handler
 
 	lw t6, thread_current
 	lw t5, 32 * 4 (t6)

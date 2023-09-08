@@ -1,3 +1,0 @@
-void trap_handler() {
-	
-}

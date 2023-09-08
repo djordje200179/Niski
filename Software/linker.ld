@@ -31,19 +31,23 @@ SECTIONS {
 	. = ALIGN(16);
 	.ram.stack : {
 		STACK_START_ADDR = .;
-		. += 4K;
+		. += 1K;
 		STACK_END_ADDR = .;
 	} > RAM
 
 	.ram.kstack : {
 		. += 1K;
-		KERNEL_START_END_ADDR = .;
+		KERNEL_STACK_END_ADDR = .;
 	} > RAM
 
 	. = ALIGN(64);
 	HEAP_START_ADDR = .;
-	. = ORIGIN(RAM) + LENGTH(RAM);
+	. = ORIGIN(RAM) + LENGTH(RAM) - ALIGN(4K);
 	HEAP_END_ADDR = .;
+	
+	KERNEL_HEAP_START_ADDR = .;
+	. = ORIGIN(RAM) + LENGTH(RAM);
+	KERNEL_HEAP_END_ADDR = .;
 }
 
 LEDS_CTRL_REG = 0x70000000;
