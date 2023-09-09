@@ -77,13 +77,14 @@ static void syscall_thread_join() {
 
 static void syscall_mutex_create() {
 	struct kmutex** location = GET_PARAM(0, struct kmutex**);
+	enum kmutex_mode mode = GET_PARAM(1, enum kmutex_mode);
 
 	if (!location) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	struct kmutex* mutex = kmutex_create();
+	struct kmutex* mutex = kmutex_create(mode & KMUTEX_MODE_RECURSIVE);
 	if (!mutex) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
@@ -115,9 +116,8 @@ static void syscall_mutex_unlock() {
 		return;
 	}
 
-	kmutex_unlock(mutex);
-
-	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+	enum kthread_status status = kmutex_unlock(mutex);
+	SET_RET_VALUE(status);
 }
 
 static void syscall_mutex_destroy() {

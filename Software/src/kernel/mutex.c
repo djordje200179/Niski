@@ -3,12 +3,14 @@
 #include "kernel/thread.h"
 #include <stddef.h>
 
-struct kmutex* kmutex_create() {
+struct kmutex* kmutex_create(bool recursive) {
 	struct kmutex* mutex = kmem_alloc(sizeof(struct kmutex));
 	if (!mutex)
 		return NULL;
 
 	mutex->owner = NULL;
+	mutex->recursive = recursive;
+	mutex->lock_count = 0;
 	mutex->queue_head = NULL;
 	mutex->queue_tail = NULL;
 
@@ -25,6 +27,7 @@ bool kmutex_try_lock_current(struct kmutex* mutex) {
 		return false;
 
 	mutex->owner = thread_current;
+	mutex->lock_count = 1;
 
 	return true;
 }
@@ -32,6 +35,15 @@ bool kmutex_try_lock_current(struct kmutex* mutex) {
 void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	if (!mutex->owner) {
 		mutex->owner = thread;
+		mutex->lock_count = 1;
+
+		return;
+	}
+
+	if (mutex->owner == thread) {
+		if (mutex->recursive)
+			mutex->lock_count++;
+
 		return;
 	}
 
@@ -46,20 +58,33 @@ void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	mutex->queue_tail = thread;
 }
 
-void kmutex_unlock(struct kmutex* mutex) {
-	if (mutex->queue_head) {
-		struct kthread* thread = mutex->queue_head;
+enum kthread_status kmutex_unlock(struct kmutex* mutex) {
+	if (mutex->owner != thread_current)
+		return KTHREAD_STATUS_ERROR;
 
-		mutex->queue_head = thread->next;
-		if (!mutex->queue_head)
-			mutex->queue_tail = NULL;
+	mutex->lock_count--;
 
-		mutex->owner = thread;
+	if (mutex->recursive && mutex->lock_count > 0)
+		return KTHREAD_STATUS_SUCCESS;
 
-		kthread_enqueue(thread);
-	} else {
+	if (!mutex->queue_head) {
 		mutex->owner = NULL;
+		return KTHREAD_STATUS_SUCCESS;
 	}
+
+	mutex->lock_count = 1;
+
+	struct kthread* thread = mutex->queue_head;
+
+	mutex->queue_head = thread->next;
+	if (!mutex->queue_head)
+		mutex->queue_tail = NULL;
+
+	mutex->owner = thread;
+
+	kthread_enqueue(thread);
+
+	return KTHREAD_STATUS_SUCCESS;
 }
 
 void kmutex_destroy(struct kmutex* mutex) {
