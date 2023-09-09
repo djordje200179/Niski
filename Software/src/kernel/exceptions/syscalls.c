@@ -45,9 +45,14 @@ static void syscall_thread_create() {
 	int (*func)() = GET_PARAM(1, int (*)());
 	void* arg = GET_PARAM(2, void*);
 
+	if (!location || !func) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	struct kthread* thread = kthread_create(func, arg);
 	if (!thread) {
-		SET_RET_VALUE(1);
+		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
@@ -55,7 +60,7 @@ static void syscall_thread_create() {
 
 	kthread_enqueue(thread);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_thread_exit() {
@@ -72,86 +77,131 @@ static void syscall_thread_join() {
 static void syscall_mutex_create() {
 	struct kmutex** location = GET_PARAM(0, struct kmutex**);
 
+	if (!location) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	struct kmutex* mutex = kmutex_create();
 	if (!mutex) {
-		SET_RET_VALUE(1);
+		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
 	*location = mutex;
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_mutex_lock() {
 	struct kmutex* mutex = GET_PARAM(0, struct kmutex*);
 
+	if (!mutex) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kmutex_lock_current(mutex);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_mutex_unlock() {
 	struct kmutex* mutex = GET_PARAM(0, struct kmutex*);
 
+	if (!mutex) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kmutex_unlock(mutex);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_mutex_destroy() {
 	struct kmutex* mutex = GET_PARAM(0, struct kmutex*);
 
+	if (!mutex) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kmutex_destroy(mutex);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_create() {
 	struct kcond** location = GET_PARAM(0, struct kcond**);
 
+	if (!location) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	struct kcond* condition = kcond_create();
 	if (!condition) {
-		SET_RET_VALUE(1);
+		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
 	*location = condition;
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_wait() {
 	struct kcond* condition = GET_PARAM(0, struct kcond*);
 	struct kmutex* mutex = GET_PARAM(1, struct kmutex*);
 
+	if (!condition || !mutex) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kcond_wait(condition, mutex);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_signal() {
 	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
+	if (!condition) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kcond_signal(condition);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_signal_all() {
 	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
+	if (!condition) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kcond_signal_all(condition);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_destroy() {
 	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
+	if (!condition) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
 	kcond_destroy(condition);
 
-	SET_RET_VALUE(0);
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 void (*syscalls[100])() = {

@@ -42,3 +42,11 @@ struct kthread* kthread_create(int (*function)(void*), void* arg);
 void kthread_dispatch();
 void kthread_enqueue(struct kthread* thread);
 void kthread_destroy(struct kthread* thread);
+
+enum kthread_status {
+	KTHREAD_STATUS_SUCCESS,
+	KTHREAD_STATUS_NOMEM,
+	KTHREAD_STATUS_TIMEDOUT,
+	KTHREAD_STATUS_BUSY,
+	KTHREAD_STATUS_ERROR
+};	
