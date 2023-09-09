@@ -35,16 +35,19 @@ mtx_init:
 	ret
 
 mtx_lock:
+	lw a0, 0(a0)
 	li a7, 0x22
 	ecall
 	ret
 
 mtx_unlock:
+	lw a0, 0(a0)
 	li a7, 0x23
 	ecall
 	ret
 
 mtx_destroy:
+	lw a0, 0(a0)
 	li a7, 0x24
 	ecall
 	ret
@@ -55,21 +58,25 @@ cnd_init:
 	ret
 
 cnd_signal:
+	lw a0, 0(a0)
 	li a7, 0x32
 	ecall
 	ret
 
 cnd_broadcast:
+	lw a0, 0(a0)
 	li a7, 0x33
 	ecall
 	ret
 
 cnd_wait:
+	lw a0, 0(a0)
 	li a7, 0x34
 	ecall
 	ret
 
 cnd_destroy:
+	lw a0, 0(a0)
 	li a7, 0x35
 	ecall
 	ret
