@@ -3,8 +3,18 @@
 #include <stdbool.h>
 #include <threads.h>
 
+mtx_t mtx;
+
 int digit_thread(void* arg) {
 	uintptr_t id = (uintptr_t)arg;
+	
+	ssds_set_digit(id, 0);
+
+	mtx_lock(&mtx);
+
+	ssds_set_digit(id, 1);
+
+	mtx_unlock(&mtx);
 
 	ssds_set_digit(id, 2);
 	
@@ -14,18 +24,27 @@ int digit_thread(void* arg) {
 void main() {
 	ssds_on();
 
-	ssds_set_digit(3, 0);
+	ssds_set_digit(0, 0);
 
-	thrd_t threads[4];
+	mtx_init(&mtx, mtx_recursive);
 
-	uint8_t created = 0;
-	for (int i = 0; i < 2; i++) {
-		int res = thrd_create(&threads[i], digit_thread, (void*)(uintptr_t)i);
-		if (res == thrd_success)
-			created++;
-		else
-			ssds_set_digit(2, res);
+	ssds_set_digit(0, 1);
 
-		ssds_set_digit(3, created);
-	}
+	mtx_lock(&mtx);
+	mtx_lock(&mtx);
+
+	ssds_set_digit(0, 2);
+
+	thrd_t thread;
+	thrd_create(&thread, digit_thread, (void*)2);
+
+	ssds_set_digit(1, 0);
+
+	thrd_yield();
+
+	ssds_set_digit(1, 1);
+
+	mtx_unlock(&mtx);
+
+	ssds_set_digit(1, 2);
 }

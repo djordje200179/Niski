@@ -27,8 +27,8 @@ typedef struct kmutex* mtx_t;
 
 enum {
     mtx_plain,
+    mtx_timed,
     mtx_recursive,
-    mtx_timed
 };
 
 int mtx_init(mtx_t* mutex, int type);
