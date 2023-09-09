@@ -20,6 +20,15 @@ void kmutex_lock_current(struct kmutex* mutex) {
 	kthread_dispatch();
 }
 
+bool kmutex_try_lock_current(struct kmutex* mutex) {
+	if (mutex->owner)
+		return false;
+
+	mutex->owner = thread_current;
+
+	return true;
+}
+
 void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	if (!mutex->owner) {
 		mutex->owner = thread;

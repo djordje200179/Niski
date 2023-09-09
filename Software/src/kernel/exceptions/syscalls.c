@@ -16,6 +16,7 @@ enum syscall_type {
 	SYSCALL_TYPE_MUTEX_LOCK = 0x22,
 	SYSCALL_TYPE_MUTEX_UNLOCK = 0x23,
 	SYSCALL_TYPE_MUTEX_DESTROY = 0x24,
+	SYSCALL_TYPE_MUTEX_TRY_LOCK = 0x25,
 
 	SYSCALL_TYPE_CONDITION_CREATE = 0x31,
 	SYSCALL_TYPE_CONDITION_WAIT = 0x32,
@@ -132,6 +133,23 @@ static void syscall_mutex_destroy() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
+static void syscall_mutex_try_lock() {
+	struct kmutex* mutex = GET_PARAM(0, struct kmutex*);
+
+	if (!mutex) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	bool result = kmutex_try_lock_current(mutex);
+	if (!result) {
+		SET_RET_VALUE(KTHREAD_STATUS_BUSY);
+		return;
+	}
+
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+}
+
 static void syscall_cond_create() {
 	struct kcond** location = GET_PARAM(0, struct kcond**);
 
@@ -217,6 +235,7 @@ void (*syscalls[100])() = {
 	[SYSCALL_TYPE_MUTEX_LOCK] = syscall_mutex_lock,
 	[SYSCALL_TYPE_MUTEX_UNLOCK] = syscall_mutex_unlock,
 	[SYSCALL_TYPE_MUTEX_DESTROY] = syscall_mutex_destroy,
+	[SYSCALL_TYPE_MUTEX_TRY_LOCK] = syscall_mutex_try_lock,
 
 	[SYSCALL_TYPE_CONDITION_CREATE] = syscall_cond_create,
 	[SYSCALL_TYPE_CONDITION_WAIT] = syscall_cond_wait,

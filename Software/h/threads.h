@@ -34,7 +34,7 @@ enum {
 int mtx_init(mtx_t* mutex, int type);
 int mtx_lock(mtx_t* mutex);
 // int mtx_timedlock(mtx_t *restrict mutex, const struct timespec *restrict time_point);
-// int mtx_trylock(mtx_t* mutex);
+int mtx_trylock(mtx_t* mutex);
 int mtx_unlock(mtx_t* mutex);
 void mtx_destroy(mtx_t* mutex);
 
