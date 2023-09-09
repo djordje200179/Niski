@@ -1,7 +1,7 @@
 .global entry
 
-.extern init
-.extern trap
+.extern init, trap
+.extern thrd_yield
 
 .extern STACK_END_ADDR
 
@@ -14,4 +14,5 @@ entry:
 
 	call init
 spin:
+	call thrd_yield
 	j spin
