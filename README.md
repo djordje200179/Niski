@@ -74,9 +74,12 @@ Therefore, following header files already exist:
 - __stddef.h__
 - __stdint.h__
 - __stdbool.h__
+- __ctype.h__
 
 Other header files need to be implemented by the OS developer. 
-And currently, the following header files and functions are fully implemented:
+Some functions will be implemented as system calls,
+and some will be implemented as library functions.
+Currently, the following header files and functions are fully implemented:
 - __stdlib.h__
 	- `malloc`
 	- `free`
@@ -101,6 +104,27 @@ And currently, the following header files and functions are fully implemented:
 	- `clock`
 	- `timespec_get`
 	- `timespec_getres`
+- __string.h__
+	- `strcpy`
+	- `strncpy`
+	- `strcat`
+	- `strncat`
+	- `strdup`
+	- `strndup`
+	- `strlen`
+	- `strcmp`
+	- `strncmp`
+	- `strchr`
+	- `strrchr`
+	- `strstr`
+	- `strtok`
+	- `memchr`
+	- `memcmp`
+	- `memset`
+	- `memset_explicit`
+	- `memcpy`
+	- `memccpy`
+	- `memmove`
 
 ### I/O devices
 To be able to communicate with the external devices,
