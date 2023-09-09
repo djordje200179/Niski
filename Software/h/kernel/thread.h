@@ -26,8 +26,7 @@ struct kthread {
 		KTHREAD_STATE_CREATED,
 		KTHREAD_STATE_READY,
 		KTHREAD_STATE_RUNNING,
-		KTHREAD_STATE_BLOCKED,
-		KTHREAD_STATE_EXITED
+		KTHREAD_STATE_BLOCKED
 	} state;
 	struct kthread* next;
 	struct kmutex* waiting_on;
@@ -41,5 +40,5 @@ void kthread_init();
 
 struct kthread* kthread_create(int (*function)(void*), void* arg);
 void kthread_dispatch();
-
 void kthread_enqueue(struct kthread* thread);
+void kthread_destroy(struct kthread* thread);

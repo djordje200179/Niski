@@ -87,3 +87,7 @@ void kthread_dispatch() {
 	thread_current = new_thread;
 	new_thread->state = KTHREAD_STATE_RUNNING;
 }
+
+void kthread_destroy(struct kthread* thread) {
+	kmem_dealloc(thread);
+}

@@ -59,7 +59,9 @@ static void syscall_thread_create() {
 }
 
 static void syscall_thread_exit() {
-	thread_current->state = KTHREAD_STATE_EXITED;
+	kthread_destroy(thread_current);
+	thread_current = NULL;
+
 	kthread_dispatch();
 }
 

@@ -56,5 +56,13 @@ void kcond_signal_all(struct kcond* condition) {
 }
 
 void kcond_destroy(struct kcond* condition) {
+	for (struct kthread* thread = condition->queue_head; thread; ) {
+		struct kthread* next = thread->next;
+
+		kthread_destroy(thread);
+
+		thread = next;
+	}
+
 	kmem_dealloc(condition);
 }

@@ -54,5 +54,13 @@ void kmutex_unlock(struct kmutex* mutex) {
 }
 
 void kmutex_destroy(struct kmutex* mutex) {
+	for (struct kthread* thread = mutex->queue_head; thread; ) {
+		struct kthread* next = thread->next;
+
+		kthread_destroy(thread);
+
+		thread = next;
+	}
+
 	kmem_dealloc(mutex);
 }
