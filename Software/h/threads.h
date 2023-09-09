@@ -21,3 +21,19 @@ void thrd_yield(void);
 [[noreturn]] void thrd_exit(int res);
 // int thrd_detach(thrd_t thr);
 // int thrd_join(thrd_t thr, int* res);
+
+struct kmutex;
+typedef struct kmutex* mtx_t;
+
+enum {
+    mtx_plain,
+    mtx_recursive,
+    mtx_timed
+};
+
+int mtx_init(mtx_t* mutex, int type);
+int mtx_lock(mtx_t* mutex);
+// int mtx_timedlock(mtx_t *restrict mutex, const struct timespec *restrict time_point);
+// int mtx_trylock(mtx_t* mutex);
+int mtx_unlock(mtx_t* mutex);
+void mtx_destroy(mtx_t* mutex);
