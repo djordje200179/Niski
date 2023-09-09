@@ -6,7 +6,8 @@ The goal of this project is to create a programmable microcontroller that can ru
 multithreaded program and communicate with the outside world.
 
 ## Hardware
-For this project Cyclone IV EP4CE22F29C6N FPGA development board was used.
+For this project Cyclone IV EP4CE6E22C8 FPGA development board was used:
+![FPGA Board](board.jpg)
 
 It has the following features:
 - 6,272 Logic Elements
@@ -35,6 +36,7 @@ It currently (partially) supports the M extension (hardware multiplication, but 
 In order to be able to use the operating system correctly, the Zicsr extension was also needed, which was fully implemented.
 
 Because of the above, the current name of the architecture is **RV32IMZicsr**.
+![FPGA Board](riscv.png)
 
 ### Memory
 The processor has a 32-bit address bus, so it can
@@ -63,17 +65,18 @@ with external devices present on the FPGA development board.
 
 
 ### C standard library
-GCC automatically generates types that are not
-dependent on the operating system, but on the
-architecture of the processor.
+GCC automatically generates header files with
+types and other definitions that are not
+dependent on the operating system, but only on
+the architecture of the processor.
 
 Therefore, following header files already exist:
 - __stddef.h__
 - __stdint.h__
 - __stdbool.h__
 
-Other header files are needed to be implemented by the
-OS developer. And currently, the following header files and functions are fully implemented:
+Other header files need to be implemented by the OS developer. 
+And currently, the following header files and functions are fully implemented:
 - __stdlib.h__
 	- `malloc`
 	- `free`
@@ -100,9 +103,10 @@ OS developer. And currently, the following header files and functions are fully 
 	- `timespec_getres`
 
 ### I/O devices
-To be able to communicate with the external devices
-present on the FPGA development board (buzzer, leds, seven-segment displays, etc.), 
-drivers for these devices are needed. 
+To be able to communicate with the external devices,
+present on the FPGA development board 
+(buzzer, leds, seven-segment displays, etc.), 
+drivers are needed. 
 Currently, the following header files and functions are fully implemented:
 - __devices/buzzer.h__
 	- `buzzer_on`
