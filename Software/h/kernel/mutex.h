@@ -1,7 +1,5 @@
 #pragma once
 
-#include "thread.h"
-
 struct kmutex {
 	struct kthread* owner;
 

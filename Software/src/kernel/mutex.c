@@ -1,5 +1,6 @@
 #include "kernel/mutex.h"
 #include "kernel/mem_allocator.h"
+#include "kernel/thread.h"
 #include <stddef.h>
 
 struct kmutex* kmutex_create() {
@@ -21,6 +22,7 @@ void kmutex_lock(struct kmutex* mutex) {
 	}
 
 	thread_current->state = KTHREAD_STATE_BLOCKED;
+	thread_current->waiting_on = mutex;
 
 	if (!mutex->queue_head)
 		mutex->queue_head = thread_current;
@@ -28,8 +30,6 @@ void kmutex_lock(struct kmutex* mutex) {
 		mutex->queue_tail->next = thread_current;
 	
 	mutex->queue_tail = thread_current;
-
-	thread_current->next = NULL;
 
 	kthread_dispatch();
 }
@@ -44,7 +44,6 @@ void kmutex_unlock(struct kmutex* mutex) {
 
 		mutex->owner = thread;
 
-		thread->next = NULL;
 		kthread_enqueue(thread);
 	} else {
 		mutex->owner = NULL;

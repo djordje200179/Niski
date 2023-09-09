@@ -12,6 +12,7 @@ static struct kthread* scheduler_tail;
 void kthread_init() {
 	thread_main.state = KTHREAD_STATE_RUNNING;
 	thread_main.next = NULL;
+	thread_main.waiting_on = NULL;
 
 	thread_current = &thread_main;
 }
@@ -22,6 +23,7 @@ void kthread_enqueue(struct kthread* thread) {
 
 	thread->state = KTHREAD_STATE_READY;
 	thread->next = NULL;
+	thread->waiting_on = NULL;
 
 	if (scheduler_head)
 		scheduler_tail->next = thread;
@@ -42,6 +44,7 @@ static struct kthread* kthread_dequeue() {
 		scheduler_tail = NULL;
 
 	thread->next = NULL;
+	thread->waiting_on = NULL;
 
 	return thread;
 }

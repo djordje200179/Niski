@@ -30,6 +30,7 @@ struct kthread {
 		KTHREAD_STATE_EXITED
 	} state;
 	struct kthread* next;
+	struct kmutex* waiting_on;
 
 	uint32_t stack[];
 };
