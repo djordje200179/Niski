@@ -1,12 +1,12 @@
 #pragma once
 
-struct kcondition {
+struct kcond {
 	struct kthread* queue_head;
 	struct kthread* queue_tail;
 };
 
-struct kcondition* kcondition_create();
-void kcondition_wait(struct kcondition* condition, struct kmutex* mutex);
-void kcondition_signal(struct kcondition* condition);
-void kcondition_signal_all(struct kcondition* condition);
-void kcondition_destroy(struct kcondition* condition);
+struct kcond* kcond_create();
+void kcond_wait(struct kcond* condition, struct kmutex* mutex);
+void kcond_signal(struct kcond* condition);
+void kcond_signal_all(struct kcond* condition);
+void kcond_destroy(struct kcond* condition);

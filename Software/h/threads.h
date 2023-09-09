@@ -38,8 +38,8 @@ int mtx_lock(mtx_t* mutex);
 int mtx_unlock(mtx_t* mutex);
 void mtx_destroy(mtx_t* mutex);
 
-struct kcondition;
-typedef struct kcondition* cnd_t;
+struct kcond;
+typedef struct kcond* cnd_t;
 
 int cnd_init(cnd_t* cond);
 int cnd_signal(cnd_t* cond);

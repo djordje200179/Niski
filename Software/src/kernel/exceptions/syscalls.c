@@ -106,9 +106,9 @@ static void syscall_mutex_destroy() {
 }
 
 static void syscall_cond_create() {
-	struct kcondition** location = GET_PARAM(0, struct kcondition**);
+	struct kcond** location = GET_PARAM(0, struct kcond**);
 
-	struct kcondition* condition = kcondition_create();
+	struct kcond* condition = kcond_create();
 	if (!condition) {
 		SET_RET_VALUE(1);
 		return;
@@ -120,34 +120,34 @@ static void syscall_cond_create() {
 }
 
 static void syscall_cond_wait() {
-	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+	struct kcond* condition = GET_PARAM(0, struct kcond*);
 	struct kmutex* mutex = GET_PARAM(1, struct kmutex*);
 
-	kcondition_wait(condition, mutex);
+	kcond_wait(condition, mutex);
 
 	SET_RET_VALUE(0);
 }
 
 static void syscall_cond_signal() {
-	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
-	kcondition_signal(condition);
+	kcond_signal(condition);
 
 	SET_RET_VALUE(0);
 }
 
 static void syscall_cond_signal_all() {
-	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
-	kcondition_signal_all(condition);
+	kcond_signal_all(condition);
 
 	SET_RET_VALUE(0);
 }
 
 static void syscall_cond_destroy() {
-	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+	struct kcond* condition = GET_PARAM(0, struct kcond*);
 
-	kcondition_destroy(condition);
+	kcond_destroy(condition);
 
 	SET_RET_VALUE(0);
 }

@@ -3,8 +3,8 @@
 #include "kernel/condition.h"
 #include "kernel/mem_allocator.h"
 
-struct kcondition* kcondition_create() {
-	struct kcondition* condition = kmem_alloc(sizeof(struct kcondition));
+struct kcond* kcond_create() {
+	struct kcond* condition = kmem_alloc(sizeof(struct kcond));
 	if (!condition)
 		return NULL;
 
@@ -14,7 +14,7 @@ struct kcondition* kcondition_create() {
 	return condition;
 }
 
-void kcondition_wait(struct kcondition* condition, struct kmutex* mutex) {
+void kcond_wait(struct kcond* condition, struct kmutex* mutex) {
 	thread_current->state = KTHREAD_STATE_BLOCKED;
 	thread_current->waiting_on = mutex;
 
@@ -29,7 +29,7 @@ void kcondition_wait(struct kcondition* condition, struct kmutex* mutex) {
 	kthread_dispatch();
 }
 
-void kcondition_signal(struct kcondition* condition) {
+void kcond_signal(struct kcond* condition) {
 	if (!condition->queue_head)
 		return;
 
@@ -42,7 +42,7 @@ void kcondition_signal(struct kcondition* condition) {
 	kmutex_lock(thread->waiting_on, thread);
 }
 
-void kcondition_signal_all(struct kcondition* condition) {
+void kcond_signal_all(struct kcond* condition) {
 	for (struct kthread* thread = condition->queue_head; thread; ) {
 		struct kthread* next = thread->next;
 
@@ -55,6 +55,6 @@ void kcondition_signal_all(struct kcondition* condition) {
 	condition->queue_tail = NULL;
 }
 
-void kcondition_destroy(struct kcondition* condition) {
+void kcond_destroy(struct kcond* condition) {
 	kmem_dealloc(condition);
 }
