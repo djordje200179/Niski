@@ -15,23 +15,26 @@ struct kmutex* kmutex_create() {
 	return mutex;
 }
 
-void kmutex_lock(struct kmutex* mutex) {
+void kmutex_lock_current(struct kmutex* mutex) {
+	kmutex_lock(mutex, thread_current);
+	kthread_dispatch();
+}
+
+void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	if (!mutex->owner) {
-		mutex->owner = thread_current;
+		mutex->owner = thread;
 		return;
 	}
 
-	thread_current->state = KTHREAD_STATE_BLOCKED;
-	thread_current->waiting_on = mutex;
+	thread->state = KTHREAD_STATE_BLOCKED;
+	thread->waiting_on = mutex;
 
 	if (!mutex->queue_head)
-		mutex->queue_head = thread_current;
+		mutex->queue_head = thread;
 	else
-		mutex->queue_tail->next = thread_current;
+		mutex->queue_tail->next = thread;
 	
-	mutex->queue_tail = thread_current;
-
-	kthread_dispatch();
+	mutex->queue_tail = thread;
 }
 
 void kmutex_unlock(struct kmutex* mutex) {

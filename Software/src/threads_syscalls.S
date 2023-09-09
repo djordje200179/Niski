@@ -1,12 +1,6 @@
-.global thrd_create
-.global thrd_equal
-.global thrd_current
-.global thrd_yield
-.global thrd_exit
-.global mtx_init
-.global mtx_lock
-.global mtx_unlock
-.global mtx_destroy
+.global thrd_create, thrd_equal, thrd_current, thrd_yield, thrd_exit
+.global mtx_init, mtx_lock, mtx_unlock, mtx_destroy
+.global cnd_init, cnd_signal, cnd_broadcast, cnd_wait, cnd_destroy
 
 .extern thread_current
 
@@ -52,5 +46,30 @@ mtx_unlock:
 
 mtx_destroy:
 	li a7, 0x24
+	ecall
+	ret
+
+cnd_init:
+	li a7, 0x31
+	ecall
+	ret
+
+cnd_signal:
+	li a7, 0x32
+	ecall
+	ret
+
+cnd_broadcast:
+	li a7, 0x33
+	ecall
+	ret
+
+cnd_wait:
+	li a7, 0x34
+	ecall
+	ret
+
+cnd_destroy:
+	li a7, 0x35
 	ecall
 	ret

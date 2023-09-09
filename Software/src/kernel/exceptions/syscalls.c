@@ -1,6 +1,7 @@
 #include "kernel/thread.h"
 #include "kernel/mem_allocator.h"
 #include "kernel/mutex.h"
+#include "kernel/condition.h"
 
 enum syscall_type {
 	SYSCALL_TYPE_MEM_ALLOC = 0x01,
@@ -14,7 +15,13 @@ enum syscall_type {
 	SYSCALL_TYPE_MUTEX_CREATE = 0x21,
 	SYSCALL_TYPE_MUTEX_LOCK = 0x22,
 	SYSCALL_TYPE_MUTEX_UNLOCK = 0x23,
-	SYSCALL_TYPE_MUTEX_DESTROY = 0x24
+	SYSCALL_TYPE_MUTEX_DESTROY = 0x24,
+
+	SYSCALL_TYPE_CONDITION_CREATE = 0x31,
+	SYSCALL_TYPE_CONDITION_WAIT = 0x32,
+	SYSCALL_TYPE_CONDITION_SIGNAL = 0x33,
+	SYSCALL_TYPE_CONDITION_SIGNAL_ALL = 0x34,
+	SYSACLL_TYPE_CONDITION_DESTROY = 0x35
 };
 
 #define GET_PARAM(index, type) (type)(thread_current->context.regs[REG_A ## index])
@@ -77,7 +84,7 @@ static void syscall_mutex_create() {
 static void syscall_mutex_lock() {
 	struct kmutex* mutex = GET_PARAM(0, struct kmutex*);
 
-	kmutex_lock(mutex);
+	kmutex_lock_current(mutex);
 
 	SET_RET_VALUE(0);
 }
@@ -98,6 +105,53 @@ static void syscall_mutex_destroy() {
 	SET_RET_VALUE(0);
 }
 
+static void syscall_cond_create() {
+	struct kcondition** location = GET_PARAM(0, struct kcondition**);
+
+	struct kcondition* condition = kcondition_create();
+	if (!condition) {
+		SET_RET_VALUE(1);
+		return;
+	}
+
+	*location = condition;
+
+	SET_RET_VALUE(0);
+}
+
+static void syscall_cond_wait() {
+	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+	struct kmutex* mutex = GET_PARAM(1, struct kmutex*);
+
+	kcondition_wait(condition, mutex);
+
+	SET_RET_VALUE(0);
+}
+
+static void syscall_cond_signal() {
+	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+
+	kcondition_signal(condition);
+
+	SET_RET_VALUE(0);
+}
+
+static void syscall_cond_signal_all() {
+	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+
+	kcondition_signal_all(condition);
+
+	SET_RET_VALUE(0);
+}
+
+static void syscall_cond_destroy() {
+	struct kcondition* condition = GET_PARAM(0, struct kcondition*);
+
+	kcondition_destroy(condition);
+
+	SET_RET_VALUE(0);
+}
+
 void (*syscalls[100])() = {
 	[SYSCALL_TYPE_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_TYPE_MEM_FREE] = syscall_mem_free,
@@ -110,5 +164,11 @@ void (*syscalls[100])() = {
 	[SYSCALL_TYPE_MUTEX_CREATE] = syscall_mutex_create,
 	[SYSCALL_TYPE_MUTEX_LOCK] = syscall_mutex_lock,
 	[SYSCALL_TYPE_MUTEX_UNLOCK] = syscall_mutex_unlock,
-	[SYSCALL_TYPE_MUTEX_DESTROY] = syscall_mutex_destroy
+	[SYSCALL_TYPE_MUTEX_DESTROY] = syscall_mutex_destroy,
+
+	[SYSCALL_TYPE_CONDITION_CREATE] = syscall_cond_create,
+	[SYSCALL_TYPE_CONDITION_WAIT] = syscall_cond_wait,
+	[SYSCALL_TYPE_CONDITION_SIGNAL] = syscall_cond_signal,
+	[SYSCALL_TYPE_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
+	[SYSACLL_TYPE_CONDITION_DESTROY] = syscall_cond_destroy
 };

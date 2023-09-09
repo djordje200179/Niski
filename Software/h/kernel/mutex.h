@@ -8,6 +8,7 @@ struct kmutex {
 };
 
 struct kmutex* kmutex_create();
-void kmutex_lock(struct kmutex* mutex);
+void kmutex_lock_current(struct kmutex* mutex);
+void kmutex_lock(struct kmutex* mutex, struct kthread* thread);
 void kmutex_unlock(struct kmutex* mutex);
 void kmutex_destroy(struct kmutex* mutex);
