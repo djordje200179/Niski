@@ -22,8 +22,11 @@ niski_dut dut (
 );
 
 initial begin
-	$stop;
-	#10000;
+	wait (dut.b2v_inst23.pc == 32'h400011b4);
+
+	$strobe("PC at %t", $time);
+
+	#5000;
 	$stop;
 end
 
