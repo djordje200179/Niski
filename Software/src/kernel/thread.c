@@ -10,11 +10,21 @@ static struct kthread* scheduler_head;
 static struct kthread* scheduler_tail;
 
 void kthread_init() {
-	thread_main.state = KTHREAD_STATE_RUNNING;
-	thread_main.next = NULL;
-	thread_main.waiting_on = NULL;
+	thread_main = (struct kthread) {
+		.stack = NULL,
+		.state = KTHREAD_STATE_RUNNING,
+		.next = NULL,
+		.waiting_on = NULL
+	};
 
 	thread_current = &thread_main;
+
+	thread_idle = (struct kthread) {
+		.stack = NULL,
+		.state = KTHREAD_STATE_READY,
+		.next = NULL,
+		.waiting_on = NULL
+	};
 }
 
 void kthread_enqueue(struct kthread* thread) {
@@ -57,9 +67,17 @@ static void wrapper_function() {
 }
 
 struct kthread* kthread_create(int (*function)(void*), void* arg) {
-	struct kthread* thread = kmem_alloc(sizeof(struct kthread) + KTHREAD_STACK_SIZE);
+	struct kthread* thread = kmem_alloc(sizeof(struct kthread));
 	if (!thread)
 		return NULL;
+
+	uint32_t* stack = kmem_alloc(KTHREAD_STACK_SIZE);
+	if (!stack) {
+		kmem_dealloc(thread);
+		return NULL;
+	}
+
+	thread->stack = stack;
 		
 	for (uint8_t i = 3; i < 32; i++)
 		thread->context.regs[i] = 0;
@@ -89,5 +107,8 @@ void kthread_dispatch() {
 }
 
 void kthread_destroy(struct kthread* thread) {
+	if (thread->stack)
+		kmem_dealloc(thread->stack);
+
 	kmem_dealloc(thread);
 }

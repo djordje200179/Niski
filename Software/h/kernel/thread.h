@@ -19,6 +19,8 @@ struct kthread {
 		
 		void (*pc)();
 	} context;
+
+	uint32_t* stack;
 	
 	int (*function)(void*);
 	void* arg;
@@ -31,8 +33,6 @@ struct kthread {
 	} state;
 	struct kthread* next;
 	struct kmutex* waiting_on;
-
-	uint32_t stack[];
 };
 
 extern struct kthread* thread_current;
