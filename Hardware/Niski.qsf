@@ -57,10 +57,10 @@ set_location_assignment PIN_90 -to BTN_PINS[2]
 set_location_assignment PIN_89 -to BTN_PINS[1]
 set_location_assignment PIN_23 -to CLK_PIN
 set_location_assignment PIN_100 -to IR_PIN
-set_location_assignment PIN_87 -to LED_PINS[3]
-set_location_assignment PIN_86 -to LED_PINS[2]
-set_location_assignment PIN_85 -to LED_PINS[1]
-set_location_assignment PIN_84 -to LED_PINS[0]
+set_location_assignment PIN_84 -to LED_PINS[3]
+set_location_assignment PIN_85 -to LED_PINS[2]
+set_location_assignment PIN_86 -to LED_PINS[1]
+set_location_assignment PIN_87 -to LED_PINS[0]
 set_location_assignment PIN_119 -to PS2_CLK_PIN
 set_location_assignment PIN_120 -to PS2_DATA_PIN
 set_location_assignment PIN_110 -to BUZZ_PIN
