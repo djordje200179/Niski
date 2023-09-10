@@ -109,9 +109,12 @@ static void syscall_mutex_lock() {
 		return;
 	}
 
-	kmutex_lock_current(mutex);
+	kmutex_lock(mutex, thread_current);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+
+	if (thread_current->state == KTHREAD_STATE_BLOCKED)
+		kthread_dispatch();
 }
 
 static void syscall_mutex_unlock() {
@@ -122,7 +125,7 @@ static void syscall_mutex_unlock() {
 		return;
 	}
 
-	enum kthread_status status = kmutex_unlock(mutex);
+	enum kthread_status status = kmutex_unlock(mutex, thread_current);
 	SET_RET_VALUE(status);
 }
 
@@ -147,7 +150,7 @@ static void syscall_mutex_try_lock() {
 		return;
 	}
 
-	bool result = kmutex_try_lock_current(mutex);
+	bool result = kmutex_try_lock(mutex, thread_current);
 	if (!result) {
 		SET_RET_VALUE(KTHREAD_STATUS_BUSY);
 		return;
@@ -184,9 +187,12 @@ static void syscall_cond_wait() {
 		return;
 	}
 
-	kcond_wait(condition, mutex);
+	kcond_wait(condition, mutex, thread_current);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+
+	if (thread_current->state == KTHREAD_STATE_BLOCKED)
+		kthread_dispatch();
 }
 
 static void syscall_cond_signal() {

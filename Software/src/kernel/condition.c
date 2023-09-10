@@ -14,19 +14,18 @@ struct kcond* kcond_create() {
 	return condition;
 }
 
-void kcond_wait(struct kcond* condition, struct kmutex* mutex) {
-	thread_current->state = KTHREAD_STATE_BLOCKED;
-	thread_current->waiting_on = mutex;
+void kcond_wait(struct kcond* condition, struct kmutex* mutex, struct kthread* thread) {
+	thread->state = KTHREAD_STATE_BLOCKED;
+	thread->waiting_on = mutex;
 
 	if (!condition->queue_head)
-		condition->queue_head = thread_current;
+		condition->queue_head = thread;
 	else
-		condition->queue_tail->next = thread_current;
+		condition->queue_tail->next = thread;
 	
-	condition->queue_tail = thread_current;
+	condition->queue_tail = thread;
 
-	kmutex_unlock(mutex);
-	kthread_dispatch();
+	kmutex_unlock(mutex, thread);
 }
 
 void kcond_signal(struct kcond* condition) {

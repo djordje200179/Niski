@@ -17,16 +17,11 @@ struct kmutex* kmutex_create(bool recursive) {
 	return mutex;
 }
 
-void kmutex_lock_current(struct kmutex* mutex) {
-	kmutex_lock(mutex, thread_current);
-	kthread_dispatch();
-}
-
-bool kmutex_try_lock_current(struct kmutex* mutex) {
+bool kmutex_try_lock(struct kmutex* mutex, struct kthread* thread) {
 	if (mutex->owner)
 		return false;
 
-	mutex->owner = thread_current;
+	mutex->owner = thread;
 	mutex->lock_count = 1;
 
 	return true;
@@ -58,8 +53,8 @@ void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	mutex->queue_tail = thread;
 }
 
-enum kthread_status kmutex_unlock(struct kmutex* mutex) {
-	if (mutex->owner != thread_current)
+enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread) {
+	if (mutex->owner != thread)
 		return KTHREAD_STATUS_ERROR;
 
 	mutex->lock_count--;
@@ -74,15 +69,15 @@ enum kthread_status kmutex_unlock(struct kmutex* mutex) {
 
 	mutex->lock_count = 1;
 
-	struct kthread* thread = mutex->queue_head;
+	struct kthread* next_thread = mutex->queue_head;
 
-	mutex->queue_head = thread->next;
+	mutex->queue_head = next_thread->next;
 	if (!mutex->queue_head)
 		mutex->queue_tail = NULL;
 
-	mutex->owner = thread;
+	mutex->owner = next_thread;
 
-	kthread_enqueue(thread);
+	kthread_enqueue(next_thread);
 
 	return KTHREAD_STATUS_SUCCESS;
 }

@@ -14,10 +14,9 @@ struct kmutex {
 };
 
 struct kmutex* kmutex_create(bool recursive);
-void kmutex_lock_current(struct kmutex* mutex);
 void kmutex_lock(struct kmutex* mutex, struct kthread* thread);
-bool kmutex_try_lock_current(struct kmutex* mutex);
-enum kthread_status kmutex_unlock(struct kmutex* mutex);
+bool kmutex_try_lock(struct kmutex* mutex, struct kthread* thread);
+enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread);
 void kmutex_destroy(struct kmutex* mutex);
 
 enum kmutex_mode {
