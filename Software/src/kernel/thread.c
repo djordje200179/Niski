@@ -4,29 +4,22 @@
 
 #define KTHREAD_STACK_SIZE 0x1000
 
-struct kthread* thread_current;
-static struct kthread thread_main, thread_idle;
+static struct kthread thread_main = {
+	.stack = NULL,
+	.state = KTHREAD_STATE_RUNNING,
+	.next = NULL,
+	.waiting_on = NULL
+}, thread_idle = {
+	.stack = NULL,
+	.state = KTHREAD_STATE_READY,
+	.next = NULL,
+	.waiting_on = NULL
+};
 
-static struct kthread* scheduler_head;
-static struct kthread* scheduler_tail;
+struct kthread* thread_current = &thread_main;
 
-void kthread_init() {
-	thread_main = (struct kthread) {
-		.stack = NULL,
-		.state = KTHREAD_STATE_RUNNING,
-		.next = NULL,
-		.waiting_on = NULL
-	};
-
-	thread_current = &thread_main;
-
-	thread_idle = (struct kthread) {
-		.stack = NULL,
-		.state = KTHREAD_STATE_READY,
-		.next = NULL,
-		.waiting_on = NULL
-	};
-}
+static struct kthread* scheduler_head = NULL;
+static struct kthread* scheduler_tail = NULL;
 
 void kthread_enqueue(struct kthread* thread) {
 	if (thread == &thread_idle)

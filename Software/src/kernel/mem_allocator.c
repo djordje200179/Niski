@@ -11,19 +11,18 @@ struct mem_segment {
 	char data[];
 };
 
-static struct mem_segment* head_segment;
+extern struct mem_segment HEAP_START_ADDR = {
+	.next = NULL,
+	.prev = NULL
+};
+
+static struct mem_segment* head_segment = &HEAP_START_ADDR;
 
 void kmem_init() {
-	extern char HEAP_START_ADDR;
 	extern char HEAP_END_ADDR;
 	
-	head_segment = (struct mem_segment*)&HEAP_START_ADDR;
-
-	size_t heap_bytes = &HEAP_END_ADDR - &HEAP_START_ADDR;
-	head_segment->blocks = heap_bytes / KMEM_BLOCK_SIZE;
-
-	head_segment->next = NULL;
-	head_segment->prev = NULL;
+	size_t bytes = (size_t)(&HEAP_END_ADDR - (char*)&HEAP_START_ADDR);
+	head_segment->blocks = bytes / KMEM_BLOCK_SIZE;
 }
 
 static size_t calculate_blocks(size_t bytes) {

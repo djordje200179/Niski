@@ -39,8 +39,6 @@ struct kthread {
 
 extern struct kthread* thread_current;
 
-void kthread_init();
-
 struct kthread* kthread_create(int (*function)(void*), void* arg);
 void kthread_dispatch();
 void kthread_enqueue(struct kthread* thread);

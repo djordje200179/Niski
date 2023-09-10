@@ -4,7 +4,6 @@
 
 void init() {
 	kmem_init();
-	kthread_init();
 
 	void main();
 	main();
