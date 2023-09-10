@@ -1,6 +1,7 @@
 .global thrd_create, thrd_equal, thrd_current, thrd_yield, thrd_exit
 .global mtx_init, mtx_lock, mtx_unlock, mtx_destroy, mtx_trylock
 .global cnd_init, cnd_signal, cnd_broadcast, cnd_wait, cnd_destroy
+.global tss_create, tss_get, tss_set, tss_delete
 
 .extern thread_current
 
@@ -84,5 +85,25 @@ cnd_wait:
 cnd_destroy:
 	lw a0, 0(a0)
 	li a7, 0x35
+	ecall
+	ret
+
+tss_create:
+	li a7, 0x41
+	ecall
+	ret
+
+tss_get:
+	li a7, 0x43
+	ecall
+	ret
+
+tss_set:
+	li a7, 0x44
+	ecall
+	ret
+
+tss_delete:
+	li a7, 0x42
 	ecall
 	ret

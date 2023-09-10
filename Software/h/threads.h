@@ -47,3 +47,15 @@ int cnd_broadcast(cnd_t* cond);
 int cnd_wait(cnd_t* cond, mtx_t* mutex);
 //int cnd_timedwait(cnd_t* cond, mtx_t* mutex, const struct timespec* time_point);
 void cnd_destroy(cnd_t* cond);
+
+struct kthread_ls;
+typedef struct kthread_ls* tss_t;
+
+#define TSS_DTOR_ITERATIONS 1
+
+typedef void (*tss_dtor_t)(void*);
+
+int tss_create(tss_t* key, tss_dtor_t dtor);
+void* tss_get(tss_t key);
+int tss_set(tss_t key, void* val);
+void tss_delete(tss_t key);

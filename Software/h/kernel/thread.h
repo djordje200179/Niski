@@ -33,6 +33,8 @@ struct kthread {
 	} state;
 	struct kthread* next;
 	struct kmutex* waiting_on;
+
+	struct kthread_ld* local_data_head;
 };
 
 extern struct kthread* thread_current;

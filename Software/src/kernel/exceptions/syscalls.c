@@ -2,6 +2,7 @@
 #include "kernel/mem_allocator.h"
 #include "kernel/mutex.h"
 #include "kernel/condition.h"
+#include "kernel/thread_local.h"
 
 enum syscall_type {
 	SYSCALL_TYPE_MEM_ALLOC = 0x01,
@@ -22,7 +23,12 @@ enum syscall_type {
 	SYSCALL_TYPE_CONDITION_WAIT = 0x32,
 	SYSCALL_TYPE_CONDITION_SIGNAL = 0x33,
 	SYSCALL_TYPE_CONDITION_SIGNAL_ALL = 0x34,
-	SYSACLL_TYPE_CONDITION_DESTROY = 0x35
+	SYSACLL_TYPE_CONDITION_DESTROY = 0x35,
+
+	SYSCALL_TYPE_TS_CREATE = 0x41,
+	SYSCALL_TYPE_TS_DESTROY = 0x42,
+	SYSCALL_TYPE_TS_GET = 0x43,
+	SYSCALL_TYPE_TS_SET = 0x44
 };
 
 #define GET_PARAM(index, type) (type)(thread_current->context.regs[REG_A ## index])
@@ -222,6 +228,69 @@ static void syscall_cond_destroy() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
+static void syscall_ts_create() {
+	struct kthread_ls** location = GET_PARAM(0, struct kthread_ls**);
+	void (*destructor)(void*) = GET_PARAM(1, void (*)(void*));
+
+	if (!location) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	struct kthread_ls* local_storage = kthread_ls_create(destructor);
+	if (!local_storage) {
+		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
+		return;
+	}
+
+	*location = local_storage;
+
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+}
+
+static void syscall_ts_destroy() {
+	struct kthread_ls* local_storage = GET_PARAM(0, struct kthread_ls*);
+
+	if (!local_storage) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	kthread_ls_destroy(local_storage);
+
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+}
+
+static void syscall_ts_get() {
+	struct kthread_ls* local_storage = GET_PARAM(0, struct kthread_ls*);
+
+	if (!local_storage) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	void* data = kthread_ls_get(local_storage, thread_current);
+	SET_RET_VALUE(data);
+}
+
+static void syscall_ts_set() {
+	struct kthread_ls* local_storage = GET_PARAM(0, struct kthread_ls*);
+	void* data = GET_PARAM(1, void*);
+
+	if (!local_storage) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	enum kthread_status status = kthread_ls_set(local_storage, thread_current, data);
+	if (status != KTHREAD_STATUS_SUCCESS) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+}
+
 void (*syscalls[100])() = {
 	[SYSCALL_TYPE_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_TYPE_MEM_FREE] = syscall_mem_free,
@@ -241,5 +310,10 @@ void (*syscalls[100])() = {
 	[SYSCALL_TYPE_CONDITION_WAIT] = syscall_cond_wait,
 	[SYSCALL_TYPE_CONDITION_SIGNAL] = syscall_cond_signal,
 	[SYSCALL_TYPE_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
-	[SYSACLL_TYPE_CONDITION_DESTROY] = syscall_cond_destroy
+	[SYSACLL_TYPE_CONDITION_DESTROY] = syscall_cond_destroy,
+
+	[SYSCALL_TYPE_TS_CREATE] = syscall_ts_create,
+	[SYSCALL_TYPE_TS_DESTROY] = syscall_ts_destroy,
+	[SYSCALL_TYPE_TS_GET] = syscall_ts_get,
+	[SYSCALL_TYPE_TS_SET] = syscall_ts_set
 };

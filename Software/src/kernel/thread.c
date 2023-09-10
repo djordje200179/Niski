@@ -1,4 +1,5 @@
 #include "kernel/thread.h"
+#include "kernel/thread_local.h"
 #include "kernel/mem_allocator.h"
 
 #define KTHREAD_STACK_SIZE 0x1000
@@ -106,7 +107,30 @@ void kthread_dispatch() {
 	new_thread->state = KTHREAD_STATE_RUNNING;
 }
 
+static void kthread_clean_td(struct kthread* thread) {
+	for (struct kthread_ld* local_data = thread->local_data_head; local_data;) {
+		struct kthread_ld* next_data = local_data->next_data;
+
+		if (local_data->prev_data)
+			local_data->prev_data->next_data = local_data->next_data;
+		else
+			local_data->storage->data_head = local_data->next_data;
+
+		if (local_data->next_data)
+			local_data->next_data->prev_data = local_data->prev_data;
+
+		if (local_data->storage->destructor)
+			local_data->storage->destructor(local_data->data);
+
+		kmem_dealloc(local_data);
+
+		local_data = next_data;
+	}
+}
+
 void kthread_destroy(struct kthread* thread) {
+	kthread_clean_td(thread);
+
 	if (thread->stack)
 		kmem_dealloc(thread->stack);
 
