@@ -29,16 +29,13 @@ SECTIONS {
 	} > RAM
 
 	. = ALIGN(16);
-	.ram.stack : {
-		STACK_START_ADDR = .;
-		. += 1K;
-		STACK_END_ADDR = .;
-	} > RAM
+	
+	STACK_START_ADDR = .;
+	. += 0x1000;
+	STACK_END_ADDR = .;
 
-	.ram.kstack : {
-		. += 1K;
-		KERNEL_STACK_END_ADDR = .;
-	} > RAM
+	. += 0x1000;
+	KERNEL_STACK_END_ADDR = .;
 
 	. = ALIGN(64);
 	HEAP_START_ADDR = .;
