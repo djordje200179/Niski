@@ -29,13 +29,9 @@ SECTIONS {
 	} > RAM
 
 	. = ALIGN(16);
-	
 	STACK_START_ADDR = .;
 	. += 0x1000;
 	STACK_END_ADDR = .;
-
-	. += 0x1000;
-	KERNEL_STACK_END_ADDR = .;
 
 	. = ALIGN(64);
 	HEAP_START_ADDR = .;

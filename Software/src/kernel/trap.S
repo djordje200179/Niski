@@ -2,10 +2,14 @@
 
 .extern trap_handler
 .extern thread_current
-.extern KERNEL_STACK_END_ADDR
+
+.bss
+.align 4
+.space 0x1000
+kernel_stack:
 
 .text
-.align 4
+.align 2
 trap:
 	csrw sscratch, t6
 	lw t6, thread_current
@@ -18,7 +22,7 @@ trap:
 	csrr t5, sepc
 	sw t5, 32 * 4 (t6)
 
-	la sp, KERNEL_STACK_END_ADDR
+	la sp, kernel_stack
 
 	csrr a0, scause
 	call exception_handler
