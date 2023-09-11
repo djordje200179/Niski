@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 struct kmutex* kmutex_create(bool recursive) {
-	struct kmutex* mutex = kmem_alloc(sizeof(struct kmutex));
+	struct kmutex* mutex = kheap_alloc(sizeof(struct kmutex));
 	if (!mutex)
 		return NULL;
 
@@ -91,5 +91,5 @@ void kmutex_destroy(struct kmutex* mutex) {
 		thread = next;
 	}
 
-	kmem_dealloc(mutex);
+	kheap_dealloc(mutex);
 }

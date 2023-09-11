@@ -54,13 +54,13 @@ static struct kthread* kthread_dequeue() {
 }
 
 struct kthread* kthread_create(int (*function)(void*), void* arg) {
-	struct kthread* thread = kmem_alloc(sizeof(struct kthread));
+	struct kthread* thread = kheap_alloc(sizeof(struct kthread));
 	if (!thread)
 		return NULL;
 
-	uint32_t* stack = kmem_alloc(KTHREAD_STACK_SIZE);
+	uint32_t* stack = kheap_alloc(KTHREAD_STACK_SIZE);
 	if (!stack) {
-		kmem_dealloc(thread);
+		kheap_dealloc(thread);
 		return NULL;
 	}
 
@@ -110,7 +110,7 @@ static void kthread_clean_td(struct kthread* thread) {
 		if (local_data->storage->destructor)
 			local_data->storage->destructor(local_data->data);
 
-		kmem_dealloc(local_data);
+		kheap_dealloc(local_data);
 
 		local_data = next_data;
 	}
@@ -120,7 +120,7 @@ void kthread_destroy(struct kthread* thread) {
 	kthread_clean_td(thread);
 
 	if (thread->stack)
-		kmem_dealloc(thread->stack);
+		kheap_dealloc(thread->stack);
 
-	kmem_dealloc(thread);
+	kheap_dealloc(thread);
 }

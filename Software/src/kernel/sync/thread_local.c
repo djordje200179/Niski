@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 struct kthread_ls* kthread_ls_create(void (*destructor)(void*)) {
-	struct kthread_ls* local_storage = kmem_alloc(sizeof(struct kthread_ls));
+	struct kthread_ls* local_storage = kheap_alloc(sizeof(struct kthread_ls));
 	if (!local_storage)
 		return NULL;
 
@@ -26,12 +26,12 @@ void kthread_ls_destroy(struct kthread_ls* local_storage) {
 		if (local_data->next_thread)
 			local_data->next_thread->prev_thread = local_data->prev_thread;
 
-		kmem_dealloc(local_data);
+		kheap_dealloc(local_data);
 
 		local_data = next_data;
 	}
 
-	kmem_dealloc(local_storage);
+	kheap_dealloc(local_storage);
 }
 
 void* kthread_ls_get(struct kthread_ls* local_storage, struct kthread* thread) {
@@ -51,7 +51,7 @@ enum kthread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthr
 		}
 	}
 
-	struct kthread_ld* local_data = kmem_alloc(sizeof(struct kthread_ld));
+	struct kthread_ld* local_data = kheap_alloc(sizeof(struct kthread_ld));
 	if (!local_data)
 		return KTHREAD_STATUS_NOMEM;
 

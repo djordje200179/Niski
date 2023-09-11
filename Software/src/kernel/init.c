@@ -3,7 +3,7 @@
 #include <stddef.h>
 
 void init() {
-	kmem_init();
+	kheap_init();
 
 	void main();
 	main();

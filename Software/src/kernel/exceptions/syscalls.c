@@ -37,14 +37,14 @@ enum syscall_type {
 static void syscall_mem_alloc() {
 	size_t bytes = GET_PARAM(0, size_t);
 
-	void* result = kmem_alloc(bytes);
+	void* result = kheap_alloc(bytes);
 	SET_RET_VALUE(result);
 }
 
 static void syscall_mem_free() {
 	void* ptr = GET_PARAM(0, void*);
 
-	kmem_dealloc(ptr);
+	kheap_dealloc(ptr);
 }
 
 static void syscall_thread_create() {

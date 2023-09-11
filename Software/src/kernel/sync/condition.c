@@ -4,7 +4,7 @@
 #include "kernel/mem_alloc/heap_allocator.h"
 
 struct kcond* kcond_create() {
-	struct kcond* condition = kmem_alloc(sizeof(struct kcond));
+	struct kcond* condition = kheap_alloc(sizeof(struct kcond));
 	if (!condition)
 		return NULL;
 
@@ -63,5 +63,5 @@ void kcond_destroy(struct kcond* condition) {
 		thread = next;
 	}
 
-	kmem_dealloc(condition);
+	kheap_dealloc(condition);
 }

@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-void kmem_init();
+void kheap_init();
 
-void* kmem_alloc(size_t bytes);
-void kmem_dealloc(void* ptr);
+void* kheap_alloc(size_t bytes);
+void kheap_dealloc(void* ptr);
