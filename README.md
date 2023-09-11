@@ -63,6 +63,13 @@ tries to follows the C23 language standard.
 Besides that, there are also functions that allow communication 
 with external devices present on the FPGA development board.
 
+Dynamic memory allocation for user programs is accomplished
+by using first-fit algorithm. But for kernel objects, a more
+efficient buddy/slab algorithm is used.
+
+Scheduler is implemented as a FIFO, but for future plans
+I want to implement a more efficient algorithm. Scheduling is
+preemptive, and the time slice is 1s.
 
 ### C standard library
 GCC automatically generates header files with
