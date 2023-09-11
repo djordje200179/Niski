@@ -11,7 +11,8 @@ int digit_thread(void* arg) {
 	
 	ssds_set_digit(id, 0);
 
-	tss_set(tss, (void*)5);
+	int tss_status = tss_set(tss, (void*)5);
+	leds_set_single(2, tss_status == thrd_success);
 
 	ssds_set_digit(id, 1);
 
@@ -20,6 +21,7 @@ int digit_thread(void* arg) {
 	ssds_set_digit(id, 2);
 
 	uintptr_t value = (uintptr_t)tss_get(tss);
+	leds_set_single(3, value != 0);
 
 	ssds_set_digit(id, value);
 	
