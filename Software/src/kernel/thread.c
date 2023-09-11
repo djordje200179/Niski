@@ -53,13 +53,6 @@ static struct kthread* kthread_dequeue() {
 	return thread;
 }
 
-static void wrapper_function() {
-	int res = thread_current->function(thread_current->arg);
-
-	[[noreturn]] void thrd_exit(int res);
-	thrd_exit(res);
-}
-
 struct kthread* kthread_create(int (*function)(void*), void* arg) {
 	struct kthread* thread = kmem_alloc(sizeof(struct kthread));
 	if (!thread)
@@ -77,7 +70,9 @@ struct kthread* kthread_create(int (*function)(void*), void* arg) {
 		thread->context.regs[i] = 0;
 	
 	thread->context.regs[REG_SP] = (uint32_t)(&(thread->stack[KTHREAD_STACK_SIZE / 4]));
-	thread->context.pc = wrapper_function;
+
+	void kthread_wrapper_function();
+	thread->context.pc = kthread_wrapper_function;
 
 	thread->function = function;
 	thread->arg = arg;

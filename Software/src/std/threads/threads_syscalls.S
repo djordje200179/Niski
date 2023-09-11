@@ -28,7 +28,6 @@ thrd_yield:
 thrd_exit:
 	li a7, 0x12
 	ecall
-	ret
 
 mtx_init:
 	li a7, 0x21

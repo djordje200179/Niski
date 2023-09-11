@@ -19,11 +19,11 @@ struct kthread {
 		
 		void (*pc)();
 	} context;
-
-	uint32_t* stack;
 	
 	int (*function)(void*);
 	void* arg;
+	
+	uint32_t* stack;
 
 	enum kthread_state {
 		KTHREAD_STATE_CREATED,
