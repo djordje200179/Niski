@@ -1,6 +1,6 @@
-#include "kernel/thread.h"
-#include "kernel/thread_local.h"
-#include "kernel/mem_allocator.h"
+#include "kernel/sync/thread.h"
+#include "kernel/sync/thread_local.h"
+#include "kernel/mem_alloc/heap_allocator.h"
 
 #define KTHREAD_STACK_SIZE 0x1000
 

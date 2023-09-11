@@ -1,8 +1,8 @@
-#include "kernel/thread.h"
-#include "kernel/mem_allocator.h"
-#include "kernel/mutex.h"
-#include "kernel/condition.h"
-#include "kernel/thread_local.h"
+#include "kernel/sync/thread.h"
+#include "kernel/mem_alloc/heap_allocator.h"
+#include "kernel/sync/mutex.h"
+#include "kernel/sync/condition.h"
+#include "kernel/sync/thread_local.h"
 
 enum syscall_type {
 	SYSCALL_TYPE_MEM_ALLOC = 0x01,

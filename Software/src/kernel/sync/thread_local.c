@@ -1,6 +1,6 @@
-#include "kernel/thread_local.h"
-#include "kernel/mem_allocator.h"
-#include "kernel/thread.h"
+#include "kernel/sync/thread_local.h"
+#include "kernel/mem_alloc/heap_allocator.h"
+#include "kernel/sync/thread.h"
 #include <stddef.h>
 
 struct kthread_ls* kthread_ls_create(void (*destructor)(void*)) {

@@ -1,7 +1,7 @@
-#include "kernel/thread.h"
-#include "kernel/mutex.h"
-#include "kernel/condition.h"
-#include "kernel/mem_allocator.h"
+#include "kernel/sync/thread.h"
+#include "kernel/sync/mutex.h"
+#include "kernel/sync/condition.h"
+#include "kernel/mem_alloc/heap_allocator.h"
 
 struct kcond* kcond_create() {
 	struct kcond* condition = kmem_alloc(sizeof(struct kcond));

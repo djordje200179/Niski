@@ -1,4 +1,4 @@
-#include "kernel/mem_allocator.h"
+#include "kernel/mem_alloc/heap_allocator.h"
 #include <stdint.h>
 
 #define KMEM_BLOCK_SIZE 64

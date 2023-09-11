@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "kernel/thread.h"
+#include "kernel/sync/thread.h"
 
 enum exception_type {
 	EXCEPTION_TYPE_INVALID_INSTRUCTION = 0x02,

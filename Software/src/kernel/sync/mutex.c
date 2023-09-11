@@ -1,6 +1,6 @@
-#include "kernel/mutex.h"
-#include "kernel/mem_allocator.h"
-#include "kernel/thread.h"
+#include "kernel/sync/mutex.h"
+#include "kernel/mem_alloc/heap_allocator.h"
+#include "kernel/sync/thread.h"
 #include <stddef.h>
 
 struct kmutex* kmutex_create(bool recursive) {
