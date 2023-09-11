@@ -152,7 +152,7 @@ Currently, the following header files and functions are fully implemented:
 	- `ssds_on`
 	- `ssds_off`
 	- `ssds_set_single`
-	- `ssds_set_all`
+	- `ssds_set`
 	- `ssds_set_dots`
 	- `ssds_set_digit`
 	- `ssds_set_number`

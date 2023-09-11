@@ -19,7 +19,7 @@ void ssds_set_single(uint8_t digit, uint8_t segments) {
 	SSDS_DATA_DIGITS_ARRAY[digit] = segments;
 }
 
-void ssds_set_all(uint32_t segments) {
+void ssds_set(uint32_t segments) {
 	segments &= 0b01111111011111110111111101111111u;
 	SSDS_DATA_DIGITS_REG = segments;
 }
