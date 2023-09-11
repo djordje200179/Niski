@@ -10,7 +10,9 @@ MAP_OUT = $(OUT_DIR)/out.map
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
-GCC = riscv64-unknown-elf-gcc
+TOOL_PREFIX = riscv64-unknown-elf-
+
+GCC = $(TOOL_PREFIX)gcc
 
 GCC_FLAGS = -march=rv32im -mabi=ilp32 -mno-div
 GCC_FLAGS += --no-pic
@@ -37,11 +39,13 @@ LD_FLAGS += -Xlinker --gc-sections
 LD_FLAGS += -fstack-limit-symbol=STACK_START_ADDR
 LD_FLAGS += -Xlinker -Map=$(MAP_OUT)
 
-OBJDUMP = riscv64-unknown-elf-objdump
+OBJDUMP = $(TOOL_PREFIX)objdump
 OBJDUMP_FLAGS =
 
-OBJCOPY = riscv64-unknown-elf-objcopy
+OBJCOPY = $(TOOL_PREFIX)objcopy
 OBJCOPY_FLAGS = -O verilog --verilog-data-width=4 --reverse-bytes=4
+
+EMULATOR = qemu-system-riscv64
 
 MEMFILE_CORRECTOR = ./memfile_corrector.py
 
