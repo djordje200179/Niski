@@ -3,11 +3,11 @@
 .extern init, trap
 .extern thrd_yield
 
-.extern STACK_END_ADDR
+.extern STACK_END
 
 .text
 entry:
-	la sp, STACK_END_ADDR
+	la sp, STACK_END
 
 	la a0, trap
 	csrw stvec, a0

@@ -12,19 +12,19 @@ struct mem_segment {
 	char data[];
 };
 
-extern struct mem_segment HEAP_START_ADDR;
+extern struct mem_segment HEAP_START;
 
-static struct mem_segment* head_segment = &HEAP_START_ADDR;
+static struct mem_segment* head_segment = &HEAP_START;
 
 void kheap_init() {
-	extern char HEAP_END_ADDR;
+	extern char HEAP_END;
 	
-	size_t bytes = (uintptr_t)&HEAP_END_ADDR - (uintptr_t)&HEAP_START_ADDR;
+	size_t bytes = (uintptr_t)&HEAP_END - (uintptr_t)&HEAP_START;
 	size_t blocks = bytes / KMEM_BLOCK_SIZE;
 
-	HEAP_START_ADDR.blocks = blocks;
-	HEAP_START_ADDR.prev = NULL;
-	HEAP_START_ADDR.next = NULL;
+	HEAP_START.blocks = blocks;
+	HEAP_START.prev = NULL;
+	HEAP_START.next = NULL;
 }
 
 static size_t calculate_blocks(size_t bytes) {

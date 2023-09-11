@@ -36,7 +36,7 @@ LD_FLAGS += --enable-multilib -flinker-output=exec -no-pie
 LD_FLAGS += -Xlinker --print-memory-usage
 LD_FLAGS += -Xlinker --build-id=none
 LD_FLAGS += -Xlinker --gc-sections
-LD_FLAGS += -fstack-limit-symbol=STACK_START_ADDR
+LD_FLAGS += -fstack-limit-symbol=STACK_START
 LD_FLAGS += -Xlinker -Map=$(MAP_OUT)
 
 OBJDUMP = $(TOOL_PREFIX)objdump
