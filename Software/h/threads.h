@@ -18,7 +18,7 @@ int thrd_equal(thrd_t lhs, thrd_t rhs);
 thrd_t thrd_current(void);
 // int thrd_sleep(const struct timespec* duration, struct timespec* remaining);
 void thrd_yield(void);
-[[noreturn]] void thrd_exit(int res);
+_Noreturn void thrd_exit(int res);
 // int thrd_detach(thrd_t thr);
 // int thrd_join(thrd_t thr, int* res);
 
