@@ -42,8 +42,37 @@ char* strdup(const char* src) {
 	char* dest = malloc(len + 1);
 	if (!dest)
 		return NULL;
+
+	dest[len] = '\0';
 	
-	return strcpy(dest, src);
+	while ((uintptr_t)dest % 4 != 0 && len > 0) {
+		*dest = *src;
+		dest++;
+		src++;
+		len--;
+	}
+
+	uint32_t* dest32 = (uint32_t*)dest;
+	uint32_t* src32 = (uint32_t*)src;
+
+	while (len >= 4) {
+		*dest32 = *src32;
+		dest32++;
+		src32++;
+		len -= 4;
+	}
+
+	dest = (char*)dest32;
+	src = (char*)src32;
+
+	while (len > 0) {
+		*dest = *src;
+		dest++;
+		src++;
+		len--;
+	}
+
+	return dest;
 }
 
 char* strndup(const char* src, size_t count) {
@@ -54,8 +83,37 @@ char* strndup(const char* src, size_t count) {
 	char* dest = malloc(len + 1);
 	if (!dest)
 		return NULL;
-	
-	return strncpy(dest, src, len);
+
+	dest[len] = '\0';
+
+	while ((uintptr_t)dest % 4 != 0 && len > 0) {
+		*dest = *src;
+		dest++;
+		src++;
+		len--;
+	}
+
+	uint32_t* dest32 = (uint32_t*)dest;
+	uint32_t* src32 = (uint32_t*)src;
+
+	while (len >= 4) {
+		*dest32 = *src32;
+		dest32++;
+		src32++;
+		len -= 4;
+	}
+
+	dest = (char*)dest32;
+	src = (char*)src32;
+
+	while (len > 0) {
+		*dest = *src;
+		dest++;
+		src++;
+		len--;
+	}
+
+	return dest;
 }
 
 size_t strlen(const char* str) {
