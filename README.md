@@ -89,6 +89,7 @@ and some will be implemented as library functions.
 Currently, the following header files and functions are fully implemented:
 - __stdlib.h__
 	- `malloc`
+	- `calloc`
 	- `free`
 - __threads.h__
 	- `thrd_create`
