@@ -15,9 +15,9 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Wed Sep  6 00:14:54 2023"
+// CREATED		"Wed Sep 13 12:41:17 2023"
 
-module niski_dut (
+module niski_dut(
 	CLK_PIN,
 	UART_RX_PIN,
 	PS2_CLK_PIN,
@@ -103,16 +103,20 @@ wire	SYNTHESIZED_WIRE_8;
 wire	SYNTHESIZED_WIRE_9;
 wire	SYNTHESIZED_WIRE_10;
 wire	SYNTHESIZED_WIRE_11;
-wire	[10:0] SYNTHESIZED_WIRE_12;
-wire	SYNTHESIZED_WIRE_13;
-wire	[11:0] SYNTHESIZED_WIRE_14;
-wire	[31:0] SYNTHESIZED_WIRE_15;
-wire	[3:0] SYNTHESIZED_WIRE_16;
-wire	[31:0] SYNTHESIZED_WIRE_17;
-wire	[31:0] SYNTHESIZED_WIRE_18;
-wire	SYNTHESIZED_WIRE_19;
-wire	SYNTHESIZED_WIRE_20;
-wire	SYNTHESIZED_WIRE_21;
+wire	SYNTHESIZED_WIRE_12;
+wire	[10:0] SYNTHESIZED_WIRE_13;
+wire	SYNTHESIZED_WIRE_14;
+wire	SYNTHESIZED_WIRE_15;
+wire	[7:0] SYNTHESIZED_WIRE_16;
+wire	SYNTHESIZED_WIRE_17;
+wire	[11:0] SYNTHESIZED_WIRE_18;
+wire	[31:0] SYNTHESIZED_WIRE_19;
+wire	[3:0] SYNTHESIZED_WIRE_20;
+wire	[31:0] SYNTHESIZED_WIRE_21;
+wire	[31:0] SYNTHESIZED_WIRE_22;
+wire	SYNTHESIZED_WIRE_23;
+wire	SYNTHESIZED_WIRE_24;
+wire	SYNTHESIZED_WIRE_25;
 
 
 
@@ -158,8 +162,8 @@ buzzer_bus_interface	b2v_inst11(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.ctrl_en(SYNTHESIZED_WIRE_20),
-	.ctrl_buzz(SYNTHESIZED_WIRE_21),
+	.ctrl_en(SYNTHESIZED_WIRE_24),
+	.ctrl_buzz(SYNTHESIZED_WIRE_25),
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst11.CONTROL_REG_ADDR = 32'b01110000000000000000000000010000;
@@ -205,12 +209,30 @@ leds_bus_interface	b2v_inst14(
 	defparam	b2v_inst14.DATA_REG_ADDR = 32'b01110000000000000000000000000100;
 
 
+lcd_bus_interface	b2v_inst15(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.ctrl_data_ack(SYNTHESIZED_WIRE_11),
+	.rd_bus(rd_bus),
+	.wr_bus(wr_bus),
+	.addr_bus(addr_bus),
+	.data_bus(data_bus),
+	.data_mask_bus(data_mask_bus),
+	.ctrl_data_is_cmd(SYNTHESIZED_WIRE_14),
+	.ctrl_data_req(SYNTHESIZED_WIRE_15),
+	.fc_bus(fc_bus),
+	.ctrl_data(SYNTHESIZED_WIRE_16)
+	);
+	defparam	b2v_inst15.CMD_REG_ADDR = 32'b01110000000000000000000000110100;
+	defparam	b2v_inst15.DATA_REG_ADDR = 32'b01110000000000000000000000110000;
+
+
 bus_arbitrator	b2v_inst16(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.cpu_req(SYNTHESIZED_WIRE_11),
+	.cpu_req(SYNTHESIZED_WIRE_12),
 	.dma_req(0),
-	.cpu_grant(SYNTHESIZED_WIRE_19),
+	.cpu_grant(SYNTHESIZED_WIRE_23),
 	
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
@@ -220,32 +242,35 @@ bus_arbitrator	b2v_inst16(
 	.data_mask_bus(data_mask_bus));
 
 
-lcd_controller	b2v_inst17(
-	.clk(clk_50_mhz),
-	.rst(btn_rst),
-	.en(1),
-	.rs_pin(LCD_RS_PIN),
-	.rw_pin(LCD_RW_PIN),
-	.e_pin(LCD_E_PIN),
-	.data_pins(LCD_DATA_PINS));
-
-
 rom	b2v_inst18(
 	.clk(clk_50_mhz),
-	.addr(SYNTHESIZED_WIRE_12),
-	.data_out(SYNTHESIZED_WIRE_18));
+	.addr(SYNTHESIZED_WIRE_13),
+	.data_out(SYNTHESIZED_WIRE_22));
 	defparam	b2v_inst18.ADDR_BITS = 11;
 	defparam	b2v_inst18.MEM_FILE = "../../Software/out/rom.mem";
+
+
+lcd_controller	b2v_inst19(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.data_is_cmd(SYNTHESIZED_WIRE_14),
+	.data_req(SYNTHESIZED_WIRE_15),
+	.data_in(SYNTHESIZED_WIRE_16),
+	.rs_pin(LCD_RS_PIN),
+	.e_pin(LCD_E_PIN),
+	.rw_pin(LCD_RW_PIN),
+	.data_ack(SYNTHESIZED_WIRE_11),
+	.data_pins(LCD_DATA_PINS));
 
 
 
 ram	b2v_inst20(
 	.clk(clk_50_mhz),
-	.wr(SYNTHESIZED_WIRE_13),
-	.addr(SYNTHESIZED_WIRE_14),
-	.data_in(SYNTHESIZED_WIRE_15),
-	.wr_mask(SYNTHESIZED_WIRE_16),
-	.data_out(SYNTHESIZED_WIRE_17));
+	.wr(SYNTHESIZED_WIRE_17),
+	.addr(SYNTHESIZED_WIRE_18),
+	.data_in(SYNTHESIZED_WIRE_19),
+	.wr_mask(SYNTHESIZED_WIRE_20),
+	.data_out(SYNTHESIZED_WIRE_21));
 	defparam	b2v_inst20.ADDR_BITS = 12;
 	defparam	b2v_inst20.MEM_FILE = "../../Software/out/ram.mem";
 
@@ -258,13 +283,13 @@ memory_bus_interface	b2v_inst21(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.mem_data_out(SYNTHESIZED_WIRE_17),
-	.mem_wr(SYNTHESIZED_WIRE_13),
+	.mem_data_out(SYNTHESIZED_WIRE_21),
+	.mem_wr(SYNTHESIZED_WIRE_17),
 	.fc_bus(fc_bus),
 	
-	.mem_addr(SYNTHESIZED_WIRE_14),
-	.mem_data_in(SYNTHESIZED_WIRE_15),
-	.mem_wr_mask(SYNTHESIZED_WIRE_16));
+	.mem_addr(SYNTHESIZED_WIRE_18),
+	.mem_data_in(SYNTHESIZED_WIRE_19),
+	.mem_wr_mask(SYNTHESIZED_WIRE_20));
 	defparam	b2v_inst21.MEM_ADDR_WIDTH = 12;
 	defparam	b2v_inst21.START_ADDR = 32'b01010000000000000000000000000000;
 
@@ -277,11 +302,11 @@ memory_bus_interface	b2v_inst22(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.mem_data_out(SYNTHESIZED_WIRE_18),
+	.mem_data_out(SYNTHESIZED_WIRE_22),
 	
 	.fc_bus(fc_bus),
 	
-	.mem_addr(SYNTHESIZED_WIRE_12)
+	.mem_addr(SYNTHESIZED_WIRE_13)
 	
 	);
 	defparam	b2v_inst22.MEM_ADDR_WIDTH = 11;
@@ -290,12 +315,12 @@ memory_bus_interface	b2v_inst22(
 
 cpu	b2v_inst23(
 	.clk(clk_50_mhz),
-	.clk_1_hz(clk_1_mhz),
+	.clk_1_hz(clk_1_hz),
 	.rst(btn_rst),
-	.bus_grant(SYNTHESIZED_WIRE_19),
+	.bus_grant(SYNTHESIZED_WIRE_23),
 	.fc_bus(fc_bus),
 	.data_bus(data_bus),
-	.bus_req(SYNTHESIZED_WIRE_11),
+	.bus_req(SYNTHESIZED_WIRE_12),
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
 	.addr_bus(addr_bus),
@@ -398,8 +423,8 @@ ir_controller	b2v_inst8(
 
 
 buzzer_controller	b2v_inst9(
-	.en(SYNTHESIZED_WIRE_20),
-	.buzz(SYNTHESIZED_WIRE_21),
+	.en(SYNTHESIZED_WIRE_24),
+	.buzz(SYNTHESIZED_WIRE_25),
 	.buzzer_pin(BUZZ_PIN));
 
 endmodule

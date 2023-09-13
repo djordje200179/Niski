@@ -167,6 +167,8 @@ set_global_assignment -name PHYSICAL_SYNTHESIS_MAP_LOGIC_TO_MEMORY_FOR_AREA ON
 set_global_assignment -name ENABLE_DRC_SETTINGS ON
 set_global_assignment -name AUTO_RAM_TO_LCELL_CONVERSION ON
 set_global_assignment -name AUTO_RESOURCE_SHARING ON
+set_global_assignment -name add_pass_through_logic_to_inferred_rams OFF
+
 set_location_assignment PIN_11 -to LCD_DATA_PINS[7]
 set_location_assignment PIN_7 -to LCD_DATA_PINS[6]
 set_location_assignment PIN_10 -to LCD_DATA_PINS[5]
@@ -191,6 +193,9 @@ set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU/CPU.sv -section_id CPU
 set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Devices/LEDs/BusInterface.sv -section_id "LEDs Bus Interface"
 set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Bus/Arbitrator.sv -section_id "Bus Arbitrator"
 set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Niski.sv -section_id Niski
+set_global_assignment -name FLOW_DISABLE_ASSEMBLER OFF
+set_global_assignment -name FLOW_ENABLE_IO_ASSIGNMENT_ANALYSIS ON
+set_global_assignment -name ALLOW_ANY_SHIFT_REGISTER_SIZE_FOR_RECOGNITION ON
 set_global_assignment -name BDF_FILE Niski.bdf
 set_global_assignment -name VERILOG_FILE CPU/CPU.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Instructions.vh
@@ -213,6 +218,7 @@ set_global_assignment -name VERILOG_FILE Components/PWM.v
 set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/Controller.v
+set_global_assignment -name VERILOG_FILE Devices/LCD/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/LCD/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/LEDs/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/LEDs/Controller.v

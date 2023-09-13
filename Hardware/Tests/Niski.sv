@@ -22,11 +22,12 @@ niski_dut dut (
 );
 
 initial begin
-	wait (dut.b2v_inst23.pc == 32'h400011b4);
-
+	$stop;
+	
+	wait (dut.b2v_inst23.pc == 32'h40000020);
 	$strobe("PC at %t", $time);
 
-	#5000;
+	#10000;
 	$stop;
 end
 
@@ -46,17 +47,5 @@ string register_names[32] = {
 	"s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
 	"t3", "t4", "t5", "t6"
 };
-
-always begin
-	wait (dut.wr_bus && dut.addr_bus[31:4] == 28'h7000002);
-	$strobe("at %t -> PC: %h, MEM[%h] = %h (%d), (Mask: %b)", $time, dut.b2v_inst23.pc, dut.addr_bus, dut.data_bus, dut.data_bus, dut.data_mask_bus);
-	wait (!dut.wr_bus);
-end
-
-// always begin
-// 	wait (dut.b2v_inst23.gpr_wr);
-// 	$strobe("PC: %h, GPR[%s] = %h (%d)", dut.b2v_inst23.pc, register_names[dut.b2v_inst23.inst_rd], dut.b2v_inst23.gpr_dst_in, dut.b2v_inst23.gpr_dst_in);
-// 	wait (!dut.b2v_inst23.gpr_wr);
-// end
 
 endmodule
