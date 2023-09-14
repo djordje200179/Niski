@@ -5,7 +5,7 @@ void main() {
 	lcd_init();
 	ssds_on();
 
-	lcd_write_string("Tartalja je Bog");
+	lcd_write_string("Tartalja je Bog\ni batina");
 	lcd_write_char('.');
 
 	for (int i = 0; i < 10000; i++) {
