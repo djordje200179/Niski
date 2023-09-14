@@ -11,21 +11,25 @@ SECTIONS {
 	.rom.text : { 
 		obj/kernel/entry.o(.text)
 		*(.text*)
+		. = ALIGN(4);
 	} > ROM
 
 	.rom.rodata : {
 		*(.srodata*)
 		*(.rodata*)
+		. = ALIGN(4);
 	} > ROM
 
 	.ram.bss : {
 		*(.sbss*)
 		*(.bss*)
+		. = ALIGN(4);
 	} > RAM
 
 	.ram.data : {
 		*(.sdata*)
 		*(.data*)
+		. = ALIGN(4);
 	} > RAM
 
 	. = ALIGN(16);
