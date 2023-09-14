@@ -91,6 +91,9 @@ Currently, the following header files and functions are fully implemented:
 	- `malloc`
 	- `calloc`
 	- `free`
+- __stdio.h__
+	- `putchar`
+	- `puts`
 - __threads.h__
 	- `thrd_create`
 	- `thrd_equal`
