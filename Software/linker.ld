@@ -14,18 +14,18 @@ SECTIONS {
 	} > ROM
 
 	.rom.rodata : {
-		*(.srodata)
-		*(.rodata)
+		*(.srodata*)
+		*(.rodata*)
 	} > ROM
 
 	.ram.bss : {
-		*(.sbss)
-		*(.bss)
+		*(.sbss*)
+		*(.bss*)
 	} > RAM
 
 	.ram.data : {
-		*(.sdata)
-		*(.data)
+		*(.sdata*)
+		*(.data*)
 	} > RAM
 
 	. = ALIGN(16);

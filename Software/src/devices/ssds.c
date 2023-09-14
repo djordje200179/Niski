@@ -1,8 +1,8 @@
 #include "devices/ssds.h"
 
-extern uint32_t SSDS_CTRL_REG;
-extern uint32_t SSDS_DATA_DIGITS_REG;
-extern uint32_t SSDS_DATA_DOTS_REG;
+extern volatile uint8_t SSDS_CTRL_REG;
+extern volatile uint32_t SSDS_DATA_DIGITS_REG;
+extern volatile uint8_t SSDS_DATA_DOTS_REG;
 
 #define SSDS_DATA_DIGITS_ARRAY ((uint8_t*)&SSDS_DATA_DIGITS_REG)
 
@@ -28,12 +28,12 @@ void ssds_set_dots(uint8_t states) {
 	SSDS_DATA_DOTS_REG = states;
 }
 
-void ssds_set_digit(uint8_t digit, uint8_t value) {
+void ssds_set_digit(uint8_t digit, unsigned char value) {
 	value |= 0b10000000u;
 	SSDS_DATA_DIGITS_ARRAY[digit] = value;
 }
 
-void __attribute__((optimize("O0"))) ssds_set_number(uint16_t number) {
+void __attribute__((optimize("O0"))) ssds_set_number(short number) {
 	uint32_t value = 0;
 	for (uint8_t i = 0; i < 4; i++) {
 		uint16_t digit = number % 10;

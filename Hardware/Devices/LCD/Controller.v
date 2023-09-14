@@ -14,9 +14,12 @@ module lcd_controller (
 			   STATE_DONE = 2'b10;
 
 	reg [16:0] counter;
+	localparam LONG_DELAY = 17'd131_000,
+			   SHORT_DELAY = 17'd131_000; // 17'd25_000;
 
 	reg [7:0] data;
 	reg is_cmd;
+	wire is_long_delay = is_cmd && ~|data[7:2];
 
 	assign rs_pin = ~is_cmd;
 	assign rw_pin = 1'b0;
@@ -28,7 +31,7 @@ module lcd_controller (
 	task reset;
 		begin
 			state <= STATE_IDLE;
-			counter <= 16'b0;
+			counter <= 17'b0;
 			data <= 8'b0;
 			is_cmd <= 1'b0;
 		end
@@ -46,7 +49,7 @@ module lcd_controller (
 				end
 			end
 			STATE_WAITING: begin
-				if (counter == 17'b11111111111111111)
+				if (is_long_delay && counter == LONG_DELAY || !is_long_delay && counter == SHORT_DELAY)
 					state <= STATE_DONE;
 				else
 					counter <= counter + 1'b1;
