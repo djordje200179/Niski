@@ -2,7 +2,7 @@ module bus_arbitrator (
 	input clk, rst,
 	
 	input cpu_req, dma_req,
-	output cpu_grant, dma_grant,
+	output reg cpu_grant, dma_grant,
 	
 	output [31:0] addr_bus, data_bus,
 	output wr_bus, rd_bus,
@@ -14,10 +14,30 @@ module bus_arbitrator (
 			   STATE_CPU	= 2'd1,
 			   STATE_DMA	= 2'd2;
 
-	assign cpu_grant = state == STATE_CPU;
-	assign dma_grant = state == STATE_DMA;
+	always @* begin
+		cpu_grant = 1'b0;
+
+		if (cpu_req) begin
+			if (!dma_req)
+				cpu_grant = 1'b1;
+			else begin
+				case (state)
+				STATE_IDLE,
+				STATE_CPU: 
+					cpu_grant = 1'b1;
+				endcase
+			end
+		end
+	end
+
+	always @* begin
+		dma_grant = 1'b0;
+
+		if (dma_req && !cpu_req)
+			dma_grant = 1'b1;
+	end
 	
-	wire bus_used = state != STATE_IDLE;
+	wire bus_used = cpu_grant || dma_grant;
 	
 	assign addr_bus = bus_used ? 32'bz : 32'b0;
 	assign data_bus = bus_used ? 32'bz : 32'b0;
@@ -42,18 +62,20 @@ module bus_arbitrator (
 					state <= STATE_DMA;
 			end
 			STATE_CPU: begin
-				if (!cpu_req)
+				if (!cpu_req) begin
 					if (dma_req)
 						state <= STATE_DMA;
 					else
 						state <= STATE_IDLE;
+				end
 			end
 			STATE_DMA: begin
-				if (!dma_req)
+				if (!dma_req) begin
 					if (cpu_req)
 						state <= STATE_CPU;
 					else
 						state <= STATE_IDLE;
+				end
 			end
 			endcase
 		end
