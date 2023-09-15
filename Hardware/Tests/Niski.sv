@@ -1,7 +1,9 @@
+`timescale 1ns/1ps
+
 module niski_tb;
 
 reg clk = 0;
-always #5 clk = ~clk;
+always #20 clk = ~clk;
 
 reg rst;
 
@@ -9,6 +11,8 @@ wire [4:0] btns = {~rst, 4'b0};
 wire [3:0] leds;
 wire [6:0] ssds_segments;
 wire [3:0] ssds_select;
+wire lcd_rs, lcd_rw, lcd_e;
+wire [7:0] lcd_data;
 
 `include "NiskiDUT.v"
 niski_dut dut (
@@ -18,16 +22,18 @@ niski_dut dut (
 	.LED_PINS(leds),
 
 	.SEVSEG_SEG_PINS(ssds_segments),
-	.SEVSEG_SEL_PINS(ssds_select)
+	.SEVSEG_SEL_PINS(ssds_select),
+
+	.LCD_RS_PIN(lcd_rs),
+	.LCD_RW_PIN(lcd_rw),
+	.LCD_E_PIN(lcd_e),
+	.LCD_DATA_PINS(lcd_data)
 );
 
-initial begin
-	$stop;
-	
-	wait (dut.b2v_inst23.pc == 32'h40000020);
-	$strobe("PC at %t", $time);
+always @(posedge lcd_e) $display("Data: %h, RS: %b", lcd_data, lcd_rs);
 
-	#10000;
+initial begin
+	#100_000_000;
 	$stop;
 end
 
