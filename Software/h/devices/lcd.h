@@ -18,13 +18,15 @@ enum lcd_command {
 	LCD_CMD_SHIFT_CURSOR_RIGHT = 0x14,
 	LCD_CMD_SHIFT_ENTIRE_DISPLAY_LEFT = 0x18,
 	LCD_CMD_SHIFT_ENTIRE_DISPLAY_RIGHT = 0x1C,
-	LCD_CMD_INIT = 0x38
+	LCD_CMD_INIT = 0x38,
+	LCD_CMD_SET_CURSOR_POSITION = 0x80,
+	LCD_CMD_REGISTER_CHAR = 0x40
 };
 
 void lcd_init();
 void lcd_clear();
 void lcd_move_to(unsigned short x, unsigned short y);
 
-void lcd_send_command(enum lcd_command cmd);
+void lcd_send_command(enum lcd_command cmd, uint8_t data);
 void lcd_write_char(char ch);
 //void lcd_register_char(char code, const char* data);

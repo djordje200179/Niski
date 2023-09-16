@@ -165,6 +165,6 @@ Currently, the following header files and functions are fully implemented:
 - __devices/lcd.h__
 	- `lcd_init`
 	- `lcd_clear`
+	- `lcd_move_to`
 	- `lcd_send_command`
 	- `lcd_write_char`
-	- `lcd_write_string`
