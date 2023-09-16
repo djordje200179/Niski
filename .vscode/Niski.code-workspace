@@ -13,6 +13,10 @@
 				"name": "Default"
 			}
 		],
-		"makefile.makefilePath": "../Software/Makefile"
+		"makefile.makefilePath": "../Software/Makefile",
+		"files.associations": {
+			"compare": "c",
+			"type_traits": "c"
+		}
 	}
 }

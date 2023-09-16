@@ -16,7 +16,7 @@ static struct kthread thread_main = {
 	.waiting_on = NULL
 };
 
-struct kthread* thread_current = &thread_main;
+struct kthread* kthread_current = &thread_main;
 
 static struct kthread* scheduler_head = NULL;
 static struct kthread* scheduler_tail = NULL;
@@ -92,14 +92,14 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 }
 
 void kthread_dispatch() {
-	struct kthread* old_thread = thread_current;
+	struct kthread* old_thread = kthread_current;
 
 	if (old_thread && old_thread->state != KTHREAD_STATE_BLOCKED)
 		kthread_enqueue(old_thread);
 		
 	struct kthread* new_thread = kthread_dequeue();
 
-	thread_current = new_thread;
+	kthread_current = new_thread;
 	new_thread->state = KTHREAD_STATE_RUNNING;
 }
 

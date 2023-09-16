@@ -39,7 +39,7 @@ struct kthread {
 	struct kthread_ld* local_data_head;
 };
 
-extern struct kthread* thread_current;
+extern struct kthread* kthread_current;
 
 struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode);
 void kthread_dispatch();

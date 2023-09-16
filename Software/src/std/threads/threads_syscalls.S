@@ -3,7 +3,7 @@
 .global cnd_init, cnd_signal, cnd_broadcast, cnd_wait, cnd_destroy
 .global tss_create, tss_get, tss_set, tss_delete
 
-.extern thread_current
+.extern kthread_current
 
 .text
 thrd_create:
@@ -17,7 +17,7 @@ thrd_equal:
 	ret
 
 thrd_current:
-	lw a0, thread_current
+	lw a0, kthread_current
 	ret
 
 thrd_yield:

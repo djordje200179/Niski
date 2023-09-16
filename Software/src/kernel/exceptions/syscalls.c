@@ -31,8 +31,8 @@ enum syscall_type {
 	SYSCALL_TYPE_TS_SET = 0x44
 };
 
-#define GET_PARAM(index, type) (type)(thread_current->context.regs[REG_A ## index])
-#define SET_RET_VALUE(value) thread_current->context.regs[REG_A0] = (uint32_t)value
+#define GET_PARAM(index, type) (type)(kthread_current->context.regs[REG_A ## index])
+#define SET_RET_VALUE(value) kthread_current->context.regs[REG_A0] = (uint32_t)value
 
 static void syscall_mem_alloc() {
 	size_t bytes = GET_PARAM(0, size_t);
@@ -71,8 +71,8 @@ static void syscall_thread_create() {
 }
 
 static void syscall_thread_exit() {
-	kthread_destroy(thread_current);
-	thread_current = NULL;
+	kthread_destroy(kthread_current);
+	kthread_current = NULL;
 
 	kthread_dispatch();
 }
@@ -109,11 +109,11 @@ static void syscall_mutex_lock() {
 		return;
 	}
 
-	kmutex_lock(mutex, thread_current);
+	kmutex_lock(mutex, kthread_current);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 
-	if (thread_current->state == KTHREAD_STATE_BLOCKED)
+	if (kthread_current->state == KTHREAD_STATE_BLOCKED)
 		kthread_dispatch();
 }
 
@@ -125,7 +125,7 @@ static void syscall_mutex_unlock() {
 		return;
 	}
 
-	enum kthread_status status = kmutex_unlock(mutex, thread_current);
+	enum kthread_status status = kmutex_unlock(mutex, kthread_current);
 	SET_RET_VALUE(status);
 }
 
@@ -150,7 +150,7 @@ static void syscall_mutex_try_lock() {
 		return;
 	}
 
-	bool result = kmutex_try_lock(mutex, thread_current);
+	bool result = kmutex_try_lock(mutex, kthread_current);
 	if (!result) {
 		SET_RET_VALUE(KTHREAD_STATUS_BUSY);
 		return;
@@ -187,11 +187,11 @@ static void syscall_cond_wait() {
 		return;
 	}
 
-	kcond_wait(condition, mutex, thread_current);
+	kcond_wait(condition, mutex, kthread_current);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 
-	if (thread_current->state == KTHREAD_STATE_BLOCKED)
+	if (kthread_current->state == KTHREAD_STATE_BLOCKED)
 		kthread_dispatch();
 }
 
@@ -275,7 +275,7 @@ static void syscall_ts_get() {
 		return;
 	}
 
-	void* data = kthread_ls_get(local_storage, thread_current);
+	void* data = kthread_ls_get(local_storage, kthread_current);
 	SET_RET_VALUE(data);
 }
 
@@ -288,7 +288,7 @@ static void syscall_ts_set() {
 		return;
 	}
 
-	enum kthread_status status = kthread_ls_set(local_storage, thread_current, data);
+	enum kthread_status status = kthread_ls_set(local_storage, kthread_current, data);
 	if (status != KTHREAD_STATUS_SUCCESS) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;

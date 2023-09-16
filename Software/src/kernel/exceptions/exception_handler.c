@@ -17,13 +17,13 @@ enum exception_type {
 
 static void syscall_handler() {
 	extern void (*syscalls[])();
-	extern struct kthread* thread_current;
+	extern struct kthread* kthread_current;
 
-	uint32_t curr_pc = (uint32_t)(thread_current->context.pc);
+	uint32_t curr_pc = (uint32_t)(kthread_current->context.pc);
 	curr_pc += 4;
-	thread_current->context.pc = (void(*))(curr_pc);
+	kthread_current->context.pc = (void(*))(curr_pc);
 
-	uint32_t syscall_type = thread_current->context.regs[REG_A7];
+	uint32_t syscall_type = kthread_current->context.regs[REG_A7];
 	(syscalls[syscall_type])();
 }
 
