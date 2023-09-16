@@ -3,6 +3,7 @@
 #include "kernel/sync/mutex.h"
 #include "kernel/sync/condition.h"
 #include "kernel/sync/thread_local.h"
+#include "kernel/sync/scheduler.h"
 
 enum syscall_type {
 	SYSCALL_TYPE_MEM_ALLOC = 0x01,
@@ -65,7 +66,7 @@ static void syscall_thread_create() {
 
 	*location = thread;
 
-	kthread_enqueue(thread);
+	kscheduler_enqueue(thread);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }

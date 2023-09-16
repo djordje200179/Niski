@@ -16,7 +16,8 @@
 		"makefile.makefilePath": "../Software/Makefile",
 		"files.associations": {
 			"compare": "c",
-			"type_traits": "c"
+			"type_traits": "c",
+			"scheduler.h": "c"
 		}
 	}
 }

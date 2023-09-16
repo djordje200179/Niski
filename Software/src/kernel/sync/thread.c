@@ -1,57 +1,18 @@
 #include "kernel/sync/thread.h"
 #include "kernel/sync/thread_local.h"
+#include "kernel/sync/scheduler.h"
 #include "kernel/mem_alloc/heap_allocator.h"
 
 #define KTHREAD_STACK_SIZE 0x1000
 
-static struct kthread thread_main = {
+static struct kthread kthread_main = {
 	.stack = NULL,
 	.state = KTHREAD_STATE_RUNNING,
 	.next = NULL,
 	.waiting_on = NULL
-}, thread_idle = {
-	.stack = NULL,
-	.state = KTHREAD_STATE_READY,
-	.next = NULL,
-	.waiting_on = NULL
 };
 
-struct kthread* kthread_current = &thread_main;
-
-static struct kthread* scheduler_head = NULL;
-static struct kthread* scheduler_tail = NULL;
-
-void kthread_enqueue(struct kthread* thread) {
-	if (thread == &thread_idle)
-		return;
-
-	thread->state = KTHREAD_STATE_READY;
-	thread->next = NULL;
-	thread->waiting_on = NULL;
-
-	if (scheduler_head)
-		scheduler_tail->next = thread;
-	else
-		scheduler_head = thread;
-
-	scheduler_tail = thread;
-}
-
-static struct kthread* kthread_dequeue() {
-	if (!scheduler_head)
-		return &thread_idle;
-
-	struct kthread* thread = scheduler_head;
-
-	scheduler_head = thread->next;
-	if (!scheduler_head)
-		scheduler_tail = NULL;
-
-	thread->next = NULL;
-	thread->waiting_on = NULL;
-
-	return thread;
-}
+struct kthread* kthread_current = &kthread_main;
 
 struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode) {
 	struct kthread* thread = kheap_alloc(sizeof(struct kthread));
@@ -95,9 +56,9 @@ void kthread_dispatch() {
 	struct kthread* old_thread = kthread_current;
 
 	if (old_thread && old_thread->state != KTHREAD_STATE_BLOCKED)
-		kthread_enqueue(old_thread);
+		kscheduler_enqueue(old_thread);
 		
-	struct kthread* new_thread = kthread_dequeue();
+	struct kthread* new_thread = kscheduler_dequeue();
 
 	kthread_current = new_thread;
 	new_thread->state = KTHREAD_STATE_RUNNING;

@@ -1,6 +1,7 @@
 #include "kernel/sync/mutex.h"
 #include "kernel/mem_alloc/heap_allocator.h"
 #include "kernel/sync/thread.h"
+#include "kernel/sync/scheduler.h"
 #include <stddef.h>
 
 struct kmutex* kmutex_create(bool recursive) {
@@ -77,7 +78,7 @@ enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread) 
 
 	mutex->owner = next_thread;
 
-	kthread_enqueue(next_thread);
+	kscheduler_enqueue(next_thread);
 
 	return KTHREAD_STATUS_SUCCESS;
 }
