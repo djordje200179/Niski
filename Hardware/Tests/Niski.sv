@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns/1ns
 
 module niski_tb;
 
@@ -30,12 +30,13 @@ niski_dut dut (
 	.LCD_DATA_PINS(lcd_data)
 );
 
-always @(posedge lcd_e) $display("Data: %h, RS: %b", lcd_data, lcd_rs);
-
 initial begin
-	#1_000_000;
+	$stop;
+	#100_000_000;
 	$stop;
 end
+
+always @(dut.b2v_inst25.pc) $strobe("PC: %h, at %t", dut.b2v_inst25.pc, $time);
 
 initial begin
 	rst = 1'b0;

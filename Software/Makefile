@@ -25,6 +25,7 @@ CC_FLAGS += -Wall -Wextra
 CC_FLAGS += -Werror-implicit-function-declaration
 CC_FLAGS += -mstrict-align
 CC_FLAGS += -mriscv-attribute
+CC_FLAGS += -fno-zero-initialized-in-bss
 CC_FLAGS += -fstack-usage
 
 LD_SCRIPT = linker.ld

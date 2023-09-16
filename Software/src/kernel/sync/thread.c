@@ -53,7 +53,7 @@ static struct kthread* kthread_dequeue() {
 	return thread;
 }
 
-struct kthread* kthread_create(int (*function)(void*), void* arg) {
+struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode) {
 	struct kthread* thread = kheap_alloc(sizeof(struct kthread));
 	if (!thread)
 		return NULL;
@@ -70,6 +70,14 @@ struct kthread* kthread_create(int (*function)(void*), void* arg) {
 		thread->context.regs[i] = 0;
 	
 	thread->context.regs[REG_SP] = (uint32_t)(&(thread->stack[KTHREAD_STACK_SIZE / 4]));
+
+	uint32_t thread_status;
+	__asm__ volatile("csrr %0, sstatus" : "=r"(thread_status));
+	if (supervisor_mode)
+		thread_status |= 0b1 << 8;
+	else
+		thread_status &= ~(0b1 << 8);
+	thread->context.status = thread_status;
 
 	void kthread_wrapper_function();
 	thread->context.pc = kthread_wrapper_function;

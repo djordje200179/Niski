@@ -30,9 +30,13 @@ module cpu#(
 	reg [31:0] gpr_dst_in;
 	reg gpr_wr;
 
+	wire csr_addr_allowed;
 	reg [31:0] csr_data_in;
 	wire [31:0] csr_data_out;
 	wire csr_wr;
+
+	wire supervisor_mode;
+	wire intr_allowed;
 
 	wire [31:0] alu_out;
 
@@ -95,17 +99,24 @@ module cpu#(
 	cpu_csrs csrs (
 		.clk(clk), .rst(rst),
 
-		.addr(inst_imm[11:0]),
+		.addr(inst_imm[11:0]), .addr_allowed(csr_addr_allowed),
 		.data_in(csr_data_in), .data_out(csr_data_out),
 		.wr(csr_wr), 
 		
 		.inst_tick(state == STATE_CHECK_EXC),
 		.timer_tick(clk_1_hz),
 
-		.exception(has_exception), .exc_cause(exc_cause),
+		.exception(has_exception), 
+		.exc_leave(state == STATE_EXEC_INST && inst_system_sret),
+		.exc_cause(exc_cause),
 		.exc_pc(exc_pc), .exc_value(exc_value),
-		.exc_handler_addr(exc_handler_addr), .exc_continue_addr(exc_continue_addr)
+		.exc_handler_addr(exc_handler_addr), .exc_continue_addr(exc_continue_addr),
+
+		.intr_allowed(intr_allowed),
+		.supervisor_mode(supervisor_mode)
 	);
+
+	`include "ExceptionCauses.vh"
 
 	cpu_alu alu_unit (
 		.funct(inst_funct),
@@ -228,6 +239,8 @@ module cpu#(
 			ma_wr_req <= 1'b0;
 			ma_rd_req <= 1'b0;
 			pc_changed <= 1'b0;
+
+			has_exception <= 1'b0;
 		end
 	endtask
 
@@ -257,10 +270,15 @@ module cpu#(
 
 				if (inst_system_ecall) begin
 					has_exception <= 1'b1;
-					exc_cause <= 32'h9;
+					exc_cause <= supervisor_mode ? EXC_CAUSE_SUPERVISOR_ECALL : EXC_CAUSE_USER_ECALL;
 					exc_pc <= pc;
 					exc_value <= 32'h0;
-				end
+				end else if (inst_system_csrrw && !csr_addr_allowed) begin
+					has_exception <= 1'b1;
+					exc_cause <= EXC_CAUSE_ILLEGAL_INSTRUCTION;
+					exc_pc <= pc;
+					exc_value <= inst_imm;
+				end 
 
 				if (pc_wr)
 					pc_changed = 1'b1;				

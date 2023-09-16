@@ -1,16 +1,18 @@
 #include <stdint.h>
 #include "kernel/sync/thread.h"
+#include "devices/ssds.h"
+#include "devices/buzzer.h"
 
 enum exception_type {
-	EXCEPTION_TYPE_INVALID_INSTRUCTION = 0x02,
-	EXCEPTION_TYPE_INVALID_MEMORY_READ = 0x05,
-	EXCEPTION_TYPE_INVALID_MEMORY_WRITE = 0x07,
+	EXC_TYPE_ILLEGAL_INSTRUCTION = 0x02,
+	EXC_TYPE_INVALID_MEMORY_READ = 0x05,
+	EXC_TYPE_INVALID_MEMORY_WRITE = 0x07,
 
-	EXCEPTION_TYPE_USER_ECALL = 0x08,
-	EXCEPTION_TYPE_SUPERVISOR_ECALL = 0x09,
+	EXC_TYPE_USER_ECALL = 0x08,
+	EXC_TYPE_SUPERVISOR_ECALL = 0x09,
 
-	EXCEPTION_TYPE_TIMER_INTERRUPT = 0x01UL << 31 | 0x01,
-	EXCEPTION_TYPE_EXTERNAL_INTERRUPT = 0x01UL << 31 | 0x09
+	EXC_TYPE_TIMER_INTERRUPT = 0x01UL << 31 | 0x01,
+	EXC_TYPE_EXTERNAL_INTERRUPT = 0x01UL << 31 | 0x09
 };
 
 static void syscall_handler() {
@@ -25,11 +27,26 @@ static void syscall_handler() {
 	(syscalls[syscall_type])();
 }
 
+static void illegal_action_handler(enum exception_type type) {
+	buzzer_on();
+	ssds_on();
+
+	ssds_set_number(type);
+	buzzer_set(true);
+
+	while(true);
+}
+
 void exception_handler(enum exception_type type) {	
 	switch (type) {
-	case EXCEPTION_TYPE_USER_ECALL:
-	case EXCEPTION_TYPE_SUPERVISOR_ECALL:
+	case EXC_TYPE_USER_ECALL:
+	case EXC_TYPE_SUPERVISOR_ECALL:
 		syscall_handler();
 		break;	
+	case EXC_TYPE_ILLEGAL_INSTRUCTION:
+	case EXC_TYPE_INVALID_MEMORY_READ:
+	case EXC_TYPE_INVALID_MEMORY_WRITE:
+		illegal_action_handler(type);
+		break;
 	}
 }

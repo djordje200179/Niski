@@ -1,28 +1,17 @@
+#include <threads.h>
+#include <stddef.h>
 #include <stdio.h>
-#include <devices/lcd.h>
-#include <devices/ssds.h>
 
-static char heartChar[] = {
-	0b00000,
-	0b01010,
-	0b11111,
-	0b11111,
-	0b11111,
-	0b01110,
-	0b00100,
-	0b00000
-};
+int faulty_thread(void* arg) {
+	__asm__ volatile("csrw sstatus, 0x00000000");
+	return 0;
+}
 
 void main() {
-	ssds_on();
-
 	puts("Hello, world!\n");
-	puts("Za Janu: <3 ");
 
-	for(volatile i = 0; i < 1000000; i++);
+	thrd_t handle;
+	thrd_create(&handle, faulty_thread, NULL);
 
-	lcd_clear();
-
-	puts("Kosovo je\nSrbija!!!");
-	ssds_set_number(1234);
+	puts("Thread created\n");
 }

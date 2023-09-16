@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "thread_status.h"
 
 enum cpu_reg {
@@ -16,7 +17,8 @@ enum cpu_reg {
 struct kthread {
 	struct kcontext {
 		uint32_t regs[32];
-		
+		uint32_t status;
+
 		void (*pc)();
 	} context;
 	
@@ -39,7 +41,7 @@ struct kthread {
 
 extern struct kthread* thread_current;
 
-struct kthread* kthread_create(int (*function)(void*), void* arg);
+struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode);
 void kthread_dispatch();
 void kthread_enqueue(struct kthread* thread);
 void kthread_destroy(struct kthread* thread);

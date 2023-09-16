@@ -57,7 +57,7 @@ static void syscall_thread_create() {
 		return;
 	}
 
-	struct kthread* thread = kthread_create(func, arg);
+	struct kthread* thread = kthread_create(func, arg, false);
 	if (!thread) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;

@@ -2,6 +2,7 @@ module cpu_csrs (
 	input clk, rst,
 
 	input [11:0] addr,
+	output addr_allowed,
 
 	input [31:0] data_in,
 	output reg [31:0] data_out,
@@ -9,9 +10,12 @@ module cpu_csrs (
 	
 	input inst_tick, timer_tick,
 
-	input exception,
+	input exception, exc_leave,
 	input [31:0] exc_cause, exc_pc, exc_value,
-	output [31:0] exc_handler_addr, exc_continue_addr
+	output [31:0] exc_handler_addr, exc_continue_addr,
+
+	output intr_allowed,
+	output reg supervisor_mode
 );
 	localparam CYCLE_ADDR		= 12'hC00,
 			   CYCLEH_ADDR 		= 12'hC80,
@@ -37,12 +41,20 @@ module cpu_csrs (
 	// TODO: Add scounteren, senvcfg, scontext, satp
 
 	reg [63:0] cycle_cnt, time_cnt, inst_cnt;
-	reg time_incr_done, inst_incr_done;
+	reg time_incr_done;
+	
+	assign addr_allowed = addr[9:8] == 2'b01 ? supervisor_mode : 1'b1;
 
 	reg [31:0] sstatus, sie, stvec, sscratch, sepc, scause, stval, sip;
 
+	wire sstatus_spp = sstatus[8],
+		 sstatus_spie = sstatus[5],
+		 sstatus_sie = sstatus[1];
+
 	assign exc_handler_addr = stvec;
 	assign exc_continue_addr = sepc;
+
+	assign intr_allowed = supervisor_mode ? sstatus_sie : 1'b1;
 
 	always @* begin
 		data_out = 32'b0;
@@ -65,6 +77,8 @@ module cpu_csrs (
 		endcase
 	end
 
+	initial supervisor_mode = 1'b1;
+
 	task reset;
 		begin
 			cycle_cnt <= 64'h0;
@@ -72,13 +86,14 @@ module cpu_csrs (
 			inst_cnt <= 64'h0;
 
 			time_incr_done <= 1'b0;
-			inst_incr_done <= 1'b0;
+
+			supervisor_mode <= 1'b1;
 		end
 	endtask
 
 	task on_clock;
 		begin
-			if (wr) begin
+			if (wr && addr_allowed) begin
 				case (addr)
 				SSTATUS_ADDR:	sstatus <= data_in;
 				SIE_ADDR:		sie <= data_in;
@@ -95,6 +110,15 @@ module cpu_csrs (
 				sepc <= exc_pc;
 				scause <= exc_cause;
 				stval <= exc_value;
+
+				supervisor_mode <= 1'b1;
+				sstatus[8] <= supervisor_mode;
+				sstatus[5] <= sstatus[1];
+				sstatus[1] <= 1'b0;
+			end else if (exc_leave) begin
+				supervisor_mode <= sstatus_spp;
+				sstatus[1] <= sstatus_spie;
+				sstatus[5] <= 1'b1;
 			end
 
 			if (timer_tick && !time_incr_done) begin
@@ -103,11 +127,8 @@ module cpu_csrs (
 			end else if (!timer_tick) 
 				time_incr_done <= 1'b0;
 
-			if (inst_tick && !inst_incr_done) begin
+			if (inst_tick)
 				inst_cnt <= inst_cnt + 32'b1;
-				inst_incr_done <= 1'b1;
-			end else if (!inst_tick) 
-				inst_incr_done <= 1'b0;
 
 			cycle_cnt <= cycle_cnt + 32'b1;
 		end

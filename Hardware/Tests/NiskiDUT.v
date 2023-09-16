@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Sat Sep 16 00:38:58 2023"
+// CREATED		"Sat Sep 16 14:47:30 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -106,19 +106,26 @@ wire	SYNTHESIZED_WIRE_9;
 wire	SYNTHESIZED_WIRE_10;
 wire	SYNTHESIZED_WIRE_11;
 wire	SYNTHESIZED_WIRE_12;
-wire	[10:0] SYNTHESIZED_WIRE_13;
-wire	SYNTHESIZED_WIRE_14;
-wire	SYNTHESIZED_WIRE_15;
-wire	[7:0] SYNTHESIZED_WIRE_16;
+wire	SYNTHESIZED_WIRE_13;
+wire	[31:0] SYNTHESIZED_WIRE_14;
+wire	[3:0] SYNTHESIZED_WIRE_15;
+wire	[31:0] SYNTHESIZED_WIRE_16;
 wire	SYNTHESIZED_WIRE_17;
-wire	[11:0] SYNTHESIZED_WIRE_18;
-wire	[31:0] SYNTHESIZED_WIRE_19;
-wire	[3:0] SYNTHESIZED_WIRE_20;
-wire	[31:0] SYNTHESIZED_WIRE_21;
-wire	[31:0] SYNTHESIZED_WIRE_22;
+wire	SYNTHESIZED_WIRE_18;
+wire	[10:0] SYNTHESIZED_WIRE_19;
+wire	SYNTHESIZED_WIRE_20;
+wire	SYNTHESIZED_WIRE_21;
+wire	[7:0] SYNTHESIZED_WIRE_22;
 wire	SYNTHESIZED_WIRE_23;
-wire	SYNTHESIZED_WIRE_24;
-wire	SYNTHESIZED_WIRE_25;
+wire	[11:0] SYNTHESIZED_WIRE_24;
+wire	[31:0] SYNTHESIZED_WIRE_25;
+wire	[3:0] SYNTHESIZED_WIRE_26;
+wire	[31:0] SYNTHESIZED_WIRE_27;
+wire	[31:0] SYNTHESIZED_WIRE_28;
+wire	SYNTHESIZED_WIRE_29;
+wire	[31:0] SYNTHESIZED_WIRE_30;
+wire	SYNTHESIZED_WIRE_31;
+wire	SYNTHESIZED_WIRE_32;
 
 
 
@@ -164,8 +171,8 @@ buzzer_bus_interface	b2v_inst11(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.ctrl_en(SYNTHESIZED_WIRE_24),
-	.ctrl_buzz(SYNTHESIZED_WIRE_25),
+	.ctrl_en(SYNTHESIZED_WIRE_31),
+	.ctrl_buzz(SYNTHESIZED_WIRE_32),
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst11.CONTROL_REG_ADDR = 32'b01110000000000000000000000010000;
@@ -179,6 +186,27 @@ leds_controller	b2v_inst12(
 	.led2(SYNTHESIZED_WIRE_9),
 	.led3(SYNTHESIZED_WIRE_10),
 	.led_pins(LED_PINS));
+
+
+cpu_bus_interface	b2v_inst13(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.bus_grant(SYNTHESIZED_WIRE_11),
+	.fc_bus(fc_bus),
+	.wr_req(SYNTHESIZED_WIRE_12),
+	.rd_req(SYNTHESIZED_WIRE_13),
+	.addr(SYNTHESIZED_WIRE_14),
+	.data_bus(data_bus),
+	.data_mask(SYNTHESIZED_WIRE_15),
+	.data_out(SYNTHESIZED_WIRE_16),
+	.bus_req(SYNTHESIZED_WIRE_18),
+	.rd_bus(rd_bus),
+	.wr_bus(wr_bus),
+	.done(SYNTHESIZED_WIRE_29),
+	.addr_bus(addr_bus),
+	
+	.data_in(SYNTHESIZED_WIRE_30),
+	.data_mask_bus(data_mask_bus));
 
 
 leds_bus_interface	b2v_inst14(
@@ -203,16 +231,16 @@ leds_bus_interface	b2v_inst14(
 lcd_bus_interface	b2v_inst15(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.ctrl_data_ack(SYNTHESIZED_WIRE_11),
+	.ctrl_data_ack(SYNTHESIZED_WIRE_17),
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.ctrl_data_is_cmd(SYNTHESIZED_WIRE_14),
-	.ctrl_data_req(SYNTHESIZED_WIRE_15),
+	.ctrl_data_is_cmd(SYNTHESIZED_WIRE_20),
+	.ctrl_data_req(SYNTHESIZED_WIRE_21),
 	.fc_bus(fc_bus),
-	.ctrl_data(SYNTHESIZED_WIRE_16)
+	.ctrl_data(SYNTHESIZED_WIRE_22)
 	);
 	defparam	b2v_inst15.CMD_REG_ADDR = 32'b01110000000000000000000000110100;
 	defparam	b2v_inst15.DATA_REG_ADDR = 32'b01110000000000000000000000110000;
@@ -221,9 +249,9 @@ lcd_bus_interface	b2v_inst15(
 bus_arbitrator	b2v_inst16(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.cpu_req(SYNTHESIZED_WIRE_12),
+	.cpu_req(SYNTHESIZED_WIRE_18),
 	.dma_req(0),
-	.cpu_grant(SYNTHESIZED_WIRE_23),
+	.cpu_grant(SYNTHESIZED_WIRE_11),
 	
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
@@ -242,8 +270,8 @@ PLL	b2v_inst17(
 
 rom	b2v_inst18(
 	.clk(clk_50_mhz),
-	.addr(SYNTHESIZED_WIRE_13),
-	.data_out(SYNTHESIZED_WIRE_22));
+	.addr(SYNTHESIZED_WIRE_19),
+	.data_out(SYNTHESIZED_WIRE_28));
 	defparam	b2v_inst18.ADDR_BITS = 11;
 	defparam	b2v_inst18.MEM_FILE = "../../Software/out/rom.mem";
 
@@ -251,24 +279,24 @@ rom	b2v_inst18(
 lcd_controller	b2v_inst19(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.data_is_cmd(SYNTHESIZED_WIRE_14),
-	.data_req(SYNTHESIZED_WIRE_15),
-	.data_in(SYNTHESIZED_WIRE_16),
+	.data_is_cmd(SYNTHESIZED_WIRE_20),
+	.data_req(SYNTHESIZED_WIRE_21),
+	.data_in(SYNTHESIZED_WIRE_22),
 	.rs_pin(LCD_RS_PIN),
 	.e_pin(LCD_E_PIN),
 	.rw_pin(LCD_RW_PIN),
-	.data_ack(SYNTHESIZED_WIRE_11),
+	.data_ack(SYNTHESIZED_WIRE_17),
 	.data_pins(LCD_DATA_PINS));
 
 
 
 ram	b2v_inst20(
 	.clk(clk_50_mhz),
-	.wr(SYNTHESIZED_WIRE_17),
-	.addr(SYNTHESIZED_WIRE_18),
-	.data_in(SYNTHESIZED_WIRE_19),
-	.wr_mask(SYNTHESIZED_WIRE_20),
-	.data_out(SYNTHESIZED_WIRE_21));
+	.wr(SYNTHESIZED_WIRE_23),
+	.addr(SYNTHESIZED_WIRE_24),
+	.data_in(SYNTHESIZED_WIRE_25),
+	.wr_mask(SYNTHESIZED_WIRE_26),
+	.data_out(SYNTHESIZED_WIRE_27));
 	defparam	b2v_inst20.ADDR_BITS = 12;
 	defparam	b2v_inst20.MEM_FILE = "../../Software/out/ram.mem";
 
@@ -281,13 +309,13 @@ memory_bus_interface	b2v_inst21(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.mem_data_out(SYNTHESIZED_WIRE_21),
-	.mem_wr(SYNTHESIZED_WIRE_17),
+	.mem_data_out(SYNTHESIZED_WIRE_27),
+	.mem_wr(SYNTHESIZED_WIRE_23),
 	.fc_bus(fc_bus),
 	
-	.mem_addr(SYNTHESIZED_WIRE_18),
-	.mem_data_in(SYNTHESIZED_WIRE_19),
-	.mem_wr_mask(SYNTHESIZED_WIRE_20));
+	.mem_addr(SYNTHESIZED_WIRE_24),
+	.mem_data_in(SYNTHESIZED_WIRE_25),
+	.mem_wr_mask(SYNTHESIZED_WIRE_26));
 	defparam	b2v_inst21.MEM_ADDR_WIDTH = 12;
 	defparam	b2v_inst21.START_ADDR = 32'b01010000000000000000000000000000;
 
@@ -300,32 +328,15 @@ memory_bus_interface	b2v_inst22(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.mem_data_out(SYNTHESIZED_WIRE_22),
+	.mem_data_out(SYNTHESIZED_WIRE_28),
 	
 	.fc_bus(fc_bus),
 	
-	.mem_addr(SYNTHESIZED_WIRE_13)
+	.mem_addr(SYNTHESIZED_WIRE_19)
 	
 	);
 	defparam	b2v_inst22.MEM_ADDR_WIDTH = 11;
 	defparam	b2v_inst22.START_ADDR = 32'b01000000000000000000000000000000;
-
-
-cpu	b2v_inst23(
-	.clk(clk_50_mhz),
-	.clk_1_hz(clk_1_hz),
-	.rst(btn_rst),
-	.bus_grant(SYNTHESIZED_WIRE_23),
-	.fc_bus(fc_bus),
-	.data_bus(data_bus),
-	.bus_req(SYNTHESIZED_WIRE_12),
-	.wr_bus(wr_bus),
-	.rd_bus(rd_bus),
-	.addr_bus(addr_bus),
-	
-	.data_mask_bus(data_mask_bus));
-	defparam	b2v_inst23.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
-	defparam	b2v_inst23.MORE_REGISTERS = 1;
 
 
 low_freq_clock	b2v_inst24(
@@ -333,6 +344,21 @@ low_freq_clock	b2v_inst24(
 	.rst(btn_rst),
 	.clk_1_khz(clk_1_khz),
 	.clk_1_hz(clk_1_hz));
+
+
+cpu	b2v_inst25(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.ma_done(SYNTHESIZED_WIRE_29),
+	.clk_1_hz(clk_1_hz),
+	.ma_data_in(SYNTHESIZED_WIRE_30),
+	.ma_rd_req(SYNTHESIZED_WIRE_13),
+	.ma_wr_req(SYNTHESIZED_WIRE_12),
+	.ma_addr(SYNTHESIZED_WIRE_14),
+	.ma_data_mask(SYNTHESIZED_WIRE_15),
+	.ma_data_out(SYNTHESIZED_WIRE_16));
+	defparam	b2v_inst25.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
+	defparam	b2v_inst25.MORE_REGISTERS = 1'b1;
 
 
 ps2_keyboard_controller	b2v_inst3(
@@ -428,10 +454,9 @@ ir_controller	b2v_inst8(
 
 
 buzzer_controller	b2v_inst9(
-	.en(SYNTHESIZED_WIRE_24),
-	.buzz(SYNTHESIZED_WIRE_25),
+	.en(SYNTHESIZED_WIRE_31),
+	.buzz(SYNTHESIZED_WIRE_32),
 	.buzzer_pin(BUZZ_PIN));
 
 assign	clk_50_mhz = CLK_PIN;
-
 endmodule
