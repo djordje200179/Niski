@@ -31,7 +31,7 @@ static void illegal_action_handler(enum exception_type type) {
 	buzzer_on();
 	ssds_on();
 
-	ssds_set_number(type);
+	ssds_set_dec_number(type);
 	buzzer_set(true);
 
 	while(true);

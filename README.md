@@ -22,6 +22,7 @@ The development board has the following peripherals:
 - 4 seven-segment displays
 - 4 buttons
 - buzzer
+- 16x2 LCD display
 - VGA port
 - PS/2 port
 - UART port
@@ -159,7 +160,8 @@ Currently, the following header files and functions are fully implemented:
 	- `ssds_set`
 	- `ssds_set_dots`
 	- `ssds_set_digit`
-	- `ssds_set_number`
+	- `ssds_set_dec_number`
+	- `ssds_set_hex_number`
 - __devices/lcd.h__
 	- `lcd_init`
 	- `lcd_clear`
