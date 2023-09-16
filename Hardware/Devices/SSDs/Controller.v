@@ -20,7 +20,6 @@ module ssds_controller (
 	frequency_divider #(REFRESH_PERIOD) refresh_tick_generator (
 		.clk(clk), 
 		.rst(rst),
-		.en(1),
 		.slow_clk(refresh_clk)
 	);
 	

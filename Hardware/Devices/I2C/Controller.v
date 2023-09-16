@@ -21,7 +21,6 @@ module i2c_controller (
     frequency_divider#(500) clk_generator (
         .clk(clk),
         .rst(rst),
-        .en(i2c_clk_activated),
         .slow_clk(clk_pin)
     );
 

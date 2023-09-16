@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <devices/lcd.h>
+#include <devices/ssds.h>
 
 static char heartChar[] = {
 	0b00000,
@@ -13,12 +14,15 @@ static char heartChar[] = {
 };
 
 void main() {
+	ssds_on();
+
 	puts("Hello, world!\n");
 	puts("Za Janu: <3 ");
 
-	for(volatile i = 0; i < 500000; i++);
+	for(volatile i = 0; i < 1000000; i++);
 
 	lcd_clear();
 
 	puts("Kosovo je\nSrbija!!!");
+	ssds_set_number(1234);
 }

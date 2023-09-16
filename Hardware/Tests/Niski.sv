@@ -33,7 +33,7 @@ niski_dut dut (
 always @(posedge lcd_e) $display("Data: %h, RS: %b", lcd_data, lcd_rs);
 
 initial begin
-	#100_000_000;
+	#1_000_000;
 	$stop;
 end
 

@@ -167,7 +167,7 @@ set_global_assignment -name PHYSICAL_SYNTHESIS_MAP_LOGIC_TO_MEMORY_FOR_AREA ON
 set_global_assignment -name ENABLE_DRC_SETTINGS ON
 set_global_assignment -name AUTO_RAM_TO_LCELL_CONVERSION ON
 set_global_assignment -name AUTO_RESOURCE_SHARING ON
-set_global_assignment -name add_pass_through_logic_to_inferred_rams OFF
+set_global_assignment -name ADD_PASS_THROUGH_LOGIC_TO_INFERRED_RAMS OFF
 
 set_location_assignment PIN_11 -to LCD_DATA_PINS[7]
 set_location_assignment PIN_7 -to LCD_DATA_PINS[6]
@@ -207,10 +207,12 @@ set_global_assignment -name VERILOG_FILE CPU/ALU.v
 set_global_assignment -name VERILOG_FILE CPU/PC.v
 set_global_assignment -name VERILOG_FILE CPU/IR.v
 set_global_assignment -name VERILOG_FILE Bus/Arbitrator.v
+set_global_assignment -name VERILOG_FILE Clocks/FrequencyDivider.v
+set_global_assignment -name VERILOG_FILE Clocks/LowFreqClock.v
+set_global_assignment -name QIP_FILE Clocks/PLL.qip
 set_global_assignment -name VERILOG_FILE Memory/BusInterface.v
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/RAM.sv
 set_global_assignment -name VERILOG_FILE Memory/ROM.v
-set_global_assignment -name VERILOG_FILE Components/Clocks.v
 set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v

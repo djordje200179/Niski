@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Wed Sep 13 12:41:17 2023"
+// CREATED		"Sat Sep 16 00:38:58 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -85,7 +85,9 @@ wire	btn_rst;
 wire	clk_1_hz;
 wire	clk_1_khz;
 wire	clk_1_mhz;
+wire	clk_2_khz;
 wire	clk_50_mhz;
+wire	clk_i50_mhz;
 wire	[31:0] data_bus;
 wire	[3:0] data_mask_bus;
 wire	fc_bus;
@@ -179,17 +181,6 @@ leds_controller	b2v_inst12(
 	.led_pins(LED_PINS));
 
 
-clocks	b2v_inst13(
-	.clk(CLK_PIN),
-	.en(1),
-	.rst(btn_rst),
-	.clk_50_mhz(clk_50_mhz),
-	.clk_1_mhz(clk_1_mhz),
-	.clk_1_khz(clk_1_khz),
-	.clk_1_hz(clk_1_hz));
-	defparam	b2v_inst13.INPUT_FREQ = 50000000;
-
-
 leds_bus_interface	b2v_inst14(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
@@ -240,6 +231,13 @@ bus_arbitrator	b2v_inst16(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus));
+
+
+PLL	b2v_inst17(
+	.inclk0(clk_50_mhz),
+	.areset(btn_rst),
+	
+	.c1(clk_2_khz));
 
 
 rom	b2v_inst18(
@@ -328,6 +326,13 @@ cpu	b2v_inst23(
 	.data_mask_bus(data_mask_bus));
 	defparam	b2v_inst23.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
 	defparam	b2v_inst23.MORE_REGISTERS = 1;
+
+
+low_freq_clock	b2v_inst24(
+	.clk_2_khz(clk_2_khz),
+	.rst(btn_rst),
+	.clk_1_khz(clk_1_khz),
+	.clk_1_hz(clk_1_hz));
 
 
 ps2_keyboard_controller	b2v_inst3(
@@ -426,5 +431,7 @@ buzzer_controller	b2v_inst9(
 	.en(SYNTHESIZED_WIRE_24),
 	.buzz(SYNTHESIZED_WIRE_25),
 	.buzzer_pin(BUZZ_PIN));
+
+assign	clk_50_mhz = CLK_PIN;
 
 endmodule
