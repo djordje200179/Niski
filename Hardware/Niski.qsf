@@ -200,7 +200,7 @@ set_global_assignment -name BDF_FILE Niski.bdf
 set_global_assignment -name VERILOG_FILE CPU/CPU.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Instructions.vh
 set_global_assignment -name VERILOG_FILE CPU/BranchTester.v
-set_global_assignment -name VERILOG_FILE CPU/MemoryAccess.v
+set_global_assignment -name VERILOG_FILE CPU/BusInterface.v
 set_global_assignment -name VERILOG_FILE CPU/RegFile.v
 set_global_assignment -name VERILOG_FILE CPU/CSRs.v
 set_global_assignment -name VERILOG_FILE CPU/ALU.v

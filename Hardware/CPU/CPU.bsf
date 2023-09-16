@@ -21,7 +21,7 @@ https://fpgasoftware.intel.com/eula.
 */
 (header "symbol" (version "1.2"))
 (symbol
-	(rect 64 64 288 208)
+	(rect 64 64 320 208)
 	(text "cpu" (rect 5 0 28 15)(font "Arial" ))
 	(text "inst" (rect 8 128 31 143)(font "Arial" ))
 	(port
@@ -32,13 +32,6 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 120)(pt 16 120))
 	)
 	(port
-		(pt 0 72)
-		(input)
-		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
-		(text "clk_1_hz" (rect 24 64 80 79)(font "Arial" ))
-		(line (pt 0 72)(pt 16 72))
-	)
-	(port
 		(pt 0 104)
 		(input)
 		(text "rst" (rect 0 0 16 15)(font "Arial" ))
@@ -46,68 +39,73 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 104)(pt 16 104))
 	)
 	(port
-		(pt 0 40)
+		(pt 256 40)
 		(input)
-		(text "bus_grant" (rect 0 0 66 15)(font "Arial" ))
-		(text "bus_grant" (rect 24 32 90 47)(font "Arial" ))
-		(line (pt 0 40)(pt 16 40))
+		(text "ma_data_in[31..0]" (rect 0 0 116 15)(font "Arial" ))
+		(text "ma_data_in[31..0]" (rect 136 32 252 47)(font "Arial" ))
+		(line (pt 240 40)(pt 256 40)(line_width 3))
 	)
 	(port
-		(pt 224 112)
+		(pt 256 120)
 		(input)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 168 104 211 119)(font "Arial" ))
-		(line (pt 208 112)(pt 224 112))
+		(text "ma_done" (rect 0 0 62 15)(font "Arial" ))
+		(text "ma_done" (rect 184 112 246 127)(font "Arial" ))
+		(line (pt 240 120)(pt 256 120))
 	)
 	(port
 		(pt 0 24)
-		(output)
-		(text "bus_req" (rect 0 0 54 15)(font "Arial" ))
-		(text "bus_req" (rect 24 16 78 31)(font "Arial" ))
-		(line (pt 16 24)(pt 0 24))
+		(input)
+		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
+		(text "clk_1_hz" (rect 26 16 82 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24))
 	)
 	(port
-		(pt 224 32)
+		(pt 256 24)
 		(output)
-		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
-		(text "addr_bus[31..0]" (rect 120 24 221 39)(font "Arial" ))
-		(line (pt 224 32)(pt 208 32)(line_width 3))
+		(text "ma_addr[31..0]" (rect 0 0 97 15)(font "Arial" ))
+		(text "ma_addr[31..0]" (rect 152 16 249 31)(font "Arial" ))
+		(line (pt 256 24)(pt 240 24)(line_width 3))
 	)
 	(port
-		(pt 224 80)
+		(pt 256 56)
 		(output)
-		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
-		(text "wr_bus" (rect 168 72 216 87)(font "Arial" ))
-		(line (pt 224 80)(pt 208 80))
+		(text "ma_data_out[31..0]" (rect 0 0 125 15)(font "Arial" ))
+		(text "ma_data_out[31..0]" (rect 128 48 253 63)(font "Arial" ))
+		(line (pt 256 56)(pt 240 56)(line_width 3))
 	)
 	(port
-		(pt 224 64)
+		(pt 256 72)
 		(output)
-		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
-		(text "rd_bus" (rect 168 56 214 71)(font "Arial" ))
-		(line (pt 224 64)(pt 208 64))
+		(text "ma_rd_req" (rect 0 0 71 15)(font "Arial" ))
+		(text "ma_rd_req" (rect 176 64 247 79)(font "Arial" ))
+		(line (pt 256 72)(pt 240 72))
 	)
 	(port
-		(pt 224 96)
+		(pt 256 88)
 		(output)
-		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
-		(text "data_mask_bus[3..0]" (rect 88 88 224 103)(font "Arial" ))
-		(line (pt 224 96)(pt 208 96)(line_width 3))
+		(text "ma_wr_req" (rect 0 0 74 15)(font "Arial" ))
+		(text "ma_wr_req" (rect 176 80 250 95)(font "Arial" ))
+		(line (pt 256 88)(pt 240 88))
 	)
 	(port
-		(pt 224 48)
-		(bidir)
-		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
-		(text "data_bus[31..0]" (rect 120 40 220 55)(font "Arial" ))
-		(line (pt 224 48)(pt 208 48)(line_width 3))
+		(pt 256 104)
+		(output)
+		(text "ma_data_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
+		(text "ma_data_mask[3..0]" (rect 120 96 253 111)(font "Arial" ))
+		(line (pt 256 104)(pt 240 104)(line_width 3))
 	)
 	(parameter
 		"EXEC_START_ADDR"
-		"0"
+		"01000000000000000000000000000000"
 		""
-		(type "PARAMETER_SIGNED_DEC")	)
+		(type "PARAMETER_UNSIGNED_BIN")	)
+	(parameter
+		"MORE_REGISTERS"
+		"1"
+		""
+		(type "PARAMETER_UNSIGNED_BIN")	)
 	(drawing
-		(rectangle (rect 16 16 208 128))
+		(rectangle (rect 16 16 240 128))
 	)
-	(annotation_block (parameter)(rect 288 24 552 64))
+	(annotation_block (parameter)(rect 272 -48 768 16))
 )

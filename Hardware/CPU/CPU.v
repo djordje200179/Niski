@@ -1,31 +1,17 @@
-module cpu (
-	clk, rst,
-	bus_req, bus_grant,
-	addr_bus, data_bus, rd_bus, wr_bus, data_mask_bus, fc_bus,
+module cpu#(
+	parameter EXEC_START_ADDR = 32'h40000000,
+			  MORE_REGISTERS = 1'b1
+) (
+	input clk, rst,
 
-	clk_1_hz
+	output [31:0] ma_addr, ma_data_out, 
+	input [31:0] ma_data_in, 
+	output reg ma_rd_req, ma_wr_req, 
+	output reg [3:0] ma_data_mask, 
+	input ma_done,
+
+	input clk_1_hz
 );
-	parameter EXEC_START_ADDR = 32'h40000000;
-	parameter MORE_REGISTERS = 1'b1;
-
-	input clk, rst;
-
-	output bus_req;
-	input bus_grant;
-
-	output [31:0] addr_bus;
-	inout [31:0] data_bus;
-	output rd_bus, wr_bus;
-	output [3:0] data_mask_bus;
-	input fc_bus;
-
-	input clk_1_hz;
-
-	wire [31:0] ma_data;
-	reg [3:0] ma_mask;
-	reg ma_wr_req, ma_rd_req;
-	wire ma_done;
-
 	wire [9:0] inst_funct;
 	wire [2:0] inst_funct3 = inst_funct[2:0];
 	wire [4:0] inst_rd, inst_rs1, inst_rs2;
@@ -61,19 +47,6 @@ module cpu (
 			   STATE_EXEC_INST_MEM_WAIT = 3'd3,
 			   STATE_CHECK_EXC	= 3'd4;
 
-	cpu_memory_access memory_access_unit (
-		.clk(clk), .rst(rst),
-
-		.bus_req(bus_req), .bus_grant(bus_grant),
-		.addr_bus(addr_bus), .data_bus(data_bus), .data_mask_bus(data_mask_bus),
-		.rd_bus(rd_bus), .wr_bus(wr_bus), .fc_bus(fc_bus),
-
-		.wr_req(ma_wr_req), .rd_req(ma_rd_req),
-		.addr((state == STATE_RD_INST_REQ || state == STATE_RD_INST_WAIT) ? pc : gpr_src1 + inst_imm), 
-		.data_out(gpr_src2), .data_in(ma_data), .data_mask(ma_mask),
-		.done(ma_done)
-	);
-
 	cpu_pc_reg pc_reg_unit (
 		.clk(clk), .rst(rst),
 
@@ -85,7 +58,7 @@ module cpu (
 	cpu_ir_reg ir_reg_unit (
 		.clk(clk),
 
-		.data_in(ma_data), 
+		.data_in(ma_data_in), 
 		.wr(state == STATE_RD_INST_WAIT && ma_done),
 
 		.funct(inst_funct),
@@ -101,6 +74,8 @@ module cpu (
 		.inst_system_ecall(inst_system_ecall), .inst_system_sret(inst_system_sret),
 		.inst_system_csrrw(inst_system_csrrw)
 	);
+
+	`include "Instructions.vh"
 	
 	cpu_branch_tester branch_tester_unit (
 		.funct3(inst_funct3),
@@ -137,16 +112,17 @@ module cpu (
 		.operand_a(gpr_src1), .operand_b(inst_arlog_imm ? inst_imm : gpr_src2),
 		.result(alu_out)
 	);
-	
-	`include "Instructions.vh"
+
+	assign ma_addr = (state == STATE_RD_INST_REQ || state == STATE_RD_INST_WAIT) ? pc : gpr_src1 + inst_imm;
+	assign ma_data_out = gpr_src2;
 
 	always @* begin
-		ma_mask = 4'b1111;
+		ma_data_mask = 4'b1111;
 
 		if (state == STATE_EXEC_INST || state == STATE_EXEC_INST_MEM_WAIT) begin
 			case (inst_funct3[1:0])
-			2'b00: ma_mask = 4'b0001;
-			2'b01: ma_mask = 4'b0011;
+			2'b00: ma_data_mask = 4'b0001;
+			2'b01: ma_data_mask = 4'b0011;
 			endcase
 		end
 	end
@@ -222,11 +198,11 @@ module cpu (
 				gpr_dst_in = csr_data_out;
 		end else begin
 			case (inst_funct3)
-			INST_LOAD_FUNCT3_BYTE: 		gpr_dst_in = {{24{ma_data[7]}}, ma_data[7:0]};
-			INST_LOAD_FUNCT3_HALF: 		gpr_dst_in = {{16{ma_data[15]}}, ma_data[15:0]};
-			INST_LOAD_FUNCT3_WORD: 		gpr_dst_in = ma_data;
-			INST_LOAD_FUNCT3_BYTE_UNS:	gpr_dst_in = {{24{1'b0}}, ma_data[7:0]};
-			INST_LOAD_FUNCT3_HALF_UNS:	gpr_dst_in = {{16{1'b0}}, ma_data[15:0]};
+			INST_LOAD_FUNCT3_BYTE: 		gpr_dst_in = {{24{ma_data_in[7]}}, ma_data_in[7:0]};
+			INST_LOAD_FUNCT3_HALF: 		gpr_dst_in = {{16{ma_data_in[15]}}, ma_data_in[15:0]};
+			INST_LOAD_FUNCT3_WORD: 		gpr_dst_in = ma_data_in;
+			INST_LOAD_FUNCT3_BYTE_UNS:	gpr_dst_in = {{24{1'b0}}, ma_data_in[7:0]};
+			INST_LOAD_FUNCT3_HALF_UNS:	gpr_dst_in = {{16{1'b0}}, ma_data_in[15:0]};
 			endcase
 		end
 	end

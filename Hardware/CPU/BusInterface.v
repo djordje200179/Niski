@@ -1,4 +1,4 @@
-module cpu_memory_access (
+module cpu_bus_interface (
 	input clk, rst,
 	
 	output reg bus_req,
