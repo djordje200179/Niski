@@ -7,6 +7,7 @@ EXE_OUT = $(OUT_DIR)/out.elf
 ROM_OUT = $(OUT_DIR)/rom.mem
 RAM_OUT = $(OUT_DIR)/ram.mem
 MAP_OUT = $(OUT_DIR)/out.map
+ASM_OUT = $(OUT_DIR)/out.dump
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
@@ -65,9 +66,6 @@ clean:
 	rm -rf $(OUT_DIR)
 	rm -rf *~
 
-dissasemble:
-	$(OBJDUMP) -d $(EXE_OUT)
-
 $(ROM_OUT): $(EXE_OUT) 
 	$(OBJCOPY) $(OBJCOPY_FLAGS) -j .rom.* --change-addresses -0x40000000 $< $@
 	$(MEMFILE_CORRECTOR) $@
@@ -77,22 +75,23 @@ $(RAM_OUT): $(EXE_OUT)
 	$(MEMFILE_CORRECTOR) $@
 
 $(EXE_OUT): $(OBJ_C) $(OBJ_S)
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(GCC) $(LD_FLAGS) -o $@ $^ $(LD_LIBS)
+	@$(OBJDUMP) -D $@ > $(ASM_OUT)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(GCC) $(CC_FLAGS) -c -o $@ $<
-	rm -f $(SRC_DIR)/$*.d
+	@rm -f $(SRC_DIR)/$*.d
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(GCC) $(CC_FLAGS) -c -o $@ $<
-	rm -f $(SRC_DIR)/$*.d
+	@rm -f $(SRC_DIR)/$*.d
 
 %.d: %.c
-	$(GCC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
+	@$(GCC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
 
 include $(DEP)
 
-.PHONY: clean dissasemble all
+.PHONY: clean all
