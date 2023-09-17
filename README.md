@@ -1,9 +1,9 @@
 # Niski
 
-The combination of several university assignments into a functional whole project.
-This project combines FPGA design, low-level programming, and system programming. 
-The goal of this project is to create a programmable microcontroller that can run any 
-multithreaded program and communicate with the outside world.
+This system combines several university assignments into a functional whole project. 
+It integrates FPGA design, low-level programming, and system programming. 
+The ultimate objective of this project is to develop a programmable microcontroller 
+capable of running any multithreaded program while also facilitating communication with the outside world."
 
 ## Hardware
 For this project Cyclone IV EP4CE6E22C8 FPGA development board was used:
@@ -28,61 +28,86 @@ The development board has the following peripherals:
 - UART port
 
 ### CPU
-Originally, I wanted to make my own processor with my own instructions, but then I realized that it is better to use some standard for which there are already compilers from higher programming languages. 
-That's why I chose RISC-V, which allows adding modules (extensions). 
+Initially, I had a desire to create my own processor with custom instructions. 
+However, I soon recognized the advantages of utilizing a standardized architecture 
+for which compilers for higher-level programming languages already exist. 
+This realization led me to opt for RISC-V, a versatile architecture that permits 
+the addition of extensions.
 
-I chose the 32-bit version, because the available memory is small and will never exceed 4GB. 
-For a while I used the E (embedded) version with 16 registers, but later I realized that it was not so much hardware intensive to have 32 registers, so I switched to that variant.
-It currently (partially) supports the M extension (hardware multiplication, but for the division the GCC library is responsible). 
-In order to be able to use the operating system correctly, the Zicsr extension was also needed, which was fully implemented.
+I specifically selected the 32-bit version due to limited available memory, 
+which will never exceed 4GB. 
+At first, I used the E (embedded) version with 16 registers. 
+However, I later concluded that the additional hardware resources 
+required for 32 registers were well justified, prompting me to make the switch. 
+Currently, the processor partially supports the M extension, 
+providing hardware multiplication capabilities, while division operations 
+rely on the GCC library.
+To ensure seamless compatibility with operating systems, the Zicsr extension 
+was also essential, and I successfully implemented it."
 
 Because of the above, the current name of the architecture is **RV32IMZicsr**.
 ![FPGA Board](riscv.png)
 
 ### Memory
-The processor has a 32-bit address bus, so it can
-potentionally address 4GB of memory.
-
-However, due to the limited resources of the FPGA
-development board, only 64KB of memory is available.
-That memory is created using the Block RAM resources.
-
-In the future, I will try to add support for SDRAM
-memory, presented on the development board, that will
-extend the available memory to 8MB.
+The processor features a 32-bit address bus, allowing it to 
+potentially address up to 4GB of memory. 
+However, due to the limited resources of the FPGA development board, 
+only 64KB of memory is currently available, which is constructed 
+using the onboard Block RAM resources. 
+In the future, I plan to explore adding support for SDRAM memory, 
+which is available on the development board. 
+This upgrade would extend the accessible memory to 8MB.
 
 ### Peripherals
 On the FPGA development board, there are several
 peripherals that can be used by the processor.
 For every peripheral, a controller and memory-mapped
-bus interface is needed.
+bus interface was designed.
 
 ### DMA
-In order to be able to transfer data efficiently,
-DMA controller is needed. It is implemented as a
-separate module, that is connected to the bus.
+In order to facilitate efficient data transfer, 
+I have implemented a DMA (Direct Memory Access) controller. 
+This controller offers flexibility in handling both source 
+and destination addresses, allowing for incrementing, decrementing,
+or fixed addressing modes. 
+Additionally, data transfers can occur in either burst mode 
+(single bus request for the entire transfer) or normal mode 
+(a bus request for every byte).
+
+Currently, the DMA operation isn't as efficient as it could be, 
+as it reads/writes only one byte per bus request. 
+In my future plans, I intend to enhance the efficiency 
+by enabling the controller to read/write 4 bytes at a time.
+
+### Watchdog
+To prevent the processor from becoming stuck 
+in an infinite loop when encountering an invalid address 
+(one not associated with any module or memory-mapped register), 
+a watchdog timer has been implemented. 
+This timer generates a signal to halt the ongoing request 
+and trigger an exception on the processor.
 
 ## Software
-A small, but functional, operating system kernel that
-tries to follows the C23 language standard.
+A small yet functional operating system kernel is in place, 
+aiming to adhere to the C23 language standard. 
+In addition to its core functionality, 
+the kernel includes functions to facilitate communication 
+with external devices on the FPGA development board.
 
-Besides that, there are also functions that allow communication 
-with external devices present on the FPGA development board.
+Dynamic memory allocation for user programs is achieved 
+using a first-fit algorithm, while a more efficient 
+buddy/slab algorithm is employed for kernel objects.
 
-Dynamic memory allocation for user programs is accomplished
-by using first-fit algorithm. But for kernel objects, a more
-efficient buddy/slab algorithm is used.
-
-Kernel supports multithreading, but not multiprocessing.
-Scheduler is implemented as a FIFO, but for future plans
-I want to implement a more efficient algorithm. Scheduling is
-preemptive, and the time slice is 1s.
+The kernel offers support for multithreading, 
+although multiprocessing is not currently supported. 
+The scheduler operates on a FIFO basis, but I have plans 
+to implement a more efficient scheduling algorithm in the future. 
+The scheduling is preemptive, with a time slice set to 1 second.
 
 ### C standard library
-GCC automatically generates header files with
-types and other definitions that are not
-dependent on the operating system, but only on
-the architecture of the processor.
+GCC automatically generates header files containing types 
+and other definitions that are architecture-dependent 
+rather than tied to the specific operating system
 
 Therefore, following header files already exist:
 - __stddef.h__
@@ -90,10 +115,10 @@ Therefore, following header files already exist:
 - __stdbool.h__
 - __ctype.h__
 
-Other header files need to be implemented by the OS developer. 
-Some functions will be implemented as system calls,
-and some will be implemented as library functions.
-Currently, the following header files and functions are fully implemented:
+The OS developer is responsible for implementing additional header files. 
+Some functions will be designed as system calls, 
+while others will function as library functions. 
+Currently, the following header files and functions have been fully implemented:
 - __errno.h__
 - __stdlib.h__
 	- `malloc`
@@ -146,11 +171,10 @@ Currently, the following header files and functions are fully implemented:
 	- `memmove`
 
 ### I/O devices
-To be able to communicate with the external devices,
-present on the FPGA development board 
-(buzzer, leds, seven-segment displays, etc.), 
-drivers are needed. 
-Currently, the following header files and functions are fully implemented:
+In order to facilitate communication with external devices 
+on the FPGA development board (such as the buzzer, LEDs, 
+7-segment displays, LCD, etc.), drivers are essential. 
+At present, the following header files and functions have been fully implemented:
 - __devices/buzzer.h__
 	- `buzzer_on`
 	- `buzzer_off`
