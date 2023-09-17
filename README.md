@@ -57,6 +57,11 @@ peripherals that can be used by the processor.
 For every peripheral, a controller and memory-mapped
 bus interface is needed.
 
+### DMA
+In order to be able to transfer data efficiently,
+DMA controller is needed. It is implemented as a
+separate module, that is connected to the bus.
+
 ## Software
 A small, but functional, operating system kernel that
 tries to follows the C23 language standard.
@@ -68,6 +73,7 @@ Dynamic memory allocation for user programs is accomplished
 by using first-fit algorithm. But for kernel objects, a more
 efficient buddy/slab algorithm is used.
 
+Kernel supports multithreading, but not multiprocessing.
 Scheduler is implemented as a FIFO, but for future plans
 I want to implement a more efficient algorithm. Scheduling is
 preemptive, and the time slice is 1s.
@@ -169,3 +175,7 @@ Currently, the following header files and functions are fully implemented:
 	- `lcd_move_to`
 	- `lcd_send_command`
 	- `lcd_write_char`
+- __devices/dma.h__
+	- `dma_transfer`
+	- `dma_fill`
+	- `dma_copy`

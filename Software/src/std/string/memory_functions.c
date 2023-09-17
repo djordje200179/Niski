@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdint.h>
+#include "devices/dma.h"
 
 void* memchr(const void* ptr, int ch, size_t count) {
 	unsigned char* cptr = (unsigned char*)ptr;
@@ -27,33 +28,7 @@ int memcmp(const void* lhs, const void* rhs, size_t count) {
 }
 
 void* memset(void* dest, int ch, size_t count) {
-	unsigned char* cdest = (unsigned char*)dest;
-
-	while ((uintptr_t)cdest % 4 != 0 && count > 0) {
-		*cdest = ch;
-		cdest++;
-		count--;
-	}
-
-	uint32_t* dest32 = (uint32_t*)cdest;
-
-	uint32_t ch32 = 0;
-	for (uint8_t i = 0; i < 4; i++)
-		ch32 |= (uint32_t)ch << (i * 8);
-	
-	while (count >= 4) {
-		*dest32 = ch32;
-		dest32++;
-		count -= 4;
-	}
-
-	cdest = (unsigned char*)dest32;
-
-	while (count > 0) {
-		*cdest = ch;
-		cdest++;
-		count--;
-	}
+	dma_fill((char*)dest, count, ch);
 
 	return dest;
 }
@@ -63,11 +38,7 @@ void* memset_explicit(void* dest, int ch, size_t count) {
 }
 
 void* memcpy(void* restrict dest, const void* restrict src, size_t count) {
-	unsigned char* cdest = (unsigned char*)dest;
-	unsigned char* csrc = (unsigned char*)src;
-
-	for (size_t i = 0; i < count; i++)
-		cdest[i] = csrc[i];
+	dma_copy((char*)src, (char*)dest, count);
 
 	return dest;
 }
@@ -90,13 +61,11 @@ void* memmove(void* dest, const void* src, size_t count) {
 	unsigned char* cdest = (unsigned char*)dest;
 	unsigned char* csrc = (unsigned char*)src;
 
-	if (cdest < csrc) {
-		for (size_t i = 0; i < count; i++)
-			cdest[i] = csrc[i];
-	} else {
-		for (size_t i = count; i > 0; i--)
-			cdest[i - 1] = csrc[i - 1];
-	}
+	if (cdest < csrc)
+		return memcpy(dest, src, count);
+
+	for (size_t i = count; i > 0; i--)
+		cdest[i - 1] = csrc[i - 1];
 
 	return dest;
 }

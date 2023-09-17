@@ -33,8 +33,16 @@ module bus_arbitrator (
 	always @* begin
 		dma_grant = 1'b0;
 
-		if (dma_req && !cpu_req)
-			dma_grant = 1'b1;
+		if (dma_req) begin
+			if (!cpu_req)
+				dma_grant = 1'b1;
+			else begin
+				case (state)
+				STATE_DMA: 
+					dma_grant = 1'b1;
+				endcase
+			end
+		end
 	end
 	
 	wire bus_used = cpu_grant || dma_grant;

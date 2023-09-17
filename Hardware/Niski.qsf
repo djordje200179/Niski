@@ -221,6 +221,7 @@ set_global_assignment -name VERILOG_FILE Components/PWM.v
 set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/Controller.v
+set_global_assignment -name VERILOG_FILE Devices/DMA/DMA.v
 set_global_assignment -name VERILOG_FILE Devices/LCD/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/LCD/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/LEDs/BusInterface.v

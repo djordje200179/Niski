@@ -43,7 +43,7 @@ char* strdup(const char* src) {
 	if (!dest)
 		return NULL;
 	
-	return strcpy(dest, src);
+	return memcpy(dest, src, len + 1);
 }
 
 char* strndup(const char* src, size_t count) {

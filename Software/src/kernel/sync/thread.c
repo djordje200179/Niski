@@ -2,7 +2,7 @@
 #include "kernel/sync/thread_local.h"
 #include "kernel/sync/scheduler.h"
 #include "kernel/mem_alloc/heap_allocator.h"
-#include <string.h>
+#include "devices/dma.h"
 
 #define KTHREAD_STACK_SIZE 0x1000
 
@@ -26,8 +26,8 @@ static void* kthread_allocate_tdata() {
 	if (!tdata)
 		return NULL;
 
-	memcpy(tdata, &TDATA_START, tdata_size);
-	memset(tdata + tdata_size, 0, tbss_size);
+	dma_copy(&TDATA_START, tdata, tdata_size);
+	dma_fill(tdata + tdata_size, tbss_size, 0);
 
 	return tdata;
 }
