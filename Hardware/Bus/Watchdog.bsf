@@ -53,26 +53,26 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 176 56)(pt 192 56))
 	)
 	(port
+		(pt 192 72)
+		(input)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 136 64 179 79)(font "Arial" ))
+		(line (pt 192 72)(pt 176 72))
+	)
+	(port
 		(pt 0 24)
 		(output)
 		(text "access_timeout" (rect 0 0 103 15)(font "Arial" ))
 		(text "access_timeout" (rect 25 16 128 31)(font "Arial" ))
 		(line (pt 0 24)(pt 16 24))
 	)
-	(port
-		(pt 192 72)
-		(bidir)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 136 64 179 79)(font "Arial" ))
-		(line (pt 192 72)(pt 176 72))
-	)
 	(parameter
-		"ALLOWED_CYCLES"
-		"1000"
+		"ALLOWED_SECONDS"
+		"1.0"
 		""
-		(type "PARAMETER_SIGNED_DEC")	)
+		(type "PARAMETER_SIGNED_FLOAT")	)
 	(drawing
 		(rectangle (rect 16 16 176 96))
 	)
-	(annotation_block (parameter)(rect 208 -24 464 16))
+	(annotation_block (parameter)(rect 256 24 512 64))
 )

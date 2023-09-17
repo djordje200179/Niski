@@ -350,7 +350,7 @@ watchdog	b2v_inst23(
 	.fc_bus(fc_bus),
 	.access_timeout(SYNTHESIZED_WIRE_31)
 	);
-	defparam	b2v_inst23.ALLOWED_CYCLES = 1_000_000;
+	defparam	b2v_inst23.ALLOWED_SECONDS = 0.01;
 
 
 low_freq_clock	b2v_inst24(

@@ -2529,7 +2529,7 @@ https://fpgasoftware.intel.com/eula.
 	(annotation_block (parameter)(rect -384 96 -101 156))
 )
 (symbol
-	(rect 64 736 256 848)
+	(rect 136 736 328 848)
 	(text "watchdog" (rect 5 0 67 15)(font "Arial" ))
 	(text "inst23" (rect 8 96 48 111)(font "Arial" ))
 	(port
@@ -2561,28 +2561,28 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 176 56)(pt 192 56))
 	)
 	(port
+		(pt 192 72)
+		(input)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 136 64 179 79)(font "Arial" ))
+		(line (pt 192 72)(pt 176 72))
+	)
+	(port
 		(pt 0 24)
 		(output)
 		(text "access_timeout" (rect 0 0 103 15)(font "Arial" ))
 		(text "access_timeout" (rect 25 16 128 31)(font "Arial" ))
 		(line (pt 0 24)(pt 16 24))
 	)
-	(port
-		(pt 192 72)
-		(bidir)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 136 64 179 79)(font "Arial" ))
-		(line (pt 192 72)(pt 176 72))
-	)
 	(parameter
-		"ALLOWED_CYCLES"
-		"1000000"
+		"ALLOWED_SECONDS"
+		"0.01"
 		""
-		(type "PARAMETER_SIGNED_DEC")	)
+		(type "PARAMETER_SIGNED_FLOAT")	)
 	(drawing
 		(rectangle (rect 16 16 176 96))
 	)
-	(annotation_block (parameter)(rect 64 696 337 736))
+	(annotation_block (parameter)(rect 136 696 344 736))
 )
 (connector
 	(pt 1976 672)
@@ -3616,22 +3616,20 @@ https://fpgasoftware.intel.com/eula.
 	(bus)
 )
 (connector
-	(text "btn_rst" (rect 24 792 68 811)(font "Intel Clear" ))
-	(pt 64 808)
-	(pt 24 808)
-)
-(connector
-	(text "clk_50_mhz" (rect -5 808 71 827)(font "Intel Clear" ))
-	(pt 64 824)
-	(pt -8 824)
-)
-(connector
-	(pt -280 760)
-	(pt 64 760)
-)
-(connector
 	(pt -280 304)
 	(pt -280 760)
+)
+(connector
+	(pt 384 776)
+	(pt 328 776)
+)
+(connector
+	(pt 400 792)
+	(pt 328 792)
+)
+(connector
+	(pt 432 808)
+	(pt 328 808)
 )
 (connector
 	(pt 384 720)
@@ -3658,16 +3656,18 @@ https://fpgasoftware.intel.com/eula.
 	(pt 432 1040)
 )
 (connector
-	(pt 256 776)
-	(pt 384 776)
+	(text "clk_50_mhz" (rect 67 808 143 827)(font "Intel Clear" ))
+	(pt 64 824)
+	(pt 136 824)
 )
 (connector
-	(pt 256 792)
-	(pt 400 792)
+	(text "btn_rst" (rect 96 792 140 811)(font "Intel Clear" ))
+	(pt 96 808)
+	(pt 136 808)
 )
 (connector
-	(pt 256 808)
-	(pt 432 808)
+	(pt -280 760)
+	(pt 136 760)
 )
 (junction (pt 352 424))
 (junction (pt 368 440))

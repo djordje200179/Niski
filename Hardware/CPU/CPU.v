@@ -65,7 +65,7 @@ module cpu#(
 		.clk(clk),
 
 		.data_in(ma_data_in), 
-		.wr(state == STATE_RD_INST_WAIT && ma_done && !ma_timeout),
+		.wr(state == STATE_RD_INST_WAIT && ma_done),
 
 		.funct(inst_funct),
 		.rd(inst_rd), .rs1(inst_rs1), .rs2(inst_rs2),
@@ -194,7 +194,7 @@ module cpu#(
 				gpr_wr = 1'b1;
 		end
 		STATE_EXEC_INST_MEM_WAIT: begin
-			if (ma_rd_req && ma_done && !ma_timeout)
+			if (ma_rd_req && ma_done)
 				gpr_wr = 1'b1;
 		end
 		endcase
@@ -240,7 +240,7 @@ module cpu#(
 
 	assign csr_wr = state == STATE_EXEC_INST && inst_system_csrrw;
 
-	task raise_interrupt(input [31:0] cause, value);
+	task raise_exception(input [31:0] cause, value);
 		begin
 			state <= STATE_CHECK_EXC;
 
@@ -273,16 +273,14 @@ module cpu#(
 					state <= STATE_RD_INST_WAIT;
 					ma_rd_req <= 1'b1;
 				end else
-					raise_interrupt(EXC_CAUSE_INSTRUCTION_ADDRESS_MISALIGNED, pc);
-							
+					raise_exception(EXC_CAUSE_INSTRUCTION_ADDRESS_MISALIGNED, pc);	
 			end
 			STATE_RD_INST_WAIT: begin
-				if (ma_done) begin
-					if (!ma_timeout)
-						state <= STATE_EXEC_INST;
-					else
-						raise_interrupt(EXC_CAUSE_INSTRUCTION_ACCESS_FAULT, pc);
-
+				if (ma_timeout) begin
+					raise_exception(EXC_CAUSE_INSTRUCTION_ACCESS_FAULT, pc);
+					ma_rd_req <= 1'b0;
+				end else if (ma_done) begin
+					state <= STATE_EXEC_INST;
 					ma_rd_req <= 1'b0;
 				end
 			end
@@ -292,27 +290,28 @@ module cpu#(
 						state <= STATE_EXEC_INST_MEM_WAIT;
 						ma_rd_req <= 1'b1;
 					end else
-						raise_interrupt(EXC_CAUSE_LOAD_ADDRESS_MISALIGNED, ma_addr);
+						raise_exception(EXC_CAUSE_LOAD_ADDRESS_MISALIGNED, ma_addr);
 				end else if (inst_store) begin
 					if (!alignment_overflow) begin
 						state <= STATE_EXEC_INST_MEM_WAIT;
 						ma_wr_req <= 1'b1;
 					end else
-						raise_interrupt(EXC_CAUSE_STORE_ADDRESS_MISALIGNED, ma_addr);
+						raise_exception(EXC_CAUSE_STORE_ADDRESS_MISALIGNED, ma_addr);
 				end else if (inst_system_ecall)
-					raise_interrupt(supervisor_mode ? EXC_CAUSE_SUPERVISOR_ECALL : EXC_CAUSE_USER_ECALL, pc);
+					raise_exception(supervisor_mode ? EXC_CAUSE_SUPERVISOR_ECALL : EXC_CAUSE_USER_ECALL, pc);
 				else if (inst_system_csrrw && !csr_addr_allowed)
-					raise_interrupt(EXC_CAUSE_ILLEGAL_INSTRUCTION, pc);
+					raise_exception(EXC_CAUSE_ILLEGAL_INSTRUCTION, pc);
 				else state <= STATE_CHECK_EXC;
 
 				if (pc_wr)
 					pc_changed = 1'b1;				
 			end
 			STATE_EXEC_INST_MEM_WAIT: begin
-				if (ma_done) begin
-					if (ma_timeout)
-						raise_interrupt(inst_load ? EXC_CAUSE_LOAD_ACCESS_FAULT : EXC_CAUSE_STORE_ACCESS_FAULT, ma_addr); 
-
+				if (ma_timeout) begin
+					raise_exception(inst_load ? EXC_CAUSE_LOAD_ACCESS_FAULT : EXC_CAUSE_STORE_ACCESS_FAULT, ma_addr);
+					ma_rd_req <= 1'b0;
+					ma_wr_req <= 1'b0;
+				end else if (ma_done) begin
 					state <= STATE_CHECK_EXC;
 					ma_rd_req <= 1'b0;
 					ma_wr_req <= 1'b0;

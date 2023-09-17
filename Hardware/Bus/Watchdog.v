@@ -1,23 +1,21 @@
 module watchdog #(
-	parameter ALLOWED_CYCLES = 1_000
+	parameter ALLOWED_SECONDS = 1.0
 ) (
 	input clk, rst,
 	
-	input rd_bus, wr_bus,
-	inout fc_bus,
+	input rd_bus, wr_bus, fc_bus,
 
 	output access_timeout
 );
-	localparam ALLOWED_CYCLES_BITS = $clog2(ALLOWED_CYCLES);
+	localparam integer ALLOWED_CYCLES = ALLOWED_SECONDS * 50_000_000;
 
-	reg [ALLOWED_CYCLES_BITS-1:0] counter;
+	reg [$clog2(ALLOWED_CYCLES)-1:0] counter;
 
 	reg [1:0] state;
 	localparam STATE_IDLE 		= 2'd0,
 			   STATE_COUNTING	= 2'd1,
 			   STATE_NOTIFYING	= 2'd2;
 
-	assign fc_bus = state == STATE_NOTIFYING ? fc_bus || 1'b1 : 1'bz;
 	assign access_timeout = state == STATE_NOTIFYING;
 
 	task reset;
