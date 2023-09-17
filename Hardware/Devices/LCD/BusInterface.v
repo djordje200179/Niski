@@ -14,11 +14,15 @@ module lcd_bus_interface (
 	parameter DATA_REG_ADDR	= 32'h0,
 			  CMD_REG_ADDR	= 32'h4;
 
+	wire [29:0] addr_base;
+	wire [1:0] addr_offset;
+	assign {addr_base, addr_offset} = addr_bus;
+
 	reg addr_hit;
 	always @* begin
 		addr_hit = 1'b0;
 
-		case (addr_bus[31:2])
+		case (addr_base)
 		DATA_REG_ADDR >> 2,
 		CMD_REG_ADDR >> 2:
 			addr_hit = 1'b1;

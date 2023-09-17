@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <devices/leds.h>
+#include <devices/ssds.h>
 
 static void calculate_ok() {
 	errno = 0;
@@ -29,6 +30,7 @@ int faulty_thread(void* arg) {
 
 void main() {
 	leds_on();
+	//ssds_on();
 	
 	puts("Main started.\n");
 
@@ -36,4 +38,6 @@ void main() {
 	thrd_create(&handle, faulty_thread, NULL);
 
 	puts("Thread created.");
+
+	//ssds_set_dec_number(1234);
 }

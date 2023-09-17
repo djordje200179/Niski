@@ -12,17 +12,33 @@ module leds_bus_interface (
 	parameter CONTROL_REG_ADDR	= 32'h0,
 			  DATA_REG_ADDR		= 32'h4;
 
+	wire [29:0] addr_base;
+	wire [1:0] addr_offset;
+	assign {addr_base, addr_offset} = addr_bus;
+
 	reg [7:0] ctrl_reg;
 	reg [31:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
 	assign {ctrl_led0, ctrl_led1, ctrl_led2, ctrl_led3} = {data_reg[24], data_reg[16], data_reg[8], data_reg[0]};
 
+	task update_reg(
+		inout [31:0] register
+	);
+		integer i;
+		begin
+			for (i = 0; i < 4; i = i + 1) begin
+				if (i + addr_offset < 4 && data_mask_bus[i])
+					register[8 * i +: 8] = register[8 * (i - addr_offset) +: 8];
+			end
+		end
+	endtask
+
 	reg addr_hit;
 	always @* begin
 		addr_hit = 1'b0;
 
-		case (addr_bus[31:2])
+		case (addr_base)
 		CONTROL_REG_ADDR >> 2,
 		DATA_REG_ADDR >> 2:    
 			addr_hit = 1'b1;
@@ -37,20 +53,13 @@ module leds_bus_interface (
 
 	reg [31:0] data_out;
 	always @* begin
-		data_out = 32'b0;
-
-		case (addr_bus[31:2])
-		CONTROL_REG_ADDR >> 2:
-			data_out[7:0] = ctrl_reg;
-		DATA_REG_ADDR >> 2:   
-			data_out = data_reg;
+		case (addr_base)
+		CONTROL_REG_ADDR >> 2:	data_out = ctrl_reg;
+		DATA_REG_ADDR >> 2: 	data_out = data_reg;
+		default: data_out = 32'bz;
 		endcase
 
-		case (addr_bus[1:0])
-		2'b01: data_out = {8'b0, data_out[31:8]};
-		2'b10: data_out = {16'b0, data_out[31:16]};
-		2'b11: data_out = {24'b0, data_out[31:24]};
-		endcase
+		data_out = data_out >> (8 * addr_offset);
 	end
 
 	reg data_written;
@@ -73,28 +82,9 @@ module leds_bus_interface (
 			else if (write_req) begin
 				data_written <= 1'b1;
 
-				case (addr_bus)
-				CONTROL_REG_ADDR: begin
-					if (data_mask_bus[0]) ctrl_reg[7:0] <= data_bus[7:0];
-				end
-				DATA_REG_ADDR: begin
-					if (data_mask_bus[0]) data_reg[7:0] <= data_bus[7:0];
-					if (data_mask_bus[1]) data_reg[15:8] <= data_bus[15:8];
-					if (data_mask_bus[2]) data_reg[23:16] <= data_bus[23:16];
-					if (data_mask_bus[3]) data_reg[31:24] <= data_bus[31:24];
-				end
-				DATA_REG_ADDR + 32'b1: begin
-					if (data_mask_bus[0]) data_reg[15:8] <= data_bus[7:0];
-					if (data_mask_bus[1]) data_reg[23:16] <= data_bus[15:8];
-					if (data_mask_bus[2]) data_reg[31:24] <= data_bus[23:16];
-				end
-				DATA_REG_ADDR + 32'b10: begin
-					if (data_mask_bus[0]) data_reg[23:16] <= data_bus[7:0];
-					if (data_mask_bus[1]) data_reg[31:24] <= data_bus[15:8];
-				end
-				DATA_REG_ADDR + 32'b11: begin
-					if (data_mask_bus[0]) data_reg[31:24] <= data_bus[7:0];
-				end
+				case (addr_base)
+				CONTROL_REG_ADDR >> 2:	update_reg(ctrl_reg);
+				DATA_REG_ADDR >> 2:		update_reg(data_reg);
 				endcase
 			end
 		end
