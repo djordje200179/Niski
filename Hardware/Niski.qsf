@@ -209,6 +209,7 @@ set_global_assignment -name VERILOG_FILE CPU/ALU.v
 set_global_assignment -name VERILOG_FILE CPU/PC.v
 set_global_assignment -name VERILOG_FILE CPU/IR.v
 set_global_assignment -name VERILOG_FILE Bus/Arbitrator.v
+set_global_assignment -name VERILOG_FILE Bus/Watchdog.v
 set_global_assignment -name VERILOG_FILE Clocks/FrequencyDivider.v
 set_global_assignment -name VERILOG_FILE Clocks/LowFreqClock.v
 set_global_assignment -name QIP_FILE Clocks/PLL.qip

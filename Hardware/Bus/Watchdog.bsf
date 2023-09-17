@@ -1,0 +1,78 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 256 176)
+	(text "watchdog" (rect 5 0 67 15)(font "Arial" ))
+	(text "inst" (rect 8 96 31 111)(font "Arial" ))
+	(port
+		(pt 0 88)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 80 41 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 64 40 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
+		(pt 192 40)
+		(input)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 136 32 182 47)(font "Arial" ))
+		(line (pt 176 40)(pt 192 40))
+	)
+	(port
+		(pt 192 56)
+		(input)
+		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
+		(text "wr_bus" (rect 136 48 184 63)(font "Arial" ))
+		(line (pt 176 56)(pt 192 56))
+	)
+	(port
+		(pt 0 24)
+		(output)
+		(text "access_timeout" (rect 0 0 103 15)(font "Arial" ))
+		(text "access_timeout" (rect 25 16 128 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24))
+	)
+	(port
+		(pt 192 72)
+		(bidir)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 136 64 179 79)(font "Arial" ))
+		(line (pt 192 72)(pt 176 72))
+	)
+	(parameter
+		"ALLOWED_CYCLES"
+		"1000"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(drawing
+		(rectangle (rect 16 16 176 96))
+	)
+	(annotation_block (parameter)(rect 208 -24 464 16))
+)

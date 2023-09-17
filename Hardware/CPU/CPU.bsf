@@ -56,8 +56,15 @@ https://fpgasoftware.intel.com/eula.
 		(pt 0 24)
 		(input)
 		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
-		(text "clk_1_hz" (rect 26 16 82 31)(font "Arial" ))
+		(text "clk_1_hz" (rect 24 16 80 31)(font "Arial" ))
 		(line (pt 0 24)(pt 16 24))
+	)
+	(port
+		(pt 104 144)
+		(input)
+		(text "ma_timeout" (rect 16 48 100 68)(font "Intel Clear" (font_size 8)))
+		(text "ma_timeout" (rect 96 41 111 118)(font "Arial" )(vertical))
+		(line (pt 104 144)(pt 104 127))
 	)
 	(port
 		(pt 256 24)
@@ -107,5 +114,5 @@ https://fpgasoftware.intel.com/eula.
 	(drawing
 		(rectangle (rect 16 16 240 128))
 	)
-	(annotation_block (parameter)(rect 272 -48 768 16))
+	(annotation_block (parameter)(rect 320 0 816 64))
 )
