@@ -15,10 +15,6 @@ module ssds_bus_interface (
 			  DATA_DIGITS_REG_ADDR	= 32'h4,
 			  DATA_DOTS_REG_ADDR 	= 32'h8;
 
-	wire [29:0] addr_base;
-	wire [1:0] addr_offset;
-	assign {addr_base, addr_offset} = addr_bus;
-
 	reg [7:0] ctrl_reg;
 	reg [31:0] data_digits_reg;
 	reg [7:0] data_dots_reg;
@@ -41,18 +37,8 @@ module ssds_bus_interface (
 			assign segments[7 * i +: 7] = data_digits_reg[8 * i + 7] ? digits_mapped_segments[i] : data_digits_reg[8 * i +: 7];
 		end
 	endgenerate
-
-	task update_reg(
-		inout [31:0] register
-	);
-		integer i;
-		begin
-			for (i = 0; i < 4; i = i + 1) begin
-				if (i + addr_offset < 4 && data_mask_bus[i])
-					register[8 * i +: 8] = register[8 * (i - addr_offset) +: 8];
-			end
-		end
-	endtask
+	
+	`include "../BusInterfaceHelper.vh"
 
 	reg addr_hit;
 	always @* begin
@@ -74,12 +60,11 @@ module ssds_bus_interface (
 
 	reg [31:0] data_out;
 	always @* begin
-		data_out = 32'b0;
-
 		case (addr_base)
 		CONTROL_REG_ADDR >> 2:		data_out = ctrl_reg;
 		DATA_DIGITS_REG_ADDR >> 2:	data_out = data_digits_reg;
 		DATA_DOTS_REG_ADDR >> 2:	data_out = data_dots_reg;
+		default: data_out = 32'b0;
 		endcase
 
 		data_out = data_out >> (8 * addr_offset);

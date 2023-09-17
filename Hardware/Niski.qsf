@@ -220,6 +220,7 @@ set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v
 set_global_assignment -name VERILOG_FILE Components/PWM.v
+set_global_assignment -name VERILOG_INCLUDE_FILE Devices/BusInterfaceHelper.vh
 set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/Buzzer/Controller.v

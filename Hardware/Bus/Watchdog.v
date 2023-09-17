@@ -8,19 +8,21 @@ module watchdog #(
 
 	output access_timeout
 );
-	reg [31:0] counter;
+	localparam ALLOWED_CYCLES_BITS = $clog2(ALLOWED_CYCLES);
+
+	reg [ALLOWED_CYCLES_BITS-1:0] counter;
 
 	reg [1:0] state;
 	localparam STATE_IDLE 		= 2'd0,
 			   STATE_COUNTING	= 2'd1,
 			   STATE_NOTIFYING	= 2'd2;
 
-	assign fc_bus = state == STATE_NOTIFYING ? 1'b1 : 1'bz;
+	assign fc_bus = state == STATE_NOTIFYING ? fc_bus || 1'b1 : 1'bz;
 	assign access_timeout = state == STATE_NOTIFYING;
 
 	task reset;
 		begin
-			counter <= 32'b0;
+			counter <= 0;
 			state <= STATE_IDLE;
 		end
 	endtask
@@ -34,16 +36,16 @@ module watchdog #(
 			end
 			STATE_COUNTING: begin
 				if (fc_bus) begin
-					counter <= 32'b0;
+					counter <= 0;
 					state <= STATE_IDLE;
 				end else if (counter == ALLOWED_CYCLES)
 					state <= STATE_NOTIFYING;
 				else
-					counter <= counter + 32'b1;
+					counter <= counter + 1;
 			end
 			STATE_NOTIFYING: begin
 				if (!rd_bus && !wr_bus) begin
-					counter <= 32'b0;
+					counter <= 1;
 					state <= STATE_IDLE;
 				end
 			end

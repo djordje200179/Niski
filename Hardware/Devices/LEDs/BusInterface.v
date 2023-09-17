@@ -12,27 +12,13 @@ module leds_bus_interface (
 	parameter CONTROL_REG_ADDR	= 32'h0,
 			  DATA_REG_ADDR		= 32'h4;
 
-	wire [29:0] addr_base;
-	wire [1:0] addr_offset;
-	assign {addr_base, addr_offset} = addr_bus;
-
 	reg [7:0] ctrl_reg;
 	reg [31:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
 	assign {ctrl_led0, ctrl_led1, ctrl_led2, ctrl_led3} = {data_reg[24], data_reg[16], data_reg[8], data_reg[0]};
 
-	task update_reg(
-		inout [31:0] register
-	);
-		integer i;
-		begin
-			for (i = 0; i < 4; i = i + 1) begin
-				if (i + addr_offset < 4 && data_mask_bus[i])
-					register[8 * i +: 8] = register[8 * (i - addr_offset) +: 8];
-			end
-		end
-	endtask
+	`include "../BusInterfaceHelper.vh"
 
 	reg addr_hit;
 	always @* begin
@@ -56,7 +42,7 @@ module leds_bus_interface (
 		case (addr_base)
 		CONTROL_REG_ADDR >> 2:	data_out = ctrl_reg;
 		DATA_REG_ADDR >> 2: 	data_out = data_reg;
-		default: data_out = 32'bz;
+		default: data_out = 32'b0;
 		endcase
 
 		data_out = data_out >> (8 * addr_offset);

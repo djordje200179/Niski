@@ -30,7 +30,7 @@ int faulty_thread(void* arg) {
 
 void main() {
 	leds_on();
-	//ssds_on();
+	ssds_on();
 	
 	puts("Main started.\n");
 
@@ -39,5 +39,5 @@ void main() {
 
 	puts("Thread created.");
 
-	//ssds_set_dec_number(1234);
+	ssds_set_dec_number(1234);
 }

@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Sun Sep 17 16:12:01 2023"
+// CREATED		"Sun Sep 17 21:47:49 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -124,10 +124,11 @@ wire	[3:0] SYNTHESIZED_WIRE_27;
 wire	[31:0] SYNTHESIZED_WIRE_28;
 wire	[31:0] SYNTHESIZED_WIRE_29;
 wire	SYNTHESIZED_WIRE_30;
-wire	[31:0] SYNTHESIZED_WIRE_31;
-wire	SYNTHESIZED_WIRE_32;
+wire	SYNTHESIZED_WIRE_31;
+wire	[31:0] SYNTHESIZED_WIRE_32;
 wire	SYNTHESIZED_WIRE_33;
 wire	SYNTHESIZED_WIRE_34;
+wire	SYNTHESIZED_WIRE_35;
 
 
 
@@ -173,8 +174,8 @@ buzzer_bus_interface	b2v_inst11(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.ctrl_en(SYNTHESIZED_WIRE_33),
-	.ctrl_buzz(SYNTHESIZED_WIRE_34),
+	.ctrl_en(SYNTHESIZED_WIRE_34),
+	.ctrl_buzz(SYNTHESIZED_WIRE_35),
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst11.CONTROL_REG_ADDR = 32'b01110000000000000000000000010000;
@@ -207,7 +208,7 @@ cpu_bus_interface	b2v_inst13(
 	.done(SYNTHESIZED_WIRE_30),
 	.addr_bus(addr_bus),
 	
-	.data_in(SYNTHESIZED_WIRE_31),
+	.data_in(SYNTHESIZED_WIRE_32),
 	.data_mask_bus(data_mask_bus));
 
 
@@ -254,7 +255,7 @@ bus_arbitrator	b2v_inst16(
 	.cpu_req(SYNTHESIZED_WIRE_18),
 	.dma_req(SYNTHESIZED_WIRE_19),
 	.cpu_grant(SYNTHESIZED_WIRE_11),
-	.dma_grant(SYNTHESIZED_WIRE_32),
+	.dma_grant(SYNTHESIZED_WIRE_33),
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
 	.fc_bus(fc_bus),
@@ -341,6 +342,17 @@ memory_bus_interface	b2v_inst22(
 	defparam	b2v_inst22.START_ADDR = 32'b01000000000000000000000000000000;
 
 
+watchdog	b2v_inst23(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.rd_bus(rd_bus),
+	.wr_bus(wr_bus),
+	.fc_bus(fc_bus),
+	.access_timeout(SYNTHESIZED_WIRE_31)
+	);
+	defparam	b2v_inst23.ALLOWED_CYCLES = 1_000_000;
+
+
 low_freq_clock	b2v_inst24(
 	.clk_2_khz(clk_2_khz),
 	.rst(btn_rst),
@@ -353,7 +365,8 @@ cpu	b2v_inst25(
 	.rst(btn_rst),
 	.ma_done(SYNTHESIZED_WIRE_30),
 	.clk_1_hz(clk_1_hz),
-	.ma_data_in(SYNTHESIZED_WIRE_31),
+	.ma_timeout(SYNTHESIZED_WIRE_31),
+	.ma_data_in(SYNTHESIZED_WIRE_32),
 	.ma_rd_req(SYNTHESIZED_WIRE_13),
 	.ma_wr_req(SYNTHESIZED_WIRE_12),
 	.ma_addr(SYNTHESIZED_WIRE_14),
@@ -366,7 +379,7 @@ cpu	b2v_inst25(
 dma	b2v_inst26(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.bus_grant(SYNTHESIZED_WIRE_32),
+	.bus_grant(SYNTHESIZED_WIRE_33),
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
 	.fc_bus(fc_bus),
@@ -479,8 +492,8 @@ ir_controller	b2v_inst8(
 
 
 buzzer_controller	b2v_inst9(
-	.en(SYNTHESIZED_WIRE_33),
-	.buzz(SYNTHESIZED_WIRE_34),
+	.en(SYNTHESIZED_WIRE_34),
+	.buzz(SYNTHESIZED_WIRE_35),
 	.buzzer_pin(BUZZ_PIN));
 
 assign	clk_50_mhz = CLK_PIN;
