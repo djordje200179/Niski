@@ -88,6 +88,7 @@ Other header files need to be implemented by the OS developer.
 Some functions will be implemented as system calls,
 and some will be implemented as library functions.
 Currently, the following header files and functions are fully implemented:
+- __errno.h__
 - __stdlib.h__
 	- `malloc`
 	- `calloc`

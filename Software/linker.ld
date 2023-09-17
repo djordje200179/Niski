@@ -20,7 +20,22 @@ SECTIONS {
 		. = ALIGN(4);
 	} > ROM
 
+	.rom.tbss : {
+		TBSS_START = .;
+		*(.tbss*)
+		. = ALIGN(4);
+		TBSS_END = .;
+	} > ROM
+
+	.rom.tdata : {
+		TDATA_START = .;
+		*(.tdata*)
+		. = ALIGN(4);
+		TDATA_END = .;
+	} > ROM
+
 	.ram.bss : {
+		DATA_START = .;
 		*(.sbss*)
 		*(.bss*)
 		. = ALIGN(4);
@@ -32,10 +47,21 @@ SECTIONS {
 		. = ALIGN(4);
 	} > RAM
 
+	.ram.tbss : {
+		MAIN_THREAD_TDATA_START = .;
+		*(.tbss*)
+		. = ALIGN(4);
+	} > RAM
+
+	.ram.tdata : {
+		*(.tdata*)
+		. = ALIGN(4);
+	} > RAM
+
 	. = ALIGN(16);
-	STACK_START = .;
+	MAIN_THREAD_STACK_START = .;
 	. += 0x1000;
-	STACK_END = .;
+	MAIN_THREAD_STACK_END = .;
 
 	. = ALIGN(64);
 	HEAP_START = .;

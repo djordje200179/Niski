@@ -4,6 +4,7 @@
 
 static struct kthread kthread_idle = {
 	.stack = NULL,
+	.tdata = NULL,
 	.state = KTHREAD_STATE_READY,
 	.next = NULL,
 	.waiting_on = NULL

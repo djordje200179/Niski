@@ -26,6 +26,7 @@ struct kthread {
 	void* arg;
 	
 	uint32_t* stack;
+	void* tdata;
 
 	enum kthread_state {
 		KTHREAD_STATE_CREATED,

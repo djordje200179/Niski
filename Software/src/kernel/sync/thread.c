@@ -2,17 +2,35 @@
 #include "kernel/sync/thread_local.h"
 #include "kernel/sync/scheduler.h"
 #include "kernel/mem_alloc/heap_allocator.h"
+#include <string.h>
 
 #define KTHREAD_STACK_SIZE 0x1000
 
 static struct kthread kthread_main = {
 	.stack = NULL,
+	.tdata = NULL,
 	.state = KTHREAD_STATE_RUNNING,
 	.next = NULL,
 	.waiting_on = NULL
 };
 
 struct kthread* kthread_current = &kthread_main;
+
+static void* kthread_allocate_tdata() {
+	extern char TDATA_START, TDATA_END, TBSS_START, TBSS_END;
+
+	size_t tdata_size = &TDATA_END - &TDATA_START;
+	size_t tbss_size = &TBSS_END - &TBSS_START;
+
+	void* tdata = kheap_alloc(tdata_size + tbss_size);
+	if (!tdata)
+		return NULL;
+
+	memcpy(tdata, &TDATA_START, tdata_size);
+	memset(tdata + tdata_size, 0, tbss_size);
+
+	return tdata;
+}
 
 struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode) {
 	struct kthread* thread = kheap_alloc(sizeof(struct kthread));
@@ -26,11 +44,17 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 	}
 
 	thread->stack = stack;
-		
-	for (uint8_t i = 3; i < 32; i++)
-		thread->context.regs[i] = 0;
-	
 	thread->context.regs[REG_SP] = (uint32_t)(&(thread->stack[KTHREAD_STACK_SIZE / 4]));
+	
+	void* tdata = kthread_allocate_tdata();
+	if (!tdata) {
+		kheap_dealloc(thread->stack);
+		kheap_dealloc(thread);
+		return NULL;
+	}
+	
+	thread->tdata = tdata;
+	thread->context.regs[REG_TP] = (uint32_t)tdata;
 
 	uint32_t thread_status;
 	__asm__ volatile("csrr %0, sstatus" : "=r"(thread_status));
@@ -39,6 +63,8 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 	else
 		thread_status &= ~(0b1 << 8);
 	thread->context.status = thread_status;
+	
+	thread->local_data_head = NULL;
 
 	void kthread_wrapper_function();
 	thread->context.pc = kthread_wrapper_function;
@@ -90,6 +116,9 @@ void kthread_destroy(struct kthread* thread) {
 
 	if (thread->stack)
 		kheap_dealloc(thread->stack);
+
+	if (thread->tdata)
+		kheap_dealloc(thread->tdata);
 
 	kheap_dealloc(thread);
 }

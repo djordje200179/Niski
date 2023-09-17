@@ -1,9 +1,20 @@
 #include <threads.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <errno.h>
+
+void calculate() {
+	errno = 0;
+}
 
 int faulty_thread(void* arg) {
-	__asm__ volatile("csrw sstatus, 0x00000000");
+	calculate();
+
+	if (errno != 0) {
+		puts("Error in thread!");
+		return 1;
+	}
+
 	return 0;
 }
 
@@ -12,6 +23,4 @@ void main() {
 
 	thrd_t handle;
 	thrd_create(&handle, faulty_thread, NULL);
-
-	puts("Thread created\n");
 }
