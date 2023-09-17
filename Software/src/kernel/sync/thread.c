@@ -26,8 +26,8 @@ static void* kthread_allocate_tdata() {
 	if (!tdata)
 		return NULL;
 
-	dma_copy(&TDATA_START, tdata, tdata_size);
-	dma_fill(tdata + tdata_size, tbss_size, 0);
+	dma_copy(&TDATA_START, tdata, tdata_size, true);
+	dma_fill(tdata + tdata_size, tbss_size, 0, true);
 
 	return tdata;
 }

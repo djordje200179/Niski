@@ -203,3 +203,4 @@ At present, the following header files and functions have been fully implemented
 	- `dma_transfer`
 	- `dma_fill`
 	- `dma_copy`
+	- `dma_rcopy`

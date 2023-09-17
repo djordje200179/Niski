@@ -28,7 +28,7 @@ int memcmp(const void* lhs, const void* rhs, size_t count) {
 }
 
 void* memset(void* dest, int ch, size_t count) {
-	dma_fill((char*)dest, count, ch);
+	dma_fill((char*)dest, count, ch, false);
 
 	return dest;
 }
@@ -38,7 +38,7 @@ void* memset_explicit(void* dest, int ch, size_t count) {
 }
 
 void* memcpy(void* restrict dest, const void* restrict src, size_t count) {
-	dma_copy((char*)src, (char*)dest, count);
+	dma_copy((char*)src, (char*)dest, count, false);
 
 	return dest;
 }
@@ -62,10 +62,9 @@ void* memmove(void* dest, const void* src, size_t count) {
 	unsigned char* csrc = (unsigned char*)src;
 
 	if (cdest < csrc)
-		return memcpy(dest, src, count);
-
-	for (size_t i = count; i > 0; i--)
-		cdest[i - 1] = csrc[i - 1];
+		dma_copy((char*)src, (char*)dest, count, false);
+	else if (cdest > csrc)
+		dma_rcopy((char*)src, (char*)dest, count, false);
 
 	return dest;
 }

@@ -8,16 +8,31 @@ extern volatile size_t DMA_CNT_REG;
 
 void dma_transfer(
 	char* src, char* dest, size_t count, 
-	bool move_src, bool move_dest, bool incr_src, bool incr_dst
+	enum dma_addressing_mode src_addr_mode, enum dma_addressing_mode dest_addr_mode, bool burst_mode
 ) {
 	if (count == 0) 
 		return;
 		
 	uint8_t ctrl = 0;
-	if (move_src) ctrl |= 0b1000;
-	if (move_dest) ctrl |= 0b0100;
-	if (incr_src) ctrl |= 0b0010;
-	if (incr_dst) ctrl |= 0b0001;
+
+	switch (src_addr_mode) {
+	case DMA_ADDRESS_INCREMENT:
+		ctrl |= 0b0010;
+	case DMA_ADDRESS_DECREMENT:
+		ctrl |= 0b1000;
+		break;
+	}
+
+	switch (dest_addr_mode) {
+	case DMA_ADDRESS_INCREMENT:
+		ctrl |= 0b0001;
+	case DMA_ADDRESS_DECREMENT:
+		ctrl |= 0b0100;
+		break;
+	}
+
+	if (burst_mode)
+		ctrl |= 0b00010000;
 
 	DMA_SRC_REG = src;
 	DMA_DEST_REG = dest;
@@ -28,16 +43,26 @@ void dma_transfer(
 	while (DMA_CNT_REG != 0);
 }
 
-void dma_copy(char* src, char* dest, size_t count) {
+void dma_copy(char* src, char* dest, size_t count, bool burst_mode) {
 	dma_transfer(
 		src, dest, count,
-		true, true, true, true
+		DMA_ADDRESS_INCREMENT, DMA_ADDRESS_INCREMENT, burst_mode
 	);
 }
 
-void dma_fill(char* dest, size_t count, char value) {
+void dma_rcopy(char* src, char* dest, size_t count, bool burst_mode) {
+	char* src_end = src + count - 1;
+	char* dest_end = dest + count - 1;
+
+	dma_transfer(
+		src_end, dest_end, count,
+		DMA_ADDRESS_DECREMENT, DMA_ADDRESS_DECREMENT, burst_mode
+	);
+}
+
+void dma_fill(char* dest, size_t count, char value, bool burst_mode) {
 	dma_transfer(
 		&value, dest, count,
-		false, true, false, true
+		DMA_ADDRESS_FIXED, DMA_ADDRESS_INCREMENT, burst_mode
 	);
 }
