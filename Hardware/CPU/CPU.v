@@ -38,6 +38,8 @@ module cpu#(
 	wire supervisor_mode;
 	wire intr_allowed;
 
+	wire alignment_overflow;
+
 	wire [31:0] alu_out;
 
 	reg has_exception;
@@ -55,7 +57,7 @@ module cpu#(
 		.clk(clk), .rst(rst),
 
 		.next_pc(next_pc), .wr(pc_wr),
-		.curr_pc(pc)
+		.pc(pc)
 	);
 	defparam pc_reg_unit.EXEC_START_ADDR = EXEC_START_ADDR;
 
@@ -122,6 +124,11 @@ module cpu#(
 		.funct(inst_funct),
 		.operand_a(gpr_src1), .operand_b(inst_arlog_imm ? inst_imm : gpr_src2),
 		.result(alu_out)
+	);
+
+	cpu_alignment_checker alignment_checker_unit (
+		.addr_offset(ma_addr[1:0]), .mask(ma_data_mask),
+		.overflow(alignment_overflow)
 	);
 
 	assign ma_addr = (state == STATE_RD_INST_REQ || state == STATE_RD_INST_WAIT) ? pc : gpr_src1 + inst_imm;
@@ -248,9 +255,19 @@ module cpu#(
 		begin
 			case (state)
 			STATE_RD_INST_REQ: begin
-				state <= STATE_RD_INST_WAIT;
-				ma_rd_req <= 1'b1;
 				pc_changed <= 1'b0;
+
+				if (!alignment_overflow) begin
+					state <= STATE_RD_INST_WAIT;
+					ma_rd_req <= 1'b1;
+				end else begin
+					state <= STATE_CHECK_EXC;
+
+					has_exception <= 1'b1;
+					exc_cause <= EXC_CAUSE_INSTRUCTION_ADDRESS_MISALIGNED;
+					exc_pc <= pc;
+					exc_value <= ma_addr;
+				end				
 			end
 			STATE_RD_INST_WAIT: begin
 				if (ma_done) begin
@@ -260,11 +277,29 @@ module cpu#(
 			end
 			STATE_EXEC_INST: begin
 				if (inst_load) begin
-					state <= STATE_EXEC_INST_MEM_WAIT;
-					ma_rd_req <= 1'b1;
+					if (!alignment_overflow) begin
+						state <= STATE_EXEC_INST_MEM_WAIT;
+						ma_rd_req <= 1'b1;
+					end else begin
+						state <= STATE_CHECK_EXC;
+
+						has_exception <= 1'b1;
+						exc_cause <= EXC_CAUSE_LOAD_ADDRESS_MISALIGNED;
+						exc_pc <= pc;
+						exc_value <= ma_addr;
+					end
 				end else if (inst_store) begin
-					state <= STATE_EXEC_INST_MEM_WAIT;
-					ma_wr_req <= 1'b1;
+					if (!alignment_overflow) begin
+						state <= STATE_EXEC_INST_MEM_WAIT;
+						ma_wr_req <= 1'b1;
+					end else begin
+						state <= STATE_CHECK_EXC;
+
+						has_exception <= 1'b1;
+						exc_cause <= EXC_CAUSE_STORE_ADDRESS_MISALIGNED;
+						exc_pc <= pc;
+						exc_value <= ma_addr;
+					end
 				end else
 					state <= STATE_CHECK_EXC;
 

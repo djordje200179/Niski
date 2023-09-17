@@ -1,4 +1,4 @@
-module alignment_checker (
+module cpu_alignment_checker (
 	input [1:0] addr_offset,
 	input [3:0] mask,
 
@@ -9,7 +9,7 @@ module alignment_checker (
 
 		case (addr_offset)
 		2'b01: begin
-			if (mask[3])
+			if (mask[3:1])
 				overflow = 1'b1;
 		end
 		2'b10: begin
