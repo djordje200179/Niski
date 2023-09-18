@@ -1,0 +1,86 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+*/
+(header "symbol" (version "1.2"))
+(symbol
+	(rect 64 64 304 176)
+	(text "interrupt_splitter" (rect 5 0 110 15)(font "Arial" ))
+	(text "inst" (rect 8 96 31 111)(font "Arial" ))
+	(port
+		(pt 240 32)
+		(input)
+		(text "ps2_incoming_data" (rect 0 0 129 15)(font "Arial" ))
+		(text "ps2_incoming_data" (rect 112 24 241 39)(font "Arial" ))
+		(line (pt 224 32)(pt 240 32))
+	)
+	(port
+		(pt 240 48)
+		(input)
+		(text "uart_incoming_data" (rect 0 0 129 15)(font "Arial" ))
+		(text "uart_incoming_data" (rect 112 40 241 55)(font "Arial" ))
+		(line (pt 224 48)(pt 240 48))
+	)
+	(port
+		(pt 240 64)
+		(input)
+		(text "ir_incoming_data" (rect 0 0 113 15)(font "Arial" ))
+		(text "ir_incoming_data" (rect 128 56 241 71)(font "Arial" ))
+		(line (pt 224 64)(pt 240 64))
+	)
+	(port
+		(pt 240 80)
+		(input)
+		(text "btn_pressed" (rect 0 0 82 15)(font "Arial" ))
+		(text "btn_pressed" (rect 152 72 234 87)(font "Arial" ))
+		(line (pt 224 80)(pt 240 80))
+	)
+	(port
+		(pt 96 112)
+		(output)
+		(text "requests[15..0]" (rect 0 0 96 15)(font "Arial" ))
+		(text "requests[15..0]" (rect 88 -8 103 88)(font "Arial" )(vertical))
+		(line (pt 96 112)(pt 96 96)(line_width 3))
+	)
+	(parameter
+		"PS2_INTR_CODE"
+		"0000"
+		""
+		(type "PARAMETER_UNSIGNED_BIN")	)
+	(parameter
+		"UART_INTR_CODE"
+		"0001"
+		""
+		(type "PARAMETER_UNSIGNED_BIN")	)
+	(parameter
+		"IR_INTR_CODE"
+		"0010"
+		""
+		(type "PARAMETER_UNSIGNED_BIN")	)
+	(parameter
+		"BTN_INTR_CODE"
+		"0011"
+		""
+		(type "PARAMETER_UNSIGNED_BIN")	)
+	(drawing
+		(rectangle (rect 16 16 224 96))
+	)
+	(annotation_block (parameter)(rect 304 -40 568 64))
+)
