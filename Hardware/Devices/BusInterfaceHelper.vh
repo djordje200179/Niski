@@ -11,7 +11,7 @@ task update_reg (
 				reg_byte = bus_byte + addr_offset;
 
 				if (data_mask_bus[bus_byte])
-					register[8 * reg_byte +: 8] = data_bus[8 * bus_byte +: 8];
+					register[8 * reg_byte +: 8] <= data_bus[8 * bus_byte +: 8];
 			end
 		end
 	end
