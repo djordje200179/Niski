@@ -25,16 +25,17 @@ module ssds_bus_interface (
 	assign ctrl_dots = data_dots_reg[3:0];
 	assign ctrl_en = ctrl_reg[0];
 
-	wire [6:0] digits_mapped_segments [0:3];
 	generate
 		genvar i;
 		for (i = 0; i < 4; i = i + 1) begin: digit_mappers
+			wire [6:0] mapped_segments;
+
 			ssds_digit_mapper digit_mapper (
 				.digit(data_digits_reg[8 * i +: 4]),
-				.segments(digits_mapped_segments[i])
+				.segments(mapped_segments)
 			);
 
-			assign segments[7 * i +: 7] = data_digits_reg[8 * i + 7] ? digits_mapped_segments[i] : data_digits_reg[8 * i +: 7];
+			assign segments[7 * i +: 7] = data_digits_reg[8 * i + 7] ? mapped_segments : data_digits_reg[8 * i +: 7];
 		end
 	endgenerate
 	

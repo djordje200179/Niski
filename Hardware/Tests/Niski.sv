@@ -31,8 +31,8 @@ module niski_tb;
 
 	initial begin
 		$stop;
-		wait (dut.b2v_inst25.pc == 32'h400004e0);
-		#1000;
+		wait (dut.b2v_inst25.pc == 32'h4000144c);
+		#10000;
 		$stop;
 	end
 
