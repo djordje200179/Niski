@@ -3709,6 +3709,11 @@ https://fpgasoftware.intel.com/eula.
 	(pt -168 296)
 	(pt -112 296)
 )
+(connector
+	(text "0" (rect -360 329 -341 337)(font "Intel Clear" )(vertical))
+	(pt -336 328)
+	(pt -336 336)
+)
 (junction (pt 352 424))
 (junction (pt 368 440))
 (junction (pt 384 456))
