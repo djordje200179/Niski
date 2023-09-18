@@ -17,7 +17,7 @@ void dma_transfer(
 
 	switch (src_addr_mode) {
 	case DMA_ADDRESS_INCREMENT:
-		ctrl |= 0b0010;
+		ctrl |= 0b1100;
 	case DMA_ADDRESS_DECREMENT:
 		ctrl |= 0b1000;
 		break;
@@ -25,9 +25,10 @@ void dma_transfer(
 
 	switch (dest_addr_mode) {
 	case DMA_ADDRESS_INCREMENT:
-		ctrl |= 0b0001;
+		ctrl |= 0b0011;
+		break;
 	case DMA_ADDRESS_DECREMENT:
-		ctrl |= 0b0100;
+		ctrl |= 0b0010;
 		break;
 	}
 

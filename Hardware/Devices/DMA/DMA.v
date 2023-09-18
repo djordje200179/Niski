@@ -19,12 +19,13 @@ module dma (
 	reg [7:0] ctrl_reg;
 	reg [31:0] src_reg, dest_reg, cnt_reg;
 
-	wire move_src, move_dest, incr_src, incr_dest;
-	assign {move_src, move_dest, incr_src, incr_dest} = ctrl_reg[3:0];
+	wire burst;
+	wire move_src, incr_src;
+	wire move_dest, incr_dest;
+
+	assign {burst, move_src, incr_src, move_dest, incr_dest} = ctrl_reg[4:0];
 
 	`include "../BusInterfaceHelper.vh"
-
-	//wire occupy_bus = ctrl_reg[4];
 
 	reg addr_hit;
 	always @* begin
