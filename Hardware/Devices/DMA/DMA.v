@@ -22,17 +22,19 @@ module dma (
 	wire move_src, move_dest, incr_src, incr_dest;
 	assign {move_src, move_dest, incr_src, incr_dest} = ctrl_reg[3:0];
 
+	`include "../BusInterfaceHelper.vh"
+
 	//wire occupy_bus = ctrl_reg[4];
 
 	reg addr_hit;
 	always @* begin
 		addr_hit = 1'b0;
 
-		case (addr_bus[31:2])
-		CTRL_REG_ADDR >> 2,
-		SRC_REG_ADDR >> 2,
-		DEST_REG_ADDR >> 2,
-		CNT_REG_ADDR >> 2:
+		case (addr_base)
+		CTRL_REG_ADDR,
+		SRC_REG_ADDR,
+		DEST_REG_ADDR,
+		CNT_REG_ADDR:
 			addr_hit = 1'b1;
 		endcase
 	end
@@ -76,22 +78,14 @@ module dma (
 
 		case (state)
 		STATE_IDLE: begin
-			case (addr_bus[31:2])
-			CTRL_REG_ADDR >> 2:
-				data_out[7:0] = ctrl_reg;
-			SRC_REG_ADDR >> 2:
-				data_out = src_reg;
-			DEST_REG_ADDR >> 2:
-				data_out = dest_reg;
-			CNT_REG_ADDR >> 2:
-				data_out = cnt_reg;
+			case (addr_base)
+			CTRL_REG_ADDR:	data_out = ctrl_reg;
+			SRC_REG_ADDR:	data_out = src_reg;
+			DEST_REG_ADDR:	data_out = dest_reg;
+			CNT_REG_ADDR:	data_out = cnt_reg;
 			endcase
 
-			case (addr_bus[1:0])
-			2'd1: data_out = {8'b0, data_out[31:8]};
-			2'd2: data_out = {16'b0, data_out[31:16]};
-			2'd3: data_out = {24'b0, data_out[31:24]};
-			endcase
+			data_out = data_out >> (8 * addr_offset);
 		end
 		STATE_TRANSFER_WRITING: data_out[7:0] = curr_data;
 		endcase
@@ -111,69 +105,15 @@ module dma (
 			case (state)
 			STATE_IDLE: begin
 				if (write_req) begin
-					case (addr_bus)
-					CTRL_REG_ADDR: begin
-						if (data_mask_bus[0]) ctrl_reg[7:0] <= data_bus[7:0];
-						process_started <= 1'b1;
-					end
-
-					SRC_REG_ADDR: begin
-						if (data_mask_bus[0]) src_reg[7:0] <= data_bus[7:0];
-						if (data_mask_bus[1]) src_reg[15:8] <= data_bus[15:8];
-						if (data_mask_bus[2]) src_reg[23:16] <= data_bus[23:16];
-						if (data_mask_bus[3]) src_reg[31:24] <= data_bus[31:24];
-					end
-					SRC_REG_ADDR + 32'd1: begin
-						if (data_mask_bus[0]) src_reg[15:8] <= data_bus[7:0];
-						if (data_mask_bus[1]) src_reg[23:16] <= data_bus[15:8];
-						if (data_mask_bus[2]) src_reg[31:24] <= data_bus[23:16];
-					end
-					SRC_REG_ADDR + 32'd2: begin
-						if (data_mask_bus[0]) src_reg[23:16] <= data_bus[7:0];
-						if (data_mask_bus[1]) src_reg[31:24] <= data_bus[15:8];
-					end
-					SRC_REG_ADDR + 32'd3: begin
-						if (data_mask_bus[0]) src_reg[31:24] <= data_bus[7:0];
-					end
-
-					DEST_REG_ADDR: begin
-						if (data_mask_bus[0]) dest_reg[7:0] <= data_bus[7:0];
-						if (data_mask_bus[1]) dest_reg[15:8] <= data_bus[15:8];
-						if (data_mask_bus[2]) dest_reg[23:16] <= data_bus[23:16];
-						if (data_mask_bus[3]) dest_reg[31:24] <= data_bus[31:24];
-					end
-					DEST_REG_ADDR + 32'd1: begin
-						if (data_mask_bus[0]) dest_reg[15:8] <= data_bus[7:0];
-						if (data_mask_bus[1]) dest_reg[23:16] <= data_bus[15:8];
-						if (data_mask_bus[2]) dest_reg[31:24] <= data_bus[23:16];
-					end
-					DEST_REG_ADDR + 32'd2: begin
-						if (data_mask_bus[0]) dest_reg[23:16] <= data_bus[7:0];
-						if (data_mask_bus[1]) dest_reg[31:24] <= data_bus[15:8];
-					end
-					DEST_REG_ADDR + 32'd3: begin
-						if (data_mask_bus[0]) dest_reg[31:24] <= data_bus[7:0];
-					end
-
-					CNT_REG_ADDR: begin
-						if (data_mask_bus[0]) cnt_reg[7:0] <= data_bus[7:0];
-						if (data_mask_bus[1]) cnt_reg[15:8] <= data_bus[15:8];
-						if (data_mask_bus[2]) cnt_reg[23:16] <= data_bus[23:16];
-						if (data_mask_bus[3]) cnt_reg[31:24] <= data_bus[31:24];
-					end
-					CNT_REG_ADDR + 32'd1: begin
-						if (data_mask_bus[0]) cnt_reg[15:8] <= data_bus[7:0];
-						if (data_mask_bus[1]) cnt_reg[23:16] <= data_bus[15:8];
-						if (data_mask_bus[2]) cnt_reg[31:24] <= data_bus[23:16];
-					end
-					CNT_REG_ADDR + 32'd2: begin
-						if (data_mask_bus[0]) cnt_reg[23:16] <= data_bus[7:0];
-						if (data_mask_bus[1]) cnt_reg[31:24] <= data_bus[15:8];
-					end
-					CNT_REG_ADDR + 32'd3: begin
-						if (data_mask_bus[0]) cnt_reg[31:24] <= data_bus[7:0];
-					end
+					case (addr_base)
+					CTRL_REG_ADDR:	update_reg(ctrl_reg);
+					SRC_REG_ADDR:	update_reg(src_reg);
+					DEST_REG_ADDR:	update_reg(dest_reg);
+					CNT_REG_ADDR:	update_reg(cnt_reg);
 					endcase
+
+					if (addr_base == CTRL_REG_ADDR)
+						process_started <= 1'b1;
 					
 					state <= STATE_WAIT_ACK;
 				end

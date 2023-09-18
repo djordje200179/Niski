@@ -1,6 +1,5 @@
-wire [29:0] addr_base;
-wire [1:0] addr_offset;
-assign {addr_base, addr_offset} = addr_bus;
+wire [31:0] addr_base = {addr_bus[31:2], 2'b00};
+wire [1:0] addr_offset = addr_bus[1:0];
 
 task update_reg(
 	inout [31:0] register

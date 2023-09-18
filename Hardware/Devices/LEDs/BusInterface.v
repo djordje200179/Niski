@@ -9,8 +9,8 @@ module leds_bus_interface (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	parameter CONTROL_REG_ADDR	= 32'h0,
-			  DATA_REG_ADDR		= 32'h4;
+	parameter CTRL_REG_ADDR	= 32'h0,
+			  DATA_REG_ADDR	= 32'h4;
 
 	reg [7:0] ctrl_reg;
 	reg [31:0] data_reg;
@@ -25,8 +25,8 @@ module leds_bus_interface (
 		addr_hit = 1'b0;
 
 		case (addr_base)
-		CONTROL_REG_ADDR >> 2,
-		DATA_REG_ADDR >> 2:    
+		CTRL_REG_ADDR,
+		DATA_REG_ADDR:    
 			addr_hit = 1'b1;
 		endcase
 	end
@@ -40,8 +40,8 @@ module leds_bus_interface (
 	reg [31:0] data_out;
 	always @* begin
 		case (addr_base)
-		CONTROL_REG_ADDR >> 2:	data_out = ctrl_reg;
-		DATA_REG_ADDR >> 2: 	data_out = data_reg;
+		CTRL_REG_ADDR:	data_out = ctrl_reg;
+		DATA_REG_ADDR: 	data_out = data_reg;
 		default: data_out = 32'b0;
 		endcase
 
@@ -69,8 +69,8 @@ module leds_bus_interface (
 				data_written <= 1'b1;
 
 				case (addr_base)
-				CONTROL_REG_ADDR >> 2:	update_reg(ctrl_reg);
-				DATA_REG_ADDR >> 2:		update_reg(data_reg);
+				CTRL_REG_ADDR:	update_reg(ctrl_reg);
+				DATA_REG_ADDR:	update_reg(data_reg);
 				endcase
 			end
 		end

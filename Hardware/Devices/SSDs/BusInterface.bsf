@@ -123,7 +123,7 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"CONTROL_REG_ADDR"
+		"CTRL_REG_ADDR"
 		"0"
 		""
 		(type "PARAMETER_SIGNED_DEC")	)

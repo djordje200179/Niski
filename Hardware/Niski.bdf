@@ -1676,7 +1676,7 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"CONTROL_REG_ADDR"
+		"CTRL_REG_ADDR"
 		"70000010"
 		""
 		(type "PARAMETER_UNSIGNED_HEX")	)
@@ -1786,7 +1786,7 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"CONTROL_REG_ADDR"
+		"CTRL_REG_ADDR"
 		"70000000"
 		""
 		(type "PARAMETER_UNSIGNED_HEX")	)
@@ -1903,7 +1903,7 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"CONTROL_REG_ADDR"
+		"CTRL_REG_ADDR"
 		"70000020"
 		""
 		(type "PARAMETER_UNSIGNED_HEX")	)

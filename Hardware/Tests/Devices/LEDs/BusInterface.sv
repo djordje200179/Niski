@@ -27,7 +27,7 @@ leds_bus_interface dut (
 	.fc_bus(fc_bus)
 );
 
-defparam dut.CONTROL_REG_ADDR = 32'h70000000;
+defparam dut.CTRL_REG_ADDR = 32'h70000000;
 defparam dut.STATUS_REG_ADDR = 32'h70000004;
 defparam dut.DATA_REG_ADDR = 32'h70000008;
 
