@@ -20,19 +20,7 @@ enum exception_type {
 	EXC_TYPE_EXTERNAL_INTERRUPT = 0x01UL << 31 | 0x09
 };
 
-static void syscall_handler() {
-	extern void (*syscalls[])();
-	extern struct kthread* kthread_current;
-
-	uint32_t curr_pc = (uint32_t)(kthread_current->context.pc);
-	curr_pc += 4;
-	kthread_current->context.pc = (void(*))(curr_pc);
-
-	uint32_t syscall_type = kthread_current->context.regs[REG_A7];
-	(syscalls[syscall_type])();
-}
-
-static void illegal_action_handler(enum exception_type type) {
+static void handle_illegal_action(enum exception_type type) {
 	buzzer_on();
 	ssds_on();
 
@@ -43,10 +31,14 @@ static void illegal_action_handler(enum exception_type type) {
 }
 
 void exception_handler(enum exception_type type) {	
+	void handle_syscall();
+	void handle_ext_intr();
+	void handle_timer_interrupt();
+
 	switch (type) {
 	case EXC_TYPE_USER_ECALL:
 	case EXC_TYPE_SUPERVISOR_ECALL:
-		syscall_handler();
+		handle_syscall();
 		break;	
 	case EXC_TYPE_INSTRUCTION_ADDRESS_MISALIGNED:
 	case EXC_TYPE_INSTRUCTION_ACCESS_FAULT:
@@ -55,7 +47,13 @@ void exception_handler(enum exception_type type) {
 	case EXC_TYPE_LOAD_ACCESS_FAULT:
 	case EXC_TYPE_STORE_ADDRESS_MISALIGNED:
 	case EXC_TYPE_STORE_ACCESS_FAULT:
-		illegal_action_handler(type);
+		handle_illegal_action(type);
+		break;
+	case EXC_TYPE_EXTERNAL_INTERRUPT:
+		handle_ext_intr();
+		break;
+	case EXC_TYPE_TIMER_INTERRUPT:
+		handle_timer_interrupt();
 		break;
 	}
 }

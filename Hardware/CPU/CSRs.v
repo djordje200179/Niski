@@ -8,13 +8,13 @@ module cpu_csrs (
 	output reg [31:0] data_out,
 	input wr, 
 	
-	input inst_tick, timer_tick,
+	input inst_tick, timer_tick, ext_intr_tick,
 
-	input exception, exc_leave,
+	input exception, interrupt, exc_leave, 
 	input [31:0] exc_cause, exc_pc, exc_value,
 	output [31:0] exc_handler_addr, exc_continue_addr,
 
-	output intr_allowed,
+	output has_intr,
 	output reg supervisor_mode
 );
 	localparam CYCLE_ADDR		= 12'hC00,
@@ -54,7 +54,20 @@ module cpu_csrs (
 	assign exc_handler_addr = stvec;
 	assign exc_continue_addr = sepc;
 
-	assign intr_allowed = supervisor_mode ? sstatus_sie : 1'b1;
+	wire intr_allowed = supervisor_mode ? sstatus_sie : 1'b1;
+	assign has_intr = |(sip & sie) && intr_allowed;
+
+	task get_available_intr (output [4:0] intr_cause);
+		integer i;
+		begin
+			intr_cause = 5'b0;
+
+			for (i = 0; i < 32; i = i + 1) begin
+				if (sip[i] && sie[i])
+					intr_cause = i;
+			end
+		end
+	endtask
 
 	always @* begin
 		data_out = 32'b0;
@@ -77,6 +90,7 @@ module cpu_csrs (
 		endcase
 	end
 
+
 	initial supervisor_mode = 1'b1;
 
 	task reset;
@@ -84,8 +98,6 @@ module cpu_csrs (
 			cycle_cnt <= 64'h0;
 			time_cnt <= 64'h0;
 			inst_cnt <= 64'h0;
-
-			time_incr_done <= 1'b0;
 
 			supervisor_mode <= 1'b1;
 		end
@@ -108,27 +120,34 @@ module cpu_csrs (
 
 			if (exception) begin
 				sepc <= exc_pc;
-				scause <= exc_cause;
 				stval <= exc_value;
 
 				supervisor_mode <= 1'b1;
 				sstatus[8] <= supervisor_mode;
 				sstatus[5] <= sstatus[1];
 				sstatus[1] <= 1'b0;
+
+				if (interrupt) begin
+					get_available_intr(scause[4:0]);
+					scause[31] <= 1'b0;
+				end else
+					scause <= exc_cause;
 			end else if (exc_leave) begin
 				supervisor_mode <= sstatus_spp;
 				sstatus[1] <= sstatus_spie;
 				sstatus[5] <= 1'b1;
 			end
 
-			if (timer_tick && !time_incr_done) begin
+			if (timer_tick) begin
 				time_cnt <= time_cnt + 32'b1;
-				time_incr_done <= 1'b1;
-			end else if (!timer_tick) 
-				time_incr_done <= 1'b0;
+				sip[5] <= 1'b1;
+			end
 
 			if (inst_tick)
 				inst_cnt <= inst_cnt + 32'b1;
+
+			if (ext_intr_tick)
+				sip[1] <= 1'b1;
 
 			cycle_cnt <= cycle_cnt + 32'b1;
 		end

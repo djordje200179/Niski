@@ -62,8 +62,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 72 176)
 		(input)
-		(text "clk_1_hz" (rect 0 0 56 15)(font "Arial" ))
-		(text "clk_1_hz" (rect 64 96 79 152)(font "Arial" )(vertical))
+		(text "timer_intr" (rect 0 0 61 15)(font "Arial" ))
+		(text "timer_intr" (rect 64 88 79 149)(font "Arial" )(vertical))
 		(line (pt 72 176)(pt 72 159))
 	)
 	(port

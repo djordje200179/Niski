@@ -10,7 +10,7 @@ module cpu#(
 	output reg [3:0] ma_data_mask, 
 	input ma_done, ma_timeout,
 
-	input clk_1_hz, ext_intr
+	input timer_intr, ext_intr
 );
 	wire [9:0] inst_funct;
 	wire [2:0] inst_funct3 = inst_funct[2:0];
@@ -36,13 +36,13 @@ module cpu#(
 	wire csr_wr;
 
 	wire supervisor_mode;
-	wire intr_allowed;
+	wire intr_available;
 
 	wire alignment_overflow;
 
 	wire [31:0] alu_out;
 
-	reg has_exception;
+	reg has_exception, has_interrupt;
 	reg [31:0] exc_cause, exc_pc, exc_value;
 	wire [31:0] exc_handler_addr, exc_continue_addr;
 
@@ -106,15 +106,16 @@ module cpu#(
 		.wr(csr_wr), 
 		
 		.inst_tick(state == STATE_CHECK_EXC),
-		.timer_tick(clk_1_hz),
+		.timer_tick(timer_intr),
+		.ext_intr_tick(ext_intr),
 
-		.exception(has_exception), 
+		.exception(has_exception), .interrupt(has_interrupt),
 		.exc_leave(state == STATE_EXEC_INST && inst_system_sret),
 		.exc_cause(exc_cause),
 		.exc_pc(exc_pc), .exc_value(exc_value),
 		.exc_handler_addr(exc_handler_addr), .exc_continue_addr(exc_continue_addr),
 
-		.intr_allowed(intr_allowed),
+		.has_intr(intr_available),
 		.supervisor_mode(supervisor_mode)
 	);
 
@@ -251,6 +252,16 @@ module cpu#(
 		end
 	endtask
 
+	task raise_interrupt();
+		begin
+			state <= STATE_CHECK_EXC;
+
+			has_exception <= 1'b1;
+			has_interrupt <= 1'b1;
+
+			exc_pc <= pc_changed ? pc : pc + 32'h4;
+		end
+	endtask
 
 	task reset;
 		begin
@@ -260,6 +271,7 @@ module cpu#(
 			pc_changed <= 1'b0;
 
 			has_exception <= 1'b0;
+			has_interrupt <= 1'b0;
 		end
 	endtask
 
@@ -301,27 +313,33 @@ module cpu#(
 					raise_exception(supervisor_mode ? EXC_CAUSE_SUPERVISOR_ECALL : EXC_CAUSE_USER_ECALL, pc);
 				else if (inst_system_csrrw && !csr_addr_allowed)
 					raise_exception(EXC_CAUSE_ILLEGAL_INSTRUCTION, pc);
+				else if (intr_available)
+					raise_interrupt;
 				else state <= STATE_CHECK_EXC;
 
 				if (pc_wr)
-					pc_changed = 1'b1;				
+					pc_changed = 1'b1;
 			end
 			STATE_EXEC_INST_MEM_WAIT: begin
-				if (ma_timeout) begin
-					raise_exception(inst_load ? EXC_CAUSE_LOAD_ACCESS_FAULT : EXC_CAUSE_STORE_ACCESS_FAULT, ma_addr);
+				if (ma_timeout || ma_done) begin
 					ma_rd_req <= 1'b0;
 					ma_wr_req <= 1'b0;
-				end else if (ma_done) begin
-					state <= STATE_CHECK_EXC;
-					ma_rd_req <= 1'b0;
-					ma_wr_req <= 1'b0;
+
+					if (ma_timeout)
+						raise_exception(inst_load ? EXC_CAUSE_LOAD_ACCESS_FAULT : EXC_CAUSE_STORE_ACCESS_FAULT, ma_addr);				
+					else begin
+						state <= STATE_CHECK_EXC;
+
+						if (intr_available)
+							raise_interrupt;
+					end
 				end
 			end
 			STATE_CHECK_EXC: begin
 				state <= STATE_RD_INST_REQ;
 
-				if (has_exception)
-					has_exception <= 1'b0;
+				has_exception <= 1'b0;
+				has_interrupt <= 1'b0;
 			end
 			endcase
 		end

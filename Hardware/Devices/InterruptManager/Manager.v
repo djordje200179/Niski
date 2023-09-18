@@ -97,7 +97,6 @@ module interrupt_manager (
 				data_written <= 1'b1;
 
 				case (addr_base)
-				PENDING_INTR_REG_ADDR:	update_reg(pending_intr_reg);
 				ENABLE_INTR_REG_ADDR:	update_reg(enable_intr_reg);
 				endcase
 			end else if (read_req && addr_base == CLAIM_INTR_REG_ADDR) begin // TODO: check offseted addreses

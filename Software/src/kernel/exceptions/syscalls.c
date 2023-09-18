@@ -298,7 +298,7 @@ static void syscall_ts_set() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
-void (*syscalls[100])() = {
+static void (*syscalls[100])() = {
 	[SYSCALL_TYPE_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_TYPE_MEM_FREE] = syscall_mem_free,
 
@@ -324,3 +324,14 @@ void (*syscalls[100])() = {
 	[SYSCALL_TYPE_TS_GET] = syscall_ts_get,
 	[SYSCALL_TYPE_TS_SET] = syscall_ts_set
 };
+
+void handle_syscall() {
+	extern struct kthread* kthread_current;
+
+	uint32_t curr_pc = (uint32_t)(kthread_current->context.pc);
+	curr_pc += 4;
+	kthread_current->context.pc = (void(*))(curr_pc);
+
+	uint32_t syscall_type = kthread_current->context.regs[REG_A7];
+	(syscalls[syscall_type])();
+}
