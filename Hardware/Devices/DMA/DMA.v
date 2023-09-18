@@ -85,7 +85,11 @@ module dma (
 			CNT_REG_ADDR:	data_out = cnt_reg;
 			endcase
 
-			data_out = data_out >> (8 * addr_offset);
+			case (addr_offset)
+			2'd1: data_out = {8'b0, data_out[31:8]};
+			2'd2: data_out = {16'b0, data_out[31:16]};
+			2'd3: data_out = {24'b0, data_out[31:24]};
+			endcase
 		end
 		STATE_TRANSFER_WRITING: data_out[7:0] = curr_data;
 		endcase
