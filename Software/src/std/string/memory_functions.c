@@ -58,12 +58,9 @@ void* memccpy(void* restrict dest, const void* restrict src, int c, size_t count
 }
 
 void* memmove(void* dest, const void* src, size_t count) {
-	unsigned char* cdest = (unsigned char*)dest;
-	unsigned char* csrc = (unsigned char*)src;
-
-	if (cdest < csrc)
+	if (dest < src)
 		dma_copy((char*)src, (char*)dest, count, false);
-	else if (cdest > csrc)
+	else if (dest > src)
 		dma_rcopy((char*)src, (char*)dest, count, false);
 
 	return dest;
