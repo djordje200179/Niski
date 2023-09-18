@@ -22,7 +22,7 @@ https://fpgasoftware.intel.com/eula.
 (header "symbol" (version "1.2"))
 (symbol
 	(rect 64 64 312 272)
-	(text "cpu_bus_interface" (rect 5 0 145 15)(font "Arial" ))
+	(text "cpu_bus_interface" (rect 5 0 125 15)(font "Arial" ))
 	(text "inst" (rect 8 192 31 207)(font "Arial" ))
 	(port
 		(pt 0 184)
@@ -39,11 +39,11 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 168)(pt 16 168))
 	)
 	(port
-		(pt 152 0)
+		(pt 136 0)
 		(input)
 		(text "bus_grant" (rect 0 0 66 15)(font "Arial" ))
-		(text "bus_grant" (rect 144 25 159 91)(font "Arial" )(vertical))
-		(line (pt 152 0)(pt 152 16))
+		(text "bus_grant" (rect 128 25 143 91)(font "Arial" )(vertical))
+		(line (pt 136 0)(pt 136 16))
 	)
 	(port
 		(pt 248 184)
@@ -88,11 +88,18 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 104)(pt 16 104)(line_width 3))
 	)
 	(port
-		(pt 136 0)
+		(pt 96 208)
+		(input)
+		(text "watchdog" (rect 0 0 62 15)(font "Arial" ))
+		(text "watchdog" (rect 88 121 103 183)(font "Arial" )(vertical))
+		(line (pt 96 208)(pt 96 192))
+	)
+	(port
+		(pt 120 0)
 		(output)
 		(text "bus_req" (rect 0 0 54 15)(font "Arial" ))
-		(text "bus_req" (rect 128 23 143 77)(font "Arial" )(vertical))
-		(line (pt 136 0)(pt 136 16))
+		(text "bus_req" (rect 112 23 127 77)(font "Arial" )(vertical))
+		(line (pt 120 0)(pt 120 15))
 	)
 	(port
 		(pt 248 104)
@@ -135,6 +142,13 @@ https://fpgasoftware.intel.com/eula.
 		(text "done" (rect 0 0 33 15)(font "Arial" ))
 		(text "done" (rect 24 112 57 127)(font "Arial" ))
 		(line (pt 16 120)(pt 0 120))
+	)
+	(port
+		(pt 0 136)
+		(output)
+		(text "timeout" (rect 0 0 48 15)(font "Arial" ))
+		(text "timeout" (rect 24 128 72 143)(font "Arial" ))
+		(line (pt 16 136)(pt 0 136))
 	)
 	(port
 		(pt 248 120)

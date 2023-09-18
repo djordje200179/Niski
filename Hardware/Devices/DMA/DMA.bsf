@@ -46,6 +46,13 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 88 0)(pt 88 16))
 	)
 	(port
+		(pt 56 176)
+		(input)
+		(text "watchdog" (rect 64 119 84 188)(font "Intel Clear" (font_size 8))(vertical))
+		(text "watchdog" (rect 48 88 63 150)(font "Arial" )(vertical))
+		(line (pt 56 176)(pt 56 160))
+	)
+	(port
 		(pt 72 0)
 		(output)
 		(text "bus_req" (rect 0 0 54 15)(font "Arial" ))
@@ -117,5 +124,5 @@ https://fpgasoftware.intel.com/eula.
 	(drawing
 		(rectangle (rect 16 16 208 160))
 	)
-	(annotation_block (parameter)(rect 240 -88 720 16))
+	(annotation_block (parameter)(rect 288 -40 768 64))
 )

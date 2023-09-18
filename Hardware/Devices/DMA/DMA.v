@@ -7,7 +7,9 @@ module dma (
 	inout [31:0] addr_bus, data_bus,
 	inout rd_bus, wr_bus,
 	inout [3:0] data_mask_bus,
-	inout fc_bus
+	inout fc_bus,
+
+	input watchdog
 );
 	parameter CTRL_REG_ADDR	= 32'h0,
 			  SRC_REG_ADDR	= 32'h4,
@@ -195,7 +197,10 @@ module dma (
 					state <= STATE_TRANSFER_READING;
 			end
 			STATE_TRANSFER_READING: begin
-				if (fc_bus) begin
+				if (watchdog) begin
+					bus_req <= 1'b0;
+					state <= STATE_IDLE;
+				end else if (fc_bus) begin
 					curr_data <= data_bus[7:0];
 					state <= STATE_TRANSFER_WRITING;
 
@@ -208,7 +213,10 @@ module dma (
 				end
 			end
 			STATE_TRANSFER_WRITING: begin
-				if (fc_bus) begin
+				if (watchdog) begin
+					bus_req <= 1'b0;
+					state <= STATE_IDLE;
+				end else if (fc_bus) begin
 					if (move_dest) begin
 						if (incr_dest) 
 							dest_reg <= dest_reg + 32'd1;

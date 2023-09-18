@@ -10,7 +10,7 @@ module cpu#(
 	output reg [3:0] ma_data_mask, 
 	input ma_done, ma_timeout,
 
-	input clk_1_hz
+	input clk_1_hz, ext_intr
 );
 	wire [9:0] inst_funct;
 	wire [2:0] inst_funct3 = inst_funct[2:0];

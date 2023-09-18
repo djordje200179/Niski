@@ -10,12 +10,14 @@ module cpu_bus_interface (
 	output [3:0] data_mask_bus,
 	input fc_bus,
 
+	input watchdog,
+
 	input wr_req, rd_req,
 	input [31:0] addr,
 	input [31:0] data_out,
 	output [31:0] data_in,
 	input [3:0] data_mask,
-	output done
+	output reg done, timeout
 );
 	localparam STATE_WAITING_REQ = 2'd0,
 			   STATE_WAITING_BUS = 2'd1,
@@ -34,13 +36,15 @@ module cpu_bus_interface (
 		   wr_bus = bus_grant ? is_wr : 1'bz,
 		   data_mask_bus = bus_grant ? mdr_mask : 4'bz;
 
-	assign done = state == STATE_DONE,
-		   data_in = mdr;
+	assign data_in = mdr;
 
 	task reset;
 		begin
 			state <= STATE_WAITING_REQ;
 			bus_req <= 1'b0;
+
+			done <= 1'b0;
+			timeout <= 1'b0;
 		end
 	endtask
 
@@ -64,8 +68,14 @@ module cpu_bus_interface (
 					state <= STATE_WAITING_ACK;
 			end
 			STATE_WAITING_ACK: begin
-				if (fc_bus) begin
+				if (watchdog) begin
 					state <= STATE_DONE;
+					timeout <= 1'b1;
+
+					bus_req <= 1'b0;
+				end else if (fc_bus) begin
+					state <= STATE_DONE;
+					done <= 1'b1;
 
 					bus_req <= 1'b0;
 					if (!is_wr)
@@ -73,8 +83,11 @@ module cpu_bus_interface (
 				end
 			end
 			STATE_DONE: begin
-				if (!rd_req && !wr_req)
+				if (!rd_req && !wr_req) begin
 					state <= STATE_WAITING_REQ;
+					done <= 1'b0;
+					timeout <= 1'b0;
+				end
 			end
 			endcase
 		end
