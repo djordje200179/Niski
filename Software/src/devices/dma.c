@@ -14,26 +14,9 @@ void dma_transfer(
 		return;
 		
 	uint8_t ctrl = 0;
-
-	switch (src_addr_mode) {
-	case DMA_ADDRESS_INCREMENT:
-		ctrl |= 0b1100;
-	case DMA_ADDRESS_DECREMENT:
-		ctrl |= 0b1000;
-		break;
-	}
-
-	switch (dest_addr_mode) {
-	case DMA_ADDRESS_INCREMENT:
-		ctrl |= 0b0011;
-		break;
-	case DMA_ADDRESS_DECREMENT:
-		ctrl |= 0b0010;
-		break;
-	}
-
-	if (burst_mode)
-		ctrl |= 0b00010000;
+	ctrl |= src_addr_mode << 2;
+	ctrl |= dest_addr_mode;
+	ctrl |= burst_mode << 4;
 
 	DMA_SRC_REG = src;
 	DMA_DEST_REG = dest;

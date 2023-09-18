@@ -4,9 +4,9 @@
 #include <stddef.h>
 
 enum dma_addressing_mode {
-	DMA_ADDRESS_FIXED,
-	DMA_ADDRESS_INCREMENT,
-	DMA_ADDRESS_DECREMENT
+	DMA_ADDRESS_FIXED 		= 0b00,
+	DMA_ADDRESS_INCREMENT	= 0b11,
+	DMA_ADDRESS_DECREMENT	= 0b10
 };
 
 void dma_transfer(
