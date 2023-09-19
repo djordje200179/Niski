@@ -12,6 +12,7 @@ module niski_tb;
 	wire [3:0] ssds_select;
 	wire lcd_rs, lcd_rw, lcd_e;
 	wire [7:0] lcd_data;
+	reg clk_1_hz = 1'b0;
 
 	`include "NiskiDUT.v"
 	niski_dut dut (
@@ -26,13 +27,21 @@ module niski_tb;
 		.LCD_RS_PIN(lcd_rs),
 		.LCD_RW_PIN(lcd_rw),
 		.LCD_E_PIN(lcd_e),
-		.LCD_DATA_PINS(lcd_data)
+		.LCD_DATA_PINS(lcd_data),
+
+		.clk_1_hz(clk_1_hz)
 	);
 
 	initial begin
 		$stop;
-		wait (dut.b2v_inst25.pc == 32'h4000144c);
-		#10000;
+		#500;
+		clk_1_hz = 1'b1;
+		#25;
+		clk_1_hz = 1'b0;
+		
+		wait (dut.b2v_inst25.csrs.supervisor_mode == 1'b0);
+		#1000;
+		
 		$stop;
 	end
 

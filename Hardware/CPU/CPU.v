@@ -36,13 +36,15 @@ module cpu#(
 	wire csr_wr;
 
 	wire supervisor_mode;
+
 	wire intr_available;
+	wire [4:0] intr_index;
 
 	wire alignment_overflow;
 
 	wire [31:0] alu_out;
 
-	reg has_exception, has_interrupt;
+	reg has_exception;
 	reg [31:0] exc_cause, exc_pc, exc_value;
 	wire [31:0] exc_handler_addr, exc_continue_addr;
 
@@ -109,13 +111,13 @@ module cpu#(
 		.timer_tick(timer_intr),
 		.ext_intr_tick(ext_intr),
 
-		.exception(has_exception), .interrupt(has_interrupt),
+		.exception(has_exception),
 		.exc_leave(state == STATE_EXEC_INST && inst_system_sret),
 		.exc_cause(exc_cause),
 		.exc_pc(exc_pc), .exc_value(exc_value),
 		.exc_handler_addr(exc_handler_addr), .exc_continue_addr(exc_continue_addr),
 
-		.has_intr(intr_available),
+		.has_intr(intr_available), .intr_index(intr_index),
 		.supervisor_mode(supervisor_mode)
 	);
 
@@ -257,8 +259,7 @@ module cpu#(
 			state <= STATE_CHECK_EXC;
 
 			has_exception <= 1'b1;
-			has_interrupt <= 1'b1;
-
+			exc_cause <= intr_index | (32'b1 << 31);
 			exc_pc <= pc_changed ? pc : pc + 32'h4;
 		end
 	endtask
@@ -268,10 +269,9 @@ module cpu#(
 			state <= STATE_RD_INST_REQ;
 			ma_wr_req <= 1'b0;
 			ma_rd_req <= 1'b0;
-			pc_changed <= 1'b0;
 
+			pc_changed <= 1'b0;
 			has_exception <= 1'b0;
-			has_interrupt <= 1'b0;
 		end
 	endtask
 
@@ -279,13 +279,11 @@ module cpu#(
 		begin
 			case (state)
 			STATE_RD_INST_REQ: begin
-				pc_changed <= 1'b0;
-
 				if (!alignment_overflow) begin
 					state <= STATE_RD_INST_WAIT;
 					ma_rd_req <= 1'b1;
 				end else
-					raise_exception(EXC_CAUSE_INSTRUCTION_ADDRESS_MISALIGNED, pc);	
+					raise_exception(EXC_CAUSE_INSTRUCTION_ADDR_MISALIGNED, pc);	
 			end
 			STATE_RD_INST_WAIT: begin
 				if (ma_timeout) begin
@@ -302,13 +300,13 @@ module cpu#(
 						state <= STATE_EXEC_INST_MEM_WAIT;
 						ma_rd_req <= 1'b1;
 					end else
-						raise_exception(EXC_CAUSE_LOAD_ADDRESS_MISALIGNED, ma_addr);
+						raise_exception(EXC_CAUSE_LOAD_ADDR_MISALIGNED, ma_addr);
 				end else if (inst_store) begin
 					if (!alignment_overflow) begin
 						state <= STATE_EXEC_INST_MEM_WAIT;
 						ma_wr_req <= 1'b1;
 					end else
-						raise_exception(EXC_CAUSE_STORE_ADDRESS_MISALIGNED, ma_addr);
+						raise_exception(EXC_CAUSE_STORE_ADDR_MISALIGNED, ma_addr);
 				end else if (inst_system_ecall)
 					raise_exception(supervisor_mode ? EXC_CAUSE_SUPERVISOR_ECALL : EXC_CAUSE_USER_ECALL, pc);
 				else if (inst_system_csrrw && !csr_addr_allowed)
@@ -339,7 +337,7 @@ module cpu#(
 				state <= STATE_RD_INST_REQ;
 
 				has_exception <= 1'b0;
-				has_interrupt <= 1'b0;
+				pc_changed <= 1'b0;
 			end
 			endcase
 		end

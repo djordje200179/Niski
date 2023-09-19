@@ -39,5 +39,5 @@ void main() {
 
 	puts("Thread created.");
 
-	ssds_set_dec_number(1234);
+	//ssds_set_dec_number(1234);
 }
