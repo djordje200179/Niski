@@ -1,5 +1,4 @@
-.global time
-.global clock
+.global time, clock
 
 .text
 time:

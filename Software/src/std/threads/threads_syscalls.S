@@ -3,11 +3,13 @@
 .global cnd_init, cnd_signal, cnd_broadcast, cnd_wait, cnd_destroy
 .global tss_create, tss_get, tss_set, tss_delete
 
+#include "kernel/syscalls.h"
+
 .extern kthread_current
 
 .text
 thrd_create:
-	li a7, 0x11
+	li a7, SYSCALL_THREAD_CREATE
 	ecall
 	ret
 
@@ -21,88 +23,88 @@ thrd_current:
 	ret
 
 thrd_yield:
-	li a7, 0x13
+	li a7, SYSCALL_THREAD_DISPATCH
 	ecall
 	ret
 
 thrd_exit:
-	li a7, 0x12
+	li a7, SYSCALL_THREAD_EXIT
 	ecall
 
 mtx_init:
-	li a7, 0x21
+	li a7, SYSCALL_MUTEX_CREATE
 	ecall
 	ret
 
 mtx_lock:
 	lw a0, 0(a0)
-	li a7, 0x22
+	li a7, SYSCALL_MUTEX_LOCK
 	ecall
 	ret
 
 mtx_unlock:
 	lw a0, 0(a0)
-	li a7, 0x23
+	li a7, SYSCALL_MUTEX_UNLOCK
 	ecall
 	ret
 
 mtx_destroy:
 	lw a0, 0(a0)
-	li a7, 0x24
+	li a7, SYSCALL_MUTEX_DESTROY
 	ecall
 	ret
 
 mtx_trylock:
 	lw a0, 0(a0)
-	li a7, 0x25
+	li a7, SYSCALL_MUTEX_TRY_LOCK
 	ecall
 	ret
 
 cnd_init:
-	li a7, 0x31
+	li a7, SYSCALL_CONDITION_CREATE
 	ecall
 	ret
 
 cnd_signal:
 	lw a0, 0(a0)
-	li a7, 0x32
+	li a7, SYSCALL_CONDITION_SIGNAL
 	ecall
 	ret
 
 cnd_broadcast:
 	lw a0, 0(a0)
-	li a7, 0x33
+	li a7, SYSCALL_CONDITION_SIGNAL_ALL
 	ecall
 	ret
 
 cnd_wait:
 	lw a0, 0(a0)
-	li a7, 0x34
+	li a7, SYSCALL_CONDITION_WAIT
 	ecall
 	ret
 
 cnd_destroy:
 	lw a0, 0(a0)
-	li a7, 0x35
+	li a7, SYSCALL_CONDITION_DESTROY
 	ecall
 	ret
 
 tss_create:
-	li a7, 0x41
+	li a7, SYSCALL_TS_CREATE
 	ecall
 	ret
 
 tss_get:
-	li a7, 0x43
+	li a7, SYSCALL_TS_GET
 	ecall
 	ret
 
 tss_set:
-	li a7, 0x44
+	li a7, SYSCALL_TS_SET
 	ecall
 	ret
 
 tss_delete:
-	li a7, 0x42
+	li a7, SYSCALL_TS_CREATE
 	ecall
 	ret

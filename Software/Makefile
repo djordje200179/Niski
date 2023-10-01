@@ -92,6 +92,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S
 %.d: %.c
 	@$(GCC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
 
+%.d: %.S
+	@$(GCC) -MM -MT $(OBJ_DIR)/$*.o $< $(CC_FLAGS) > $@
+
 include $(DEP)
 
 .PHONY: clean all

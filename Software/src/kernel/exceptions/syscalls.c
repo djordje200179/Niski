@@ -4,33 +4,7 @@
 #include "kernel/sync/condition.h"
 #include "kernel/sync/thread_local.h"
 #include "kernel/sync/scheduler.h"
-
-enum syscall_type {
-	SYSCALL_TYPE_MEM_ALLOC = 0x01,
-	SYSCALL_TYPE_MEM_FREE = 0x02,
-
-	SYSCALL_TYPE_THREAD_CREATE = 0x11,
-	SYSCALL_TYPE_THREAD_EXIT = 0x12,
-	SYSCALL_TYPE_THREAD_DISPATCH = 0x13,
-	SYSCALL_TYPE_THREAD_JOIN = 0x14,
-
-	SYSCALL_TYPE_MUTEX_CREATE = 0x21,
-	SYSCALL_TYPE_MUTEX_LOCK = 0x22,
-	SYSCALL_TYPE_MUTEX_UNLOCK = 0x23,
-	SYSCALL_TYPE_MUTEX_DESTROY = 0x24,
-	SYSCALL_TYPE_MUTEX_TRY_LOCK = 0x25,
-
-	SYSCALL_TYPE_CONDITION_CREATE = 0x31,
-	SYSCALL_TYPE_CONDITION_WAIT = 0x32,
-	SYSCALL_TYPE_CONDITION_SIGNAL = 0x33,
-	SYSCALL_TYPE_CONDITION_SIGNAL_ALL = 0x34,
-	SYSACLL_TYPE_CONDITION_DESTROY = 0x35,
-
-	SYSCALL_TYPE_TS_CREATE = 0x41,
-	SYSCALL_TYPE_TS_DESTROY = 0x42,
-	SYSCALL_TYPE_TS_GET = 0x43,
-	SYSCALL_TYPE_TS_SET = 0x44
-};
+#include "kernel/syscalls.h"
 
 #define GET_PARAM(index, type) (type)(kthread_current->context.regs[REG_A ## index])
 #define SET_RET_VALUE(value) kthread_current->context.regs[REG_A0] = (uint32_t)value
@@ -299,30 +273,30 @@ static void syscall_ts_set() {
 }
 
 static void (*syscalls[100])() = {
-	[SYSCALL_TYPE_MEM_ALLOC] = syscall_mem_alloc,
-	[SYSCALL_TYPE_MEM_FREE] = syscall_mem_free,
+	[SYSCALL_MEM_ALLOC] = syscall_mem_alloc,
+	[SYSCALL_MEM_FREE] = syscall_mem_free,
 
-	[SYSCALL_TYPE_THREAD_CREATE] = syscall_thread_create,
-	[SYSCALL_TYPE_THREAD_EXIT] = syscall_thread_exit,
-	[SYSCALL_TYPE_THREAD_DISPATCH] = kthread_dispatch,
-	[SYSCALL_TYPE_THREAD_JOIN] = syscall_thread_join,
+	[SYSCALL_THREAD_CREATE] = syscall_thread_create,
+	[SYSCALL_THREAD_EXIT] = syscall_thread_exit,
+	[SYSCALL_THREAD_DISPATCH] = kthread_dispatch,
+	[SYSCALL_THREAD_JOIN] = syscall_thread_join,
 
-	[SYSCALL_TYPE_MUTEX_CREATE] = syscall_mutex_create,
-	[SYSCALL_TYPE_MUTEX_LOCK] = syscall_mutex_lock,
-	[SYSCALL_TYPE_MUTEX_UNLOCK] = syscall_mutex_unlock,
-	[SYSCALL_TYPE_MUTEX_DESTROY] = syscall_mutex_destroy,
-	[SYSCALL_TYPE_MUTEX_TRY_LOCK] = syscall_mutex_try_lock,
+	[SYSCALL_MUTEX_CREATE] = syscall_mutex_create,
+	[SYSCALL_MUTEX_LOCK] = syscall_mutex_lock,
+	[SYSCALL_MUTEX_UNLOCK] = syscall_mutex_unlock,
+	[SYSCALL_MUTEX_DESTROY] = syscall_mutex_destroy,
+	[SYSCALL_MUTEX_TRY_LOCK] = syscall_mutex_try_lock,
 
-	[SYSCALL_TYPE_CONDITION_CREATE] = syscall_cond_create,
-	[SYSCALL_TYPE_CONDITION_WAIT] = syscall_cond_wait,
-	[SYSCALL_TYPE_CONDITION_SIGNAL] = syscall_cond_signal,
-	[SYSCALL_TYPE_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
-	[SYSACLL_TYPE_CONDITION_DESTROY] = syscall_cond_destroy,
+	[SYSCALL_CONDITION_CREATE] = syscall_cond_create,
+	[SYSCALL_CONDITION_WAIT] = syscall_cond_wait,
+	[SYSCALL_CONDITION_SIGNAL] = syscall_cond_signal,
+	[SYSCALL_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
+	[SYSCALL_CONDITION_DESTROY] = syscall_cond_destroy,
 
-	[SYSCALL_TYPE_TS_CREATE] = syscall_ts_create,
-	[SYSCALL_TYPE_TS_DESTROY] = syscall_ts_destroy,
-	[SYSCALL_TYPE_TS_GET] = syscall_ts_get,
-	[SYSCALL_TYPE_TS_SET] = syscall_ts_set
+	[SYSCALL_TS_CREATE] = syscall_ts_create,
+	[SYSCALL_TS_DESTROY] = syscall_ts_destroy,
+	[SYSCALL_TS_GET] = syscall_ts_get,
+	[SYSCALL_TS_SET] = syscall_ts_set
 };
 
 void handle_syscall() {

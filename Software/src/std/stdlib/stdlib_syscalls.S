@@ -1,13 +1,14 @@
-.global malloc
-.global free
+.global malloc, free
+
+#include "kernel/syscalls.h"
 
 .text
 malloc:
-	li a7, 0x01
+	li a7, SYSCALL_MEM_ALLOC
 	ecall
 	ret
 
 free:
-	li a7, 0x02
+	li a7, SYSCALL_MEM_FREE
 	ecall
 	ret
