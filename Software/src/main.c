@@ -34,6 +34,8 @@ void main() {
 	
 	puts("Main started.\n");
 
+	ssds_set_dec_number(1234);
+
 	thrd_t handle;
 	thrd_create(&handle, faulty_thread, NULL);
 

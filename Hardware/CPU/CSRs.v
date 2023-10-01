@@ -42,7 +42,6 @@ module cpu_csrs (
 	// TODO: Add scounteren, senvcfg, scontext, satp
 
 	reg [63:0] cycle_cnt, time_cnt, inst_cnt;
-	reg time_incr_done;
 	
 	assign addr_allowed = addr[9:8] == 2'b01 ? supervisor_mode : 1'b1;
 
@@ -88,7 +87,6 @@ module cpu_csrs (
 		endcase
 	end
 
-
 	initial supervisor_mode = 1'b1;
 
 	task reset;
@@ -98,6 +96,7 @@ module cpu_csrs (
 			inst_cnt <= 64'h0;
 
 			supervisor_mode <= 1'b1;
+			sip <= 32'b0;
 		end
 	endtask
 
