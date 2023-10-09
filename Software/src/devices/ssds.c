@@ -33,7 +33,7 @@ void ssds_set_digit(uint8_t digit, unsigned char value) {
 	SSDS_DATA_DIGITS_ARRAY[digit] = value;
 }
 
-void __attribute__((optimize("O0"))) ssds_set_dec_number(short number) {
+void ssds_set_dec_number(short number) {
 	uint32_t value = 0;
 	for (uint8_t i = 0; i < 4; i++) {
 		uint16_t digit = number % 10;

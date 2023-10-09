@@ -12,10 +12,14 @@ module cpu#(
 
 	input timer_intr, ext_intr
 );
-	wire [9:0] inst_funct;
+	wire [9:0] inst_funct_in;
+	wire [4:0] inst_rd_in, inst_rs1_in, inst_rs2_in;
+	wire [31:0] inst_imm_in;
+
+	reg [9:0] inst_funct;
 	wire [2:0] inst_funct3 = inst_funct[2:0];
-	wire [4:0] inst_rd, inst_rs1, inst_rs2;
-	wire [31:0] inst_imm;
+	reg [4:0] inst_rd, inst_rs1, inst_rs2;
+	reg [31:0] inst_imm;
 	wire inst_lui, inst_auipc, inst_jal, inst_jalr, inst_branch, inst_load, 
 		 inst_store, inst_arlog_imm, inst_arlog, inst_misc_mem, 
 		 inst_system_ecall, inst_system_sret, inst_system_csrrw;
@@ -51,9 +55,10 @@ module cpu#(
 	reg [2:0] state;
 	localparam STATE_RD_INST_REQ = 3'd0,
 			   STATE_RD_INST_WAIT = 3'd1,
-			   STATE_EXEC_INST	= 3'd2,
-			   STATE_EXEC_INST_MEM_WAIT = 3'd3,
-			   STATE_CHECK_EXC	= 3'd4;
+			   STATE_DECODE_INST = 3'd2,
+			   STATE_EXEC_INST	= 3'd3,
+			   STATE_EXEC_INST_MEM_WAIT = 3'd4,
+			   STATE_CHECK_EXC	= 3'd5;
 
 	cpu_pc_reg pc_reg_unit (
 		.clk(clk), .rst(rst),
@@ -69,9 +74,9 @@ module cpu#(
 		.data_in(ma_data_in), 
 		.wr(state == STATE_RD_INST_WAIT && ma_done),
 
-		.funct(inst_funct),
-		.rd(inst_rd), .rs1(inst_rs1), .rs2(inst_rs2),
-		.imm(inst_imm),
+		.funct(inst_funct_in),
+		.rd(inst_rd_in), .rs1(inst_rs1_in), .rs2(inst_rs2_in),
+		.imm(inst_imm_in),
 		
 		.inst_lui(inst_lui), .inst_auipc(inst_auipc), 
 		.inst_jal(inst_jal), .inst_jalr(inst_jalr),
@@ -290,9 +295,18 @@ module cpu#(
 					raise_exception(EXC_CAUSE_INSTRUCTION_ACCESS_FAULT, pc);
 					ma_rd_req <= 1'b0;
 				end else if (ma_done) begin
-					state <= STATE_EXEC_INST;
+					state <= STATE_DECODE_INST;
 					ma_rd_req <= 1'b0;
 				end
+			end
+			STATE_DECODE_INST: begin
+				state <= STATE_EXEC_INST;
+
+				inst_funct = inst_funct_in;
+				inst_rd = inst_rd_in;
+				inst_rs1 = inst_rs1_in;
+				inst_rs2 = inst_rs2_in;
+				inst_imm = inst_imm_in;
 			end
 			STATE_EXEC_INST: begin
 				if (inst_load) begin

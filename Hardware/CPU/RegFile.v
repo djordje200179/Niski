@@ -20,7 +20,7 @@ module cpu_reg_file#(
 	assign data_rd2 = |addr_rd2 ? registers.regs[addr_rd2] : 32'b0;
 
 	always @(posedge clk) begin
-		if (wr && |addr_wr)
+		if (wr)
 			registers.regs[addr_wr] <= data_wr;
 	end	
 endmodule
