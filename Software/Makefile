@@ -15,7 +15,7 @@ TOOL_PREFIX = riscv64-unknown-elf-
 
 GCC = $(TOOL_PREFIX)gcc
 
-GCC_FLAGS = -march=rv32im -mabi=ilp32 -mno-div
+GCC_FLAGS = -march=rv32em -mabi=ilp32e -mno-div
 GCC_FLAGS += --no-pic
 GCC_FLAGS += -std=c2x -ffreestanding -nostdlib
 
@@ -27,7 +27,6 @@ CC_FLAGS += -Werror-implicit-function-declaration
 CC_FLAGS += -mstrict-align
 CC_FLAGS += -mriscv-attribute
 CC_FLAGS += -fno-zero-initialized-in-bss
-CC_FLAGS += -fstack-usage
 
 LD_SCRIPT = linker.ld
 LD_LIBS = -lgcc

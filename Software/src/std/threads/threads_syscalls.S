@@ -9,7 +9,7 @@
 
 .text
 thrd_create:
-	li a7, SYSCALL_THREAD_CREATE
+	li a5, SYSCALL_THREAD_CREATE
 	ecall
 	ret
 
@@ -23,88 +23,88 @@ thrd_current:
 	ret
 
 thrd_yield:
-	li a7, SYSCALL_THREAD_DISPATCH
+	li a5, SYSCALL_THREAD_DISPATCH
 	ecall
 	ret
 
 thrd_exit:
-	li a7, SYSCALL_THREAD_EXIT
+	li a5, SYSCALL_THREAD_EXIT
 	ecall
 
 mtx_init:
-	li a7, SYSCALL_MUTEX_CREATE
+	li a5, SYSCALL_MUTEX_CREATE
 	ecall
 	ret
 
 mtx_lock:
 	lw a0, 0(a0)
-	li a7, SYSCALL_MUTEX_LOCK
+	li a5, SYSCALL_MUTEX_LOCK
 	ecall
 	ret
 
 mtx_unlock:
 	lw a0, 0(a0)
-	li a7, SYSCALL_MUTEX_UNLOCK
+	li a5, SYSCALL_MUTEX_UNLOCK
 	ecall
 	ret
 
 mtx_destroy:
 	lw a0, 0(a0)
-	li a7, SYSCALL_MUTEX_DESTROY
+	li a5, SYSCALL_MUTEX_DESTROY
 	ecall
 	ret
 
 mtx_trylock:
 	lw a0, 0(a0)
-	li a7, SYSCALL_MUTEX_TRY_LOCK
+	li a5, SYSCALL_MUTEX_TRY_LOCK
 	ecall
 	ret
 
 cnd_init:
-	li a7, SYSCALL_CONDITION_CREATE
+	li a5, SYSCALL_CONDITION_CREATE
 	ecall
 	ret
 
 cnd_signal:
 	lw a0, 0(a0)
-	li a7, SYSCALL_CONDITION_SIGNAL
+	li a5, SYSCALL_CONDITION_SIGNAL
 	ecall
 	ret
 
 cnd_broadcast:
 	lw a0, 0(a0)
-	li a7, SYSCALL_CONDITION_SIGNAL_ALL
+	li a5, SYSCALL_CONDITION_SIGNAL_ALL
 	ecall
 	ret
 
 cnd_wait:
 	lw a0, 0(a0)
-	li a7, SYSCALL_CONDITION_WAIT
+	li a5, SYSCALL_CONDITION_WAIT
 	ecall
 	ret
 
 cnd_destroy:
 	lw a0, 0(a0)
-	li a7, SYSCALL_CONDITION_DESTROY
+	li a5, SYSCALL_CONDITION_DESTROY
 	ecall
 	ret
 
 tss_create:
-	li a7, SYSCALL_TS_CREATE
+	li a5, SYSCALL_TS_CREATE
 	ecall
 	ret
 
 tss_get:
-	li a7, SYSCALL_TS_GET
+	li a5, SYSCALL_TS_GET
 	ecall
 	ret
 
 tss_set:
-	li a7, SYSCALL_TS_SET
+	li a5, SYSCALL_TS_SET
 	ecall
 	ret
 
 tss_delete:
-	li a7, SYSCALL_TS_CREATE
+	li a5, SYSCALL_TS_CREATE
 	ecall
 	ret

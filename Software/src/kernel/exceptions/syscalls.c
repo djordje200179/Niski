@@ -306,6 +306,6 @@ void handle_syscall() {
 	curr_pc += 4;
 	kthread_current->context.pc = (void(*))(curr_pc);
 
-	uint32_t syscall_type = kthread_current->context.regs[REG_A7];
+	uint32_t syscall_type = kthread_current->context.regs[REG_A5];
 	(syscalls[syscall_type])();
 }

@@ -16,7 +16,7 @@ enum cpu_reg {
 
 struct kthread {
 	struct kcontext {
-		uint32_t regs[32];
+		uint32_t regs[16];
 		uint32_t status;
 
 		void (*pc)();

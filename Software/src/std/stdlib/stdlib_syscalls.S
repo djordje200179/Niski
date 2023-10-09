@@ -4,11 +4,11 @@
 
 .text
 malloc:
-	li a7, SYSCALL_MEM_ALLOC
+	li a5, SYSCALL_MEM_ALLOC
 	ecall
 	ret
 
 free:
-	li a7, SYSCALL_MEM_FREE
+	li a5, SYSCALL_MEM_FREE
 	ecall
 	ret

@@ -3,7 +3,7 @@
 .extern kthread_current
 .extern thrd_exit
 
-.equ KTHREAD_FUNCTION_OFFSET, 32 * 4 + 4 + 4
+.equ KTHREAD_FUNCTION_OFFSET, 16 * 4 + 4 + 4
 .equ KTHREAD_ARG_OFFSET, KTHREAD_FUNCTION_OFFSET + 4
 
 .text

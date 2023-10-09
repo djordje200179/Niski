@@ -41,5 +41,11 @@ void main() {
 
 	puts("Thread created.");
 
-	//ssds_set_dec_number(1234);
+	thrd_yield();
+
+	for (int i = 0; i < 10000; i++) {
+		for (volatile int j = 0; j < 200000; j++);
+
+		ssds_set_dec_number(i);
+	}
 }

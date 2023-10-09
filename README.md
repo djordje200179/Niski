@@ -35,17 +35,14 @@ This realization led me to opt for RISC-V, a versatile architecture that permits
 the addition of extensions.
 
 I specifically selected the 32-bit version due to limited available memory, 
-which will never exceed 4GB. 
-At first, I used the E (embedded) version with 16 registers. 
-However, I later concluded that the additional hardware resources 
-required for 32 registers were well justified, prompting me to make the switch. 
+which will never exceed 4GB.
 Currently, the processor partially supports the M extension, 
 providing hardware multiplication capabilities, while division operations 
 rely on the GCC library.
 To ensure seamless compatibility with operating systems, the Zicsr extension 
 was also essential, and I successfully implemented it."
 
-Because of the above, the current name of the architecture is **RV32IMZicsr**.
+Because of the above, the current name of the architecture is **RV32EMZicsr**.
 ![FPGA Board](riscv.png)
 
 ### Memory
