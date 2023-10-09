@@ -34,13 +34,8 @@ module niski_tb;
 
 	initial begin
 		$stop;
-		#5000;
-		clk_1_hz = 1'b1;
-		#25;
-		clk_1_hz = 1'b0;
 		
-		wait (dut.b2v_inst25.pc == 32'h40000b64);
-		#1000;
+		#42000;
 		
 		$stop;
 	end

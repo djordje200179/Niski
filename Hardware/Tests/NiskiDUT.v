@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Tue Sep 19 00:10:42 2023"
+// CREATED		"Sun Oct  1 17:00:23 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -364,7 +364,7 @@ cpu	b2v_inst25(
 	.ma_data_mask(SYNTHESIZED_WIRE_37),
 	.ma_data_out(SYNTHESIZED_WIRE_38));
 	defparam	b2v_inst25.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
-	defparam	b2v_inst25.MORE_REGISTERS = 1'b1;
+	defparam	b2v_inst25.MORE_REGISTERS = 1'b0;
 
 
 dma	b2v_inst26(

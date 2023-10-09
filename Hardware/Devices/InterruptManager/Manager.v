@@ -17,9 +17,12 @@ module interrupt_manager (
 	reg [15:0] pending_intr_reg;
 	reg [15:0] enable_intr_reg;
 
-	task get_claimable_intr (output [3:0] intr_code);
+	task automatic get_claimable_intr (output [3:0] intr_code);
 		integer i;
+		
 		begin
+			intr_code = 4'b0;
+			
 			for (i = 0; i < 16; i = i + 1) begin
 				if (pending_intr_reg[i] && enable_intr_reg[i])
 					intr_code = i;
