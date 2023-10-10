@@ -4,7 +4,4 @@
 void init() {
 	kheap_init();
 	lcd_init();
-
-	void main();
-	main();
 }

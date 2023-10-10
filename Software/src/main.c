@@ -40,12 +40,4 @@ void main() {
 	thrd_create(&handle, faulty_thread, NULL);
 
 	puts("Thread created.");
-
-	thrd_yield();
-
-	for (int i = 0; i < 10000; i++) {
-		for (volatile int j = 0; j < 200000; j++);
-
-		ssds_set_dec_number(i);
-	}
 }
