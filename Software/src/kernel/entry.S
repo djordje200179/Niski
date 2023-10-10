@@ -2,14 +2,12 @@
 
 .extern init, trap
 .extern thrd_yield
-.extern main
 
-.extern MAIN_THREAD_STACK_END, MAIN_THREAD_TDATA_START, DATA_START
+.extern KERNEL_STACK_END, DATA_START
 
 .text
 entry:
-	la sp, MAIN_THREAD_STACK_END
-	la tp, MAIN_THREAD_TDATA_START
+	la sp, KERNEL_STACK_END
 	la gp, DATA_START
 
 	la a0, trap
@@ -21,11 +19,7 @@ entry:
 	csrwi sstatus, 0
 
 	call init
-
-	la a0, main
-	csrw sepc, a0
-	la ra, spin
-	sret
+	
 spin:
 	call thrd_yield
 	j spin

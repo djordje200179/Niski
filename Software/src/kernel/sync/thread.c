@@ -79,15 +79,17 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 }
 
 void kthread_dispatch() {
-	struct kthread* old_thread = kthread_current;
+	struct kthread* prev_thread = kthread_current;
 
-	if (old_thread && old_thread->state != KTHREAD_STATE_BLOCKED)
-		kscheduler_enqueue(old_thread);
+	if (prev_thread && prev_thread->state != KTHREAD_STATE_BLOCKED && prev_thread != &kthread_main)
+		kscheduler_enqueue(prev_thread);
 		
-	struct kthread* new_thread = kscheduler_dequeue();
+	struct kthread* next_thread = kscheduler_dequeue();
+	if (!next_thread)
+		next_thread = &kthread_main;
 
-	kthread_current = new_thread;
-	new_thread->state = KTHREAD_STATE_RUNNING;
+	kthread_current = next_thread;
+	next_thread->state = KTHREAD_STATE_RUNNING;
 }
 
 static void kthread_clean_td(struct kthread* thread) {

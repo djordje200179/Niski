@@ -13,19 +13,23 @@ static void calculate_faulty() {
 	errno = 1;
 }
 
-int faulty_thread(void* arg) {
+int first_thread(void* arg) {
+	calculate_ok();
 	leds_set_single(0, errno == 0);
 
-	calculate_ok();
+	calculate_faulty();
 	leds_set_single(1, errno == 0);
 
-	calculate_faulty();
+	calculate_ok();
 	leds_set_single(2, errno == 0);
 
-	calculate_ok();
-	leds_set_single(3, errno == 0);
-
 	return 0;
+}
+
+int second_thread(void* arg) {
+	leds_set_single(0, true);
+
+	while(true);
 }
 
 void main() {
@@ -36,8 +40,9 @@ void main() {
 
 	ssds_set_dec_number(1234);
 
-	thrd_t handle;
-	thrd_create(&handle, faulty_thread, NULL);
+	thrd_t handles[2];
+	thrd_create(&handles[0], first_thread, NULL);
+	thrd_create(&handles[1], second_thread, NULL);
 
-	puts("Thread created.");
+	puts("Threads created.");
 }

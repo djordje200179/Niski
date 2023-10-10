@@ -2,11 +2,7 @@
 
 .extern trap_handler
 .extern kthread_current
-
-.bss
-.align 4
-.space 0x1000
-kernel_stack:
+.extern KERNEL_STACK_END
 
 .text
 .align 2
@@ -24,7 +20,7 @@ trap:
 	csrr x14, sepc
 	sw x14, (16 + 1) * 4 (x15)
 
-	la sp, kernel_stack
+	la sp, KERNEL_STACK_END
 
 	csrr a0, scause
 	call exception_handler

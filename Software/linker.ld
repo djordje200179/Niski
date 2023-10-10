@@ -47,21 +47,9 @@ SECTIONS {
 		. = ALIGN(4);
 	} > RAM
 
-	.ram.tbss : {
-		MAIN_THREAD_TDATA_START = .;
-		*(.tbss*)
-		. = ALIGN(4);
-	} > RAM
-
-	.ram.tdata : {
-		*(.tdata*)
-		. = ALIGN(4);
-	} > RAM
-
 	. = ALIGN(16);
-	MAIN_THREAD_STACK_START = .;
-	. += 0x1000;
-	MAIN_THREAD_STACK_END = .;
+	. += 0x100;
+	KERNEL_STACK_END = .;
 
 	. = ALIGN(64);
 	HEAP_START = .;

@@ -2,21 +2,10 @@
 #include "kernel/sync/thread.h"
 #include <stddef.h>
 
-static struct kthread kthread_idle = {
-	.stack = NULL,
-	.tdata = NULL,
-	.state = KTHREAD_STATE_READY,
-	.next = NULL,
-	.waiting_on = NULL
-};
-
 static struct kthread* kscheduler_head = NULL;
 static struct kthread* kscheduler_tail = NULL;
 
 void kscheduler_enqueue(struct kthread* thread) {
-	if (thread == &kthread_idle)
-		return;
-
 	thread->state = KTHREAD_STATE_READY;
 	thread->next = NULL;
 	thread->waiting_on = NULL;
@@ -31,7 +20,7 @@ void kscheduler_enqueue(struct kthread* thread) {
 
 struct kthread* kscheduler_dequeue() {
 	if (!kscheduler_head)
-		return &kthread_idle;
+		return NULL;
 
 	struct kthread* thread = kscheduler_head;
 
