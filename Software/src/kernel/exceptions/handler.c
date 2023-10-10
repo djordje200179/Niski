@@ -30,10 +30,10 @@ void exception_handler(uint32_t type) {
 	case EXCEPTION_STORE_ACCESS_FAULT:
 		handle_illegal_action(type);
 		break;
-	case EXCEPTION_INTERRUPT | TIMER_INTERRUPT:
+	case EXCEPTION_INTERRUPT | EXTERNAL_INTERRUPT:
 		handle_ext_intr();
 		break;
-	case EXCEPTION_INTERRUPT | EXTERNAL_INTERRUPT:
+	case EXCEPTION_INTERRUPT | TIMER_INTERRUPT:
 		handle_timer_interrupt();
 		break;
 	}

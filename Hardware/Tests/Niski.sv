@@ -4,6 +4,10 @@ module niski_tb;
 	reg clk = 0;
 	always #20 clk = ~clk;
 
+	reg clk_1_hz = 1'b0;
+	always #100000 clk_1_hz = ~clk_1_hz;
+
+
 	reg rst;
 
 	wire [4:0] btns = {~rst, 4'b0};
@@ -12,7 +16,7 @@ module niski_tb;
 	wire [3:0] ssds_select;
 	wire lcd_rs, lcd_rw, lcd_e;
 	wire [7:0] lcd_data;
-	reg clk_1_hz = 1'b0;
+	
 
 	`include "NiskiDUT.v"
 	niski_dut dut (
@@ -32,12 +36,9 @@ module niski_tb;
 		.clk_1_hz(clk_1_hz)
 	);
 
-	initial begin
-		$stop;
-		
-		#42000;
-		
-		$stop;
+	always @(dut.b2v_inst25.pc) begin
+		if (dut.b2v_inst25.pc == 32'h40001594)	
+			$stop;
 	end
 
 	always @(dut.b2v_inst25.pc) $strobe("PC: %h, at %t", dut.b2v_inst25.pc, $time);

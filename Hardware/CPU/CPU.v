@@ -158,11 +158,7 @@ module cpu#(
 
 		case (state)
 		STATE_EXEC_INST: begin
-			if (inst_jal || inst_jalr)
-				pc_wr = 1'b1;
-			else if (inst_branch)
-				pc_wr = branch_cond;
-			else if (inst_system_sret)
+			if (inst_jal || inst_jalr || inst_branch || inst_system_sret)
 				pc_wr = 1'b1;
 		end
 		STATE_CHECK_EXC: begin
@@ -181,7 +177,7 @@ module cpu#(
 				next_pc = pc + inst_imm;
 			else if (inst_jalr)
 				next_pc = (gpr_src1 + inst_imm) & ~32'h1;
-			else if (inst_branch)
+			else if (inst_branch && branch_cond)
 				next_pc = pc + inst_imm;
 			else if (inst_system_sret)
 				next_pc = exc_continue_addr;
@@ -220,7 +216,7 @@ module cpu#(
 			else if (inst_auipc)
 				gpr_dst_in = pc + inst_imm;
 			else if (inst_jal || inst_jalr)
-				gpr_dst_in = pc + 4;
+				gpr_dst_in = pc + 32'd4;
 			else if (inst_arlog_imm || inst_arlog)
 				gpr_dst_in = alu_out;
 			else if (inst_system_csrrw)
@@ -268,7 +264,7 @@ module cpu#(
 
 			has_exception <= 1'b1;
 			exc_cause <= intr_index | (32'b1 << 31);
-			exc_pc <= pc_changed ? pc : pc + 32'h4;
+			exc_pc <= pc_changed ? pc : next_pc;
 		end
 	endtask
 
@@ -330,7 +326,8 @@ module cpu#(
 					raise_exception(EXC_CAUSE_ILLEGAL_INSTRUCTION, pc);
 				else if (intr_available)
 					raise_interrupt;
-				else state <= STATE_CHECK_EXC;
+				else 
+					state <= STATE_CHECK_EXC;
 
 				if (pc_wr)
 					pc_changed = 1'b1;
