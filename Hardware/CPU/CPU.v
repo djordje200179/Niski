@@ -187,8 +187,11 @@ module cpu#(
 				next_pc = exc_continue_addr;
 		end
 		STATE_CHECK_EXC: begin
-			if (has_exception)
+			if (has_exception) begin
 				next_pc = exc_handler_addr;
+				if (exc_handler_addr[1:0] == 2'b1 && exc_cause[31])
+					next_pc = next_pc + exc_cause << 2;
+			end
 		end
 		endcase
 	end
