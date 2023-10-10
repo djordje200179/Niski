@@ -1,5 +1,7 @@
 #include <stddef.h>
 #include "devices/intr_manager.h"
+#include "kernel/riscv.h"
+#include "kernel/exceptions.h"
 
 enum external_interrupt_type {
 	EXT_INTR_TYPE_PS2 = 1,
@@ -23,4 +25,6 @@ void handle_ext_intr() {
 		if (handler != NULL)
 			handler(arg);
 	}
+
+	clear_interrupt(EXTERNAL_INTERRUPT);
 }

@@ -17,7 +17,8 @@
 		"files.associations": {
 			"compare": "c",
 			"type_traits": "c",
-			"scheduler.h": "c"
+			"scheduler.h": "c",
+			"ssds.h": "c"
 		}
 	}
 }
