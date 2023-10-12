@@ -1,14 +1,14 @@
 module interrupt_manager (
 	input clk, rst,
 
+	input [15:0] intr_reqs,
+	output has_req,
+
 	input [31:0] addr_bus, 
 	inout [31:0] data_bus, 
 	input rd_bus, wr_bus,
 	input [3:0] data_mask_bus, 
-	output fc_bus,
-
-	input [15:0] intr_reqs,
-	output has_req
+	output fc_bus
 );
 	parameter PENDING_INTR_REG_ADDR	= 32'h0,
 			  ENABLE_INTR_REG_ADDR	= 32'h4,
@@ -17,7 +17,9 @@ module interrupt_manager (
 	reg [15:0] pending_intr_reg;
 	reg [15:0] enable_intr_reg;
 
-	task automatic get_claimable_intr (output [3:0] intr_code);
+	`include "../BusInterfaceHelper.vh"
+
+	task get_claimable_intr (output [3:0] intr_code);
 		integer i;
 		
 		begin
@@ -29,8 +31,6 @@ module interrupt_manager (
 			end
 		end
 	endtask
-
-	`include "../BusInterfaceHelper.vh"
 
 	reg addr_hit;
 	always @* begin
@@ -71,7 +71,7 @@ module interrupt_manager (
 	assign data_bus = read_req ? data_out : 32'bz,
 		   fc_bus = req ? (read_req || data_written) : 1'bz;
 
-	task register_interrupt;
+	task register_interrupts;
 		integer i;
 		begin
 			for (i = 0; i < 16; i = i + 1) begin
@@ -87,13 +87,15 @@ module interrupt_manager (
 		begin
 			data_written <= 1'b0;
 
-			pending_intr_reg <= 32'b0;
-			enable_intr_reg <= 32'b0;
+			pending_intr_reg <= 16'b0;
+			enable_intr_reg <= 16'b0;
 		end
 	endtask
 
 	task on_clock;
 		begin
+			register_interrupts;
+
 			if (data_written && !write_req)
 				data_written <= 1'b0;
 			else if (write_req) begin

@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Sun Oct  1 17:00:23 2023"
+// CREATED		"Wed Oct 11 22:13:50 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -44,8 +44,7 @@ module niski_dut(
 	SDRAM_DATA_PINS,
 	SDRAM_MASK_PINS,
 	SEVSEG_SEG_PINS,
-	SEVSEG_SEL_PINS,
-	clk_1_hz
+	SEVSEG_SEL_PINS
 );
 
 
@@ -76,16 +75,12 @@ inout wire	[15:0] SDRAM_DATA_PINS;
 output wire	[1:0] SDRAM_MASK_PINS;
 output wire	[7:0] SEVSEG_SEG_PINS;
 output wire	[3:0] SEVSEG_SEL_PINS;
-input wire clk_1_hz;
 
 wire	[31:0] addr_bus;
-wire	btn_0;
-wire	btn_1;
-wire	btn_2;
-wire	btn_3;
+wire	btn_irq;
 wire	btn_rst;
+wire	clk_1_hz;
 wire	clk_1_khz;
-wire	clk_1_mhz;
 wire	clk_2_khz;
 wire	clk_50_mhz;
 wire	clk_i50_mhz;
@@ -125,16 +120,20 @@ wire	SYNTHESIZED_WIRE_26;
 wire	SYNTHESIZED_WIRE_27;
 wire	[31:0] SYNTHESIZED_WIRE_28;
 wire	SYNTHESIZED_WIRE_29;
-wire	SYNTHESIZED_WIRE_41;
+wire	SYNTHESIZED_WIRE_45;
 wire	[15:0] SYNTHESIZED_WIRE_31;
 wire	SYNTHESIZED_WIRE_32;
 wire	SYNTHESIZED_WIRE_33;
 wire	SYNTHESIZED_WIRE_34;
-wire	[31:0] SYNTHESIZED_WIRE_36;
-wire	[3:0] SYNTHESIZED_WIRE_37;
-wire	[31:0] SYNTHESIZED_WIRE_38;
-wire	SYNTHESIZED_WIRE_39;
-wire	SYNTHESIZED_WIRE_40;
+wire	SYNTHESIZED_WIRE_35;
+wire	SYNTHESIZED_WIRE_36;
+wire	SYNTHESIZED_WIRE_37;
+wire	SYNTHESIZED_WIRE_38;
+wire	[31:0] SYNTHESIZED_WIRE_40;
+wire	[3:0] SYNTHESIZED_WIRE_41;
+wire	[31:0] SYNTHESIZED_WIRE_42;
+wire	SYNTHESIZED_WIRE_43;
+wire	SYNTHESIZED_WIRE_44;
 
 
 
@@ -180,8 +179,8 @@ buzzer_bus_interface	b2v_inst11(
 	.addr_bus(addr_bus),
 	.data_bus(data_bus),
 	.data_mask_bus(data_mask_bus),
-	.ctrl_en(SYNTHESIZED_WIRE_39),
-	.ctrl_buzz(SYNTHESIZED_WIRE_40),
+	.ctrl_en(SYNTHESIZED_WIRE_43),
+	.ctrl_buzz(SYNTHESIZED_WIRE_44),
 	.fc_bus(fc_bus)
 	);
 	defparam	b2v_inst11.CTRL_REG_ADDR = 32'b01110000000000000000000000010000;
@@ -246,7 +245,7 @@ bus_arbitrator	b2v_inst16(
 	.rst(btn_rst),
 	.cpu_req(SYNTHESIZED_WIRE_12),
 	.dma_req(SYNTHESIZED_WIRE_13),
-	.cpu_grant(SYNTHESIZED_WIRE_32),
+	.cpu_grant(SYNTHESIZED_WIRE_36),
 	.dma_grant(SYNTHESIZED_WIRE_29),
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
@@ -340,14 +339,15 @@ watchdog	b2v_inst23(
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
 	.fc_bus(fc_bus),
-	.access_timeout(SYNTHESIZED_WIRE_41));
+	.access_timeout(SYNTHESIZED_WIRE_45));
 	defparam	b2v_inst23.ALLOWED_SECONDS = 0.01;
 
 
 low_freq_clock	b2v_inst24(
 	.clk_2_khz(clk_2_khz),
 	.rst(btn_rst),
-	.clk_1_khz(clk_1_khz));
+	.clk_1_khz(clk_1_khz),
+	.clk_1_hz(clk_1_hz));
 
 
 cpu	b2v_inst25(
@@ -358,11 +358,11 @@ cpu	b2v_inst25(
 	.timer_intr(SYNTHESIZED_WIRE_26),
 	.ext_intr(SYNTHESIZED_WIRE_27),
 	.ma_data_in(SYNTHESIZED_WIRE_28),
-	.ma_rd_req(SYNTHESIZED_WIRE_34),
-	.ma_wr_req(SYNTHESIZED_WIRE_33),
-	.ma_addr(SYNTHESIZED_WIRE_36),
-	.ma_data_mask(SYNTHESIZED_WIRE_37),
-	.ma_data_out(SYNTHESIZED_WIRE_38));
+	.ma_rd_req(SYNTHESIZED_WIRE_38),
+	.ma_wr_req(SYNTHESIZED_WIRE_37),
+	.ma_addr(SYNTHESIZED_WIRE_40),
+	.ma_data_mask(SYNTHESIZED_WIRE_41),
+	.ma_data_out(SYNTHESIZED_WIRE_42));
 	defparam	b2v_inst25.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
 	defparam	b2v_inst25.MORE_REGISTERS = 1'b0;
 
@@ -371,7 +371,7 @@ dma	b2v_inst26(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.bus_grant(SYNTHESIZED_WIRE_29),
-	.watchdog(SYNTHESIZED_WIRE_41),
+	.watchdog(SYNTHESIZED_WIRE_45),
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
 	.fc_bus(fc_bus),
@@ -403,9 +403,9 @@ interrupt_manager	b2v_inst27(
 	.fc_bus(fc_bus),
 	.has_req(ext_intr)
 	);
-	defparam	b2v_inst27.CLAIM_INTR_REG_ADDR = 32'b01110000000000000101000000001000;
-	defparam	b2v_inst27.ENABLE_INTR_REG_ADDR = 32'b01110000000000000101000000000100;
-	defparam	b2v_inst27.PENDING_INTR_REG_ADDR = 32'b01110000000000000101000000000000;
+	defparam	b2v_inst27.CLAIM_INTR_REG_ADDR = 32'b01110000000000000000000001011000;
+	defparam	b2v_inst27.ENABLE_INTR_REG_ADDR = 32'b01110000000000000000000001010100;
+	defparam	b2v_inst27.PENDING_INTR_REG_ADDR = 32'b01110000000000000000000001010000;
 
 
 rising_edge_detector	b2v_inst28(
@@ -419,7 +419,7 @@ interrupt_splitter	b2v_inst29(
 	
 	
 	
-	
+	.btn_pressed(btn_irq),
 	.requests(SYNTHESIZED_WIRE_31));
 	defparam	b2v_inst29.BTN_INTR_CODE = 4;
 	defparam	b2v_inst29.IR_INTR_CODE = 3;
@@ -439,18 +439,37 @@ ps2_keyboard_controller	b2v_inst3(
 	);
 
 
+buttons_bus_interface	b2v_inst30(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.btn_0(SYNTHESIZED_WIRE_32),
+	.btn_1(SYNTHESIZED_WIRE_33),
+	.btn_2(SYNTHESIZED_WIRE_34),
+	.btn_3(SYNTHESIZED_WIRE_35),
+	.rd_bus(rd_bus),
+	.wr_bus(wr_bus),
+	.addr_bus(addr_bus),
+	.data_bus(data_bus),
+	.data_mask_bus(data_mask_bus),
+	.fc_bus(fc_bus),
+	.interrupt(btn_irq)
+	);
+	defparam	b2v_inst30.CTRL_REG_ADDR = 32'b01110000000000000000000001100000;
+	defparam	b2v_inst30.DATA_REG_ADDR = 32'b01110000000000000000000001100100;
+
+
 cpu_bus_interface	b2v_inst31(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.bus_grant(SYNTHESIZED_WIRE_32),
+	.bus_grant(SYNTHESIZED_WIRE_36),
 	.fc_bus(fc_bus),
-	.wr_req(SYNTHESIZED_WIRE_33),
-	.rd_req(SYNTHESIZED_WIRE_34),
-	.watchdog(SYNTHESIZED_WIRE_41),
-	.addr(SYNTHESIZED_WIRE_36),
+	.wr_req(SYNTHESIZED_WIRE_37),
+	.rd_req(SYNTHESIZED_WIRE_38),
+	.watchdog(SYNTHESIZED_WIRE_45),
+	.addr(SYNTHESIZED_WIRE_40),
 	.data_bus(data_bus),
-	.data_mask(SYNTHESIZED_WIRE_37),
-	.data_out(SYNTHESIZED_WIRE_38),
+	.data_mask(SYNTHESIZED_WIRE_41),
+	.data_out(SYNTHESIZED_WIRE_42),
 	.bus_req(SYNTHESIZED_WIRE_12),
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
@@ -463,14 +482,14 @@ cpu_bus_interface	b2v_inst31(
 
 
 buttons_controller	b2v_inst4(
-	.clk(clk_1_mhz),
+	.clk(clk_1_khz),
 	.button_pins(BTN_PINS),
-	
-	
-	
-	
+	.btn_0(SYNTHESIZED_WIRE_32),
+	.btn_1(SYNTHESIZED_WIRE_33),
+	.btn_2(SYNTHESIZED_WIRE_34),
+	.btn_3(SYNTHESIZED_WIRE_35),
 	.btn_rst(btn_rst));
-	defparam	b2v_inst4.DEBOUNCING_TICKS = 32;
+	defparam	b2v_inst4.DEBOUNCING_TICKS = 4;
 
 
 sdram_controller	b2v_inst5(
@@ -543,8 +562,8 @@ ir_controller	b2v_inst8(
 
 
 buzzer_controller	b2v_inst9(
-	.en(SYNTHESIZED_WIRE_39),
-	.buzz(SYNTHESIZED_WIRE_40),
+	.en(SYNTHESIZED_WIRE_43),
+	.buzz(SYNTHESIZED_WIRE_44),
 	.buzzer_pin(BUZZ_PIN));
 
 assign	clk_50_mhz = CLK_PIN;

@@ -18,7 +18,8 @@
 			"compare": "c",
 			"type_traits": "c",
 			"scheduler.h": "c",
-			"ssds.h": "c"
+			"ssds.h": "c",
+			"intr_manager.h": "c"
 		}
 	}
 }

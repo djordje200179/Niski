@@ -7,10 +7,24 @@ module niski_tb;
 	reg clk_1_hz = 1'b0;
 	always #100000 clk_1_hz = ~clk_1_hz;
 
+	reg btn = 1'b0;
+	initial begin
+		#5000;
+		btn = 1'b1;
+		#5000;
+		btn = 1'b0;
+		#15000;
+		$stop;
+	end
 
-	reg rst;
+	reg rst = 1'b0;
+	initial begin
+		#2 rst = 1'b1;
+		#2 rst = 1'b0;
+		$stop;
+	end
 
-	wire [4:0] btns = {~rst, 4'b0};
+	wire [4:0] btns = {~rst, ~btn, 3'b111};
 	wire [3:0] leds;
 	wire [6:0] ssds_segments;
 	wire [3:0] ssds_select;
@@ -31,23 +45,17 @@ module niski_tb;
 		.LCD_RS_PIN(lcd_rs),
 		.LCD_RW_PIN(lcd_rw),
 		.LCD_E_PIN(lcd_e),
-		.LCD_DATA_PINS(lcd_data),
-
-		.clk_1_hz(clk_1_hz)
+		.LCD_DATA_PINS(lcd_data)
 	);
 
 	always @(dut.b2v_inst25.pc) begin
-		if (dut.b2v_inst25.pc == 32'h40001594)	
+		if (dut.b2v_inst25.pc == 32'h40000468) begin
+			#10000;
 			$stop;
+		end
 	end
 
 	always @(dut.b2v_inst25.pc) $strobe("PC: %h, at %t", dut.b2v_inst25.pc, $time);
-
-	initial begin
-		rst = 1'b0;
-		#2 rst = 1'b1;
-		#2 rst = 1'b0;
-	end
 
 	string register_names[32] = {
 		"zero",
