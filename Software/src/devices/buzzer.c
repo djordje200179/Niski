@@ -1,17 +1,19 @@
 #include "devices/buzzer.h"
 #include <stdint.h>
 
-extern volatile uint8_t BUZZER_CTRL_REG;
-extern volatile uint8_t BUZZER_DATA_REG;
+extern volatile struct {
+	uint32_t ctrl;
+	uint32_t data;
+} BUZZER;
 
 void buzzer_on(void) {
-	BUZZER_CTRL_REG = 0b1;
+	BUZZER.ctrl = 0b1;
 }
 
 void buzzer_off(void) {
-	BUZZER_CTRL_REG = 0b0;
+	BUZZER.ctrl = 0b0;
 }
 
 void buzzer_set(bool state) {
-	BUZZER_DATA_REG = state ? 0b1 : 0b0;
+	BUZZER.ctrl = state;
 }

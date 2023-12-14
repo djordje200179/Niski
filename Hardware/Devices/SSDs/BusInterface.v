@@ -1,4 +1,4 @@
-module ssds_bus_interface (
+module ssds_bus_interface#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 
     output ctrl_en, 
@@ -11,10 +11,6 @@ module ssds_bus_interface (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	parameter CTRL_REG_ADDR			= 32'h0,
-			  DATA_DIGITS_REG_ADDR	= 32'h4,
-			  DATA_DOTS_REG_ADDR 	= 32'h8;
-
 	reg [7:0] ctrl_reg;
 	reg [31:0] data_digits_reg;
 	reg [7:0] data_dots_reg;
@@ -38,42 +34,52 @@ module ssds_bus_interface (
 			assign segments[7 * i +: 7] = data_digits_reg[8 * i + 7] ? mapped_segments : data_digits_reg[8 * i +: 7];
 		end
 	endgenerate
-	
-	`include "../BusInterfaceHelper.vh"
 
-	reg addr_hit;
-	always @* begin
-		addr_hit = 1'b0;
+	wire addr_hit;
+	wire [1:0] reg_index;
+	wire [1:0] word_offset;
+	addr_splitter#(START_ADDR, 3) addr_splitter (
+		.addr_bus(addr_bus),
 
-		case (addr_base)
-		CTRL_REG_ADDR,
-		DATA_DIGITS_REG_ADDR,
-		DATA_DOTS_REG_ADDR:    
-			addr_hit = 1'b1;
-		endcase
-	end
-	
-	wire req_valid = rd_bus ^ wr_bus;
+		.addr_hit(addr_hit),
+		.reg_index(reg_index),
+		.word_offset(word_offset)
+	);
 
-	wire req = addr_hit && req_valid,
-		 read_req = req && rd_bus,
-		 write_req = req && wr_bus;
+	wire [31:0] incoming_data;
+	wire [31:0] existing_data_mask;
+	data_shifter data_shifter (
+		.data_bus(data_bus),
+		.word_offset(word_offset),
+		.data_mask_bus(data_mask_bus),
+
+		.existing_data_mask(existing_data_mask),
+		.incoming_data(incoming_data)
+	);
+
+	wire [7:0] next_ctrl_reg = ctrl_reg & existing_data_mask | incoming_data;
+	wire [31:0] next_data_digits_reg = data_digits_reg & existing_data_mask | incoming_data;
+	wire [7:0] next_data_dots_reg = data_dots_reg & existing_data_mask | incoming_data;
+
+	wire read_req = addr_hit && rd_bus,
+		 write_req = addr_hit && wr_bus;
 
 	reg [31:0] data_out;
 	always @* begin
-		case (addr_base)
-		CTRL_REG_ADDR:			data_out = ctrl_reg;
-		DATA_DIGITS_REG_ADDR:	data_out = data_digits_reg;
-		DATA_DOTS_REG_ADDR:		data_out = data_dots_reg;
-		default: data_out = 32'b0;
+		data_out = 32'b0;
+
+		case (reg_index)
+		2'd0: data_out = ctrl_reg;
+		2'd1: data_out = data_digits_reg;
+		2'd2: data_out = data_dots_reg;
 		endcase
 
-		data_out = data_out >> (8 * addr_offset);
+		data_out = data_out >> (8 * word_offset);
 	end
 
 	reg data_written;
 	assign data_bus = read_req ? data_out : 32'bz,
-		   fc_bus = req ? (read_req || data_written) : 1'bz;
+		   fc_bus = addr_hit ? (read_req || data_written) : 1'bz;
 
 	task reset;
 		begin
@@ -92,10 +98,10 @@ module ssds_bus_interface (
 			else if (write_req) begin
 				data_written <= 1'b1;
 
-				case (addr_base)
-				CTRL_REG_ADDR:			update_reg(ctrl_reg);
-				DATA_DIGITS_REG_ADDR:	update_reg(data_digits_reg);
-				DATA_DOTS_REG_ADDR:		update_reg(data_dots_reg);
+				case (reg_index)
+				2'd0: ctrl_reg <= next_ctrl_reg;
+				2'd1: data_digits_reg <= next_data_digits_reg;
+				2'd2: data_dots_reg <= next_data_dots_reg;
 				endcase
 			end
 		end

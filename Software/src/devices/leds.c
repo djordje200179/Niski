@@ -1,20 +1,24 @@
 #include "devices/leds.h"
 
-extern volatile uint8_t LEDS_CTRL_REG;
-extern volatile uint32_t LEDS_DATA_REG;
+extern volatile struct {
+	uint32_t ctrl;
 
-#define LEDS_DATA_ARRAY ((uint8_t*)&LEDS_DATA_REG)
+	union {
+		uint32_t data;
+		uint8_t digits[4];
+	};
+} LEDS;
 
 void leds_on(void) {
-	LEDS_CTRL_REG = 0b1;
+	LEDS.ctrl = 0b1;
 }
 
 void leds_off(void) {
-	LEDS_CTRL_REG = 0b0;
+	LEDS.ctrl = 0b1;
 }
 
 void leds_set_single(uint8_t led, bool state) {
-	LEDS_DATA_ARRAY[led] = state;
+	LEDS.digits[led] = state;
 }
 
 void leds_set(uint8_t states) {
@@ -22,5 +26,5 @@ void leds_set(uint8_t states) {
 	for (int i = 0; i < 4; i++)
 		data |= ((states >> i) & 0b1) << (i * 8);
 	
-	LEDS_DATA_REG = data;
+	LEDS.data = data;
 }

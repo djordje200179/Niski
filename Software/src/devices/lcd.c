@@ -1,8 +1,10 @@
 #include "devices/lcd.h"
 #include <stdint.h>
 
-extern volatile uint8_t LCD_DATA_REG;
-extern volatile uint8_t LCD_CMD_REG;
+extern volatile struct {
+	uint32_t data;
+	uint32_t cmd;
+} LCD;
 
 void lcd_init() {
 	lcd_send_command(LCD_CMD_INIT, 0);
@@ -24,11 +26,11 @@ void lcd_move_to(unsigned short x, unsigned short y) {
 }
 
 void lcd_send_command(enum lcd_command cmd, uint8_t data) {
-	LCD_CMD_REG = cmd | data;
+	LCD.cmd = cmd | data;
 }
 
 void lcd_write_char(char ch) {
-	LCD_DATA_REG = ch;
+	LCD.data = ch;
 }
 
 void lcd_register_char(char code, const char* data) {

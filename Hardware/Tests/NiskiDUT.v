@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Wed Oct 11 22:13:50 2023"
+// CREATED		"Thu Dec 14 13:47:04 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -183,8 +183,7 @@ buzzer_bus_interface	b2v_inst11(
 	.ctrl_buzz(SYNTHESIZED_WIRE_44),
 	.fc_bus(fc_bus)
 	);
-	defparam	b2v_inst11.CTRL_REG_ADDR = 32'b01110000000000000000000000010000;
-	defparam	b2v_inst11.DATA_REG_ADDR = 32'b01110000000000000000000000010100;
+	defparam	b2v_inst11.START_ADDR = 32'b01110000000000000000000000010000;
 
 
 leds_controller	b2v_inst12(
@@ -218,8 +217,7 @@ leds_bus_interface	b2v_inst14(
 	.ctrl_led3(SYNTHESIZED_WIRE_10),
 	.fc_bus(fc_bus)
 	);
-	defparam	b2v_inst14.CTRL_REG_ADDR = 32'b01110000000000000000000000000000;
-	defparam	b2v_inst14.DATA_REG_ADDR = 32'b01110000000000000000000000000100;
+	defparam	b2v_inst14.START_ADDR = 32'b01110000000000000000000000000000;
 
 
 lcd_bus_interface	b2v_inst15(
@@ -236,8 +234,7 @@ lcd_bus_interface	b2v_inst15(
 	.fc_bus(fc_bus),
 	.ctrl_data(SYNTHESIZED_WIRE_17)
 	);
-	defparam	b2v_inst15.CMD_REG_ADDR = 32'b01110000000000000000000000110100;
-	defparam	b2v_inst15.DATA_REG_ADDR = 32'b01110000000000000000000000110000;
+	defparam	b2v_inst15.START_ADDR = 32'b01110000000000000000000000110000;
 
 
 bus_arbitrator	b2v_inst16(
@@ -385,10 +382,7 @@ dma	b2v_inst26(
 	
 	
 	);
-	defparam	b2v_inst26.CNT_REG_ADDR = 32'b01110000000000000000000001001100;
-	defparam	b2v_inst26.CTRL_REG_ADDR = 32'b01110000000000000000000001000000;
-	defparam	b2v_inst26.DEST_REG_ADDR = 32'b01110000000000000000000001001000;
-	defparam	b2v_inst26.SRC_REG_ADDR = 32'b01110000000000000000000001000100;
+	defparam	b2v_inst26.START_ADDR = 32'b01110000000000000000000001000000;
 
 
 interrupt_manager	b2v_inst27(
@@ -403,9 +397,7 @@ interrupt_manager	b2v_inst27(
 	.fc_bus(fc_bus),
 	.has_req(ext_intr)
 	);
-	defparam	b2v_inst27.CLAIM_INTR_REG_ADDR = 32'b01110000000000000000000001011000;
-	defparam	b2v_inst27.ENABLE_INTR_REG_ADDR = 32'b01110000000000000000000001010100;
-	defparam	b2v_inst27.PENDING_INTR_REG_ADDR = 32'b01110000000000000000000001010000;
+	defparam	b2v_inst27.START_ADDR = 32'b01110000000000000000000001010000;
 
 
 rising_edge_detector	b2v_inst28(
@@ -454,8 +446,7 @@ buttons_bus_interface	b2v_inst30(
 	.fc_bus(fc_bus),
 	.interrupt(btn_irq)
 	);
-	defparam	b2v_inst30.CTRL_REG_ADDR = 32'b01110000000000000000000001100000;
-	defparam	b2v_inst30.DATA_REG_ADDR = 32'b01110000000000000000000001100100;
+	defparam	b2v_inst30.START_ADDR = 32'b01110000000000000000000001100000;
 
 
 cpu_bus_interface	b2v_inst31(
@@ -546,9 +537,7 @@ ssds_bus_interface	b2v_inst7(
 	.ctrl_digit_3(SYNTHESIZED_WIRE_4),
 	.ctrl_dots(SYNTHESIZED_WIRE_5)
 	);
-	defparam	b2v_inst7.CTRL_REG_ADDR = 32'b01110000000000000000000000100000;
-	defparam	b2v_inst7.DATA_DIGITS_REG_ADDR = 32'b01110000000000000000000000100100;
-	defparam	b2v_inst7.DATA_DOTS_REG_ADDR = 32'b01110000000000000000000000101000;
+	defparam	b2v_inst7.START_ADDR = 32'b01110000000000000000000000100000;
 
 
 ir_controller	b2v_inst8(

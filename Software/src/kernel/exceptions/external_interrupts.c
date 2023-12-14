@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "devices/intr_manager.h"
+#include "devices/intr_mngr.h"
 #include "devices/ssds.h"
 #include "kernel/riscv.h"
 #include "kernel/exceptions.h"
@@ -24,7 +24,7 @@ static void* ext_intr_args[16] = {NULL};
 
 void handle_ext_intr() {
 	while (true) {
-		uint8_t intr = intr_get_next();
+		uint8_t intr = intr_mngr_get_next();
 		if (intr == NO_INTR)
 			break;
 		

@@ -1,10 +1,12 @@
 #include "devices/dma.h"
 #include <stdint.h>
 
-extern volatile uint8_t DMA_CTRL_REG;
-extern volatile char* DMA_SRC_REG;
-extern volatile char* DMA_DEST_REG;
-extern volatile size_t DMA_CNT_REG;
+extern volatile struct DMA {
+	uint32_t ctrl;
+	char* src;
+	char* dest;
+	size_t cnt;
+} DMA;
 
 void dma_transfer(
 	char* src, char* dest, size_t count, 
@@ -18,13 +20,12 @@ void dma_transfer(
 	ctrl |= dest_addr_mode;
 	ctrl |= burst_mode << 4;
 
-	DMA_SRC_REG = src;
-	DMA_DEST_REG = dest;
-	DMA_CNT_REG = count;
+	DMA.src = src;
+	DMA.dest = dest;
+	DMA.cnt = count;
+	DMA.ctrl = ctrl;
 
-	DMA_CTRL_REG = ctrl;
-
-	while (DMA_CNT_REG != 0);
+	while (DMA.cnt != 0);
 }
 
 void dma_copy(char* src, char* dest, size_t count, bool burst_mode) {

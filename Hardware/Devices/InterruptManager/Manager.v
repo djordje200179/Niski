@@ -1,4 +1,4 @@
-module interrupt_manager (
+module interrupt_manager#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 
 	input [15:0] intr_reqs,
@@ -9,15 +9,37 @@ module interrupt_manager (
 	input rd_bus, wr_bus,
 	input [3:0] data_mask_bus, 
 	output fc_bus
-);
-	parameter PENDING_INTR_REG_ADDR	= 32'h0,
-			  ENABLE_INTR_REG_ADDR	= 32'h4,
-			  CLAIM_INTR_REG_ADDR	= 32'h8;
-			  
+); 
 	reg [15:0] pending_intr_reg;
 	reg [15:0] enable_intr_reg;
 
-	`include "../BusInterfaceHelper.vh"
+	wire addr_hit;
+	wire [1:0] reg_index;
+	wire [1:0] word_offset;
+	addr_splitter#(START_ADDR, 3) addr_splitter (
+		.addr_bus(addr_bus),
+
+		.addr_hit(addr_hit),
+		.reg_index(reg_index),
+		.word_offset(word_offset)
+	);
+
+	wire read_req = addr_hit && rd_bus,
+		 write_req = addr_hit && wr_bus;
+
+	wire [31:0] incoming_data;
+	wire [31:0] existing_data_mask;
+	data_shifter data_shifter (
+		.data_bus(data_bus),
+		.word_offset(word_offset),
+		.data_mask_bus(data_mask_bus),
+
+		.existing_data_mask(existing_data_mask),
+		.incoming_data(incoming_data)
+	);
+	
+	wire [31:0] next_pending_intr_reg = pending_intr_reg & existing_data_mask | incoming_data;
+	wire [31:0] next_enable_intr_reg = enable_intr_reg & existing_data_mask | incoming_data;
 
 	task get_claimable_intr (output [3:0] intr_code);
 		integer i;
@@ -32,44 +54,27 @@ module interrupt_manager (
 		end
 	endtask
 
-	reg addr_hit;
-	always @* begin
-		addr_hit = 1'b0;
-
-		case (addr_base)
-		PENDING_INTR_REG_ADDR,
-		ENABLE_INTR_REG_ADDR,
-		CLAIM_INTR_REG_ADDR:    
-			addr_hit = 1'b1;
-		endcase
-	end
-
-	wire req_valid = rd_bus ^ wr_bus;
-
-	wire req = addr_hit && req_valid,
-		 read_req = req && rd_bus,
-		 write_req = req && wr_bus;
-
 	reg [31:0] data_out;
 	always @* begin
-		case (addr_base)
-		PENDING_INTR_REG_ADDR:	data_out = pending_intr_reg;
-		ENABLE_INTR_REG_ADDR: 	data_out = enable_intr_reg;
-		CLAIM_INTR_REG_ADDR: 	begin
+		data_out = 32'h0;
+		
+		case (reg_index)
+		2'd0: data_out = pending_intr_reg;
+		2'd1: data_out = enable_intr_reg;
+		2'd2: begin 
 			if (|intr_reqs)
 				get_claimable_intr(data_out);
 			else
 				data_out = 32'hffffffff;
 		end
-		default: data_out = 32'b0;
 		endcase
 
-		data_out = data_out >> (8 * addr_offset);
+		data_out = data_out >> (8 * word_offset);
 	end
 
 	reg data_written;
 	assign data_bus = read_req ? data_out : 32'bz,
-		   fc_bus = req ? (read_req || data_written) : 1'bz;
+		   fc_bus = addr_hit ? (read_req || data_written) : 1'bz;
 
 	task register_interrupts;
 		integer i;
@@ -101,12 +106,14 @@ module interrupt_manager (
 			else if (write_req) begin
 				data_written <= 1'b1;
 
-				case (addr_base)
-				ENABLE_INTR_REG_ADDR:	update_reg(enable_intr_reg);
+				case (reg_index)
+				2'd0: pending_intr_reg <= next_pending_intr_reg;
+				2'd1: enable_intr_reg <= next_enable_intr_reg;
+				2'd2: begin
+					if (data_out != 32'hffffffff)
+						pending_intr_reg[data_out[3:0]] <= 1'b0;
+				end
 				endcase
-			end else if (read_req && addr_base == CLAIM_INTR_REG_ADDR) begin // TODO: check offseted addreses
-				if (data_out != 32'hffffffff)
-					pending_intr_reg[data_out[3:0]] <= 1'b0;
 			end
 		end
 	endtask

@@ -19,7 +19,11 @@
 			"type_traits": "c",
 			"scheduler.h": "c",
 			"ssds.h": "c",
-			"intr_manager.h": "c"
+			"intr_manager.h": "c",
+			"cstdlib": "c",
+			"dma.h": "c",
+			"limits": "c",
+			"heap_allocator.h": "c"
 		}
 	}
 }

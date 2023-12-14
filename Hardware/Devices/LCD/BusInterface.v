@@ -1,4 +1,4 @@
-module lcd_bus_interface (
+module lcd_bus_interface#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 	
 	output reg [7:0] ctrl_data,
@@ -11,34 +11,22 @@ module lcd_bus_interface (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	parameter DATA_REG_ADDR	= 32'h0,
-			  CMD_REG_ADDR	= 32'h4;
+	wire addr_hit;
+	wire [0:0] reg_index;
+	wire [1:0] word_offset;
+	addr_splitter#(START_ADDR, 2) addr_splitter (
+		.addr_bus(addr_bus),
 
-	wire [29:0] addr_base;
-	wire [1:0] addr_offset;
-	assign {addr_base, addr_offset} = addr_bus;
+		.addr_hit(addr_hit),
+		.reg_index(reg_index),
+		.word_offset(word_offset)
+	);
 
-	reg addr_hit;
-	always @* begin
-		addr_hit = 1'b0;
+	wire read_req = addr_hit && rd_bus,
+		 write_req = addr_hit && wr_bus;
 
-		case (addr_base)
-		DATA_REG_ADDR >> 2,
-		CMD_REG_ADDR >> 2:
-			addr_hit = 1'b1;
-		endcase
-	end
-	
-	wire req_valid = rd_bus ^ wr_bus;
-
-	wire req = addr_hit && req_valid,
-		 read_req = req && rd_bus,
-		 write_req = req && wr_bus;
-
-	wire [31:0] data_out = 32'b0;
-
-	assign data_bus = read_req ? data_out : 32'bz,
-		   fc_bus = req ? ctrl_data_ack : 1'bz;
+	assign data_bus = read_req ? 32'b0 : 32'bz,
+		   fc_bus = addr_hit ? ctrl_data_ack : 1'bz;
 
 	task reset;
 		begin
@@ -51,22 +39,20 @@ module lcd_bus_interface (
 			if (ctrl_data_ack && !write_req)
 				ctrl_data_req <= 1'b0;
 			else if (!ctrl_data_ack && write_req) begin
-				case (addr_bus)
-				DATA_REG_ADDR: begin
-					if (data_mask_bus[0]) begin
+				if (word_offset == 2'd0 && data_mask_bus[0]) begin
+					case (reg_index)
+					1'd0: begin
 						ctrl_data <= data_bus[7:0];
 						ctrl_data_is_cmd <= 1'b0;
 						ctrl_data_req <= 1'b1;
 					end
-				end
-				CMD_REG_ADDR: begin
-					if (data_mask_bus[0]) begin
+					1'd1: begin
 						ctrl_data <= data_bus[7:0];
 						ctrl_data_is_cmd <= 1'b1;
 						ctrl_data_req <= 1'b1;
 					end
+					endcase
 				end
-				endcase
 			end
 		end
 	endtask

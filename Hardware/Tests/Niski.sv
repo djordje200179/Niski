@@ -8,14 +8,6 @@ module niski_tb;
 	always #100000 clk_1_hz = ~clk_1_hz;
 
 	reg btn = 1'b0;
-	initial begin
-		#5000;
-		btn = 1'b1;
-		#5000;
-		btn = 1'b0;
-		#15000;
-		$stop;
-	end
 
 	reg rst = 1'b0;
 	initial begin
@@ -49,7 +41,7 @@ module niski_tb;
 	);
 
 	always @(dut.b2v_inst25.pc) begin
-		if (dut.b2v_inst25.pc == 32'h40000468) begin
+		if (dut.b2v_inst25.pc == 32'h40000538) begin
 			#10000;
 			$stop;
 		end

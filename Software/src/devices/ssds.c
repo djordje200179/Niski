@@ -1,36 +1,42 @@
 #include "devices/ssds.h"
 
-extern volatile uint8_t SSDS_CTRL_REG;
-extern volatile uint32_t SSDS_DATA_DIGITS_REG;
-extern volatile uint8_t SSDS_DATA_DOTS_REG;
+extern volatile struct {
+	uint32_t ctrl;
 
-#define SSDS_DATA_DIGITS_ARRAY ((uint8_t*)&SSDS_DATA_DIGITS_REG)
+	union {
+		uint32_t data;
+		uint8_t digits[4];
+	};
+	
+	uint32_t dots;
+} SSDS;
+
 
 void ssds_on(void) {
-	SSDS_CTRL_REG = 0b1;
+	SSDS.ctrl = 0b1;
 }
 
 void ssds_off(void) {
-	SSDS_CTRL_REG = 0b0;
+	SSDS.ctrl = 0b0;
 }
 
 void ssds_set_single(uint8_t digit, uint8_t segments) {
 	segments &= 0b01111111u;
-	SSDS_DATA_DIGITS_ARRAY[digit] = segments;
+	SSDS.digits[digit] = segments;
 }
 
 void ssds_set(uint32_t segments) {
 	segments &= 0b01111111011111110111111101111111u;
-	SSDS_DATA_DIGITS_REG = segments;
+	SSDS.data = segments;
 }
 
 void ssds_set_dots(uint8_t states) {
-	SSDS_DATA_DOTS_REG = states;
+	SSDS.dots = states;
 }
 
 void ssds_set_digit(uint8_t digit, unsigned char value) {
 	value |= 0b10000000u;
-	SSDS_DATA_DIGITS_ARRAY[digit] = value;
+	SSDS.digits[digit] = value;
 }
 
 void ssds_set_dec_number(short number) {
@@ -45,7 +51,7 @@ void ssds_set_dec_number(short number) {
 		number /= 10;
 	}
 
-	SSDS_DATA_DIGITS_REG = value;
+	SSDS.data = value;
 }
 
 void ssds_set_hex_number(unsigned short number) {
@@ -60,5 +66,5 @@ void ssds_set_hex_number(unsigned short number) {
 		number >>= 4;
 	}
 
-	SSDS_DATA_DIGITS_REG = value;
+	SSDS.data = value;
 }

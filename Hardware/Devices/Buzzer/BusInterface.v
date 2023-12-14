@@ -1,4 +1,4 @@
-module buzzer_bus_interface (
+module buzzer_bus_interface#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 	
 	output ctrl_en, ctrl_buzz,
@@ -9,48 +9,55 @@ module buzzer_bus_interface (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	parameter CTRL_REG_ADDR	= 32'h0,
-			  DATA_REG_ADDR	= 32'h4;
-
 	reg [7:0] ctrl_reg;
 	reg [7:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
 	assign ctrl_buzz = data_reg[0];
 
-	`include "../BusInterfaceHelper.vh"
+	wire addr_hit;
+	wire [0:0] reg_index;
+	wire [1:0] word_offset;
+	addr_splitter#(START_ADDR, 2) addr_splitter (
+		.addr_bus(addr_bus),
 
-	reg addr_hit;
-	always @* begin
-		addr_hit = 1'b0;
+		.addr_hit(addr_hit),
+		.reg_index(reg_index),
+		.word_offset(word_offset)
+	);
 
-		case (addr_base)
-		CTRL_REG_ADDR,
-		DATA_REG_ADDR:
-			addr_hit = 1'b1;
-		endcase
-	end
-	
-	wire req_valid = rd_bus ^ wr_bus;
+	wire [31:0] incoming_data;
+	wire [31:0] existing_data_mask;
+	data_shifter data_shifter (
+		.data_bus(data_bus),
+		.word_offset(word_offset),
+		.data_mask_bus(data_mask_bus),
 
-	wire req = addr_hit && req_valid,
-		 read_req = req && rd_bus,
-		 write_req = req && wr_bus;
+		.existing_data_mask(existing_data_mask),
+		.incoming_data(incoming_data)
+	);
+
+	wire [7:0] next_ctrl_reg = ctrl_reg & existing_data_mask | incoming_data;
+	wire [7:0] next_data_reg = data_reg & existing_data_mask | incoming_data;
+
+	wire read_req = addr_hit && rd_bus,
+		 write_req = addr_hit && wr_bus;
 
 	reg [31:0] data_out;
 	always @* begin
-		case (addr_base)
-		CTRL_REG_ADDR:	data_out = ctrl_reg;
-		DATA_REG_ADDR:	data_out = data_reg;
-		default: data_out = 32'b0;
+		data_out = 32'b0;
+
+		case (reg_index)
+		1'd0: data_out = ctrl_reg;
+		1'd1: data_out = data_reg;
 		endcase
 
-		data_out = data_out >> (8 * addr_offset);
+		data_out = data_out >> (8 * word_offset);
 	end
 
 	reg data_written;
 	assign data_bus = read_req ? data_out : 32'bz,
-		   fc_bus = req ? (read_req || data_written) : 1'bz;
+		   fc_bus = addr_hit ? (read_req || data_written) : 1'bz;
 
 	task reset;
 		begin
@@ -68,9 +75,9 @@ module buzzer_bus_interface (
 			else if (write_req) begin
 				data_written <= 1'b1;
 
-				case (addr_base)
-				CTRL_REG_ADDR:	update_reg(ctrl_reg);
-				DATA_REG_ADDR:	update_reg(data_reg);
+				case (reg_index)
+				1'd0: ctrl_reg <= next_ctrl_reg;
+				1'd1: data_reg <= next_data_reg;
 				endcase
 			end
 		end

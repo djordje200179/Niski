@@ -27,9 +27,11 @@ int first_thread(void* arg) {
 }
 
 int second_thread(void* arg) {
-	leds_set_single(0, true);
+	leds_set_single(3, true);
 
 	while(true);
+
+	return 0;
 }
 
 void main() {
