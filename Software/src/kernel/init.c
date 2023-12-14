@@ -2,10 +2,12 @@
 #include "kernel/sync/thread.h"
 #include "kernel/sync/scheduler.h"
 #include "devices/lcd.h"
+#include "devices/intr_mngr.h"
 
 void init() {
 	kheap_init();
 	lcd_init();
+	intr_mngr_allow_all();
 
 	void main();
 	struct kthread* user_thread = kthread_create((void*)main, NULL, false);

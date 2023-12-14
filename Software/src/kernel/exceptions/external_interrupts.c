@@ -23,17 +23,13 @@ static void (*ext_intr_handlers[16])(void*) = {
 static void* ext_intr_args[16] = {NULL};
 
 void handle_ext_intr() {
-	while (true) {
-		uint8_t intr = intr_mngr_get_next();
-		if (intr == NO_INTR)
-			break;
-		
-		void (*handler)(void*) = ext_intr_handlers[intr];
-		void* arg = ext_intr_args[intr];
+	uint8_t intr = intr_mngr_get_next();
+	
+	void (*handler)(void*) = ext_intr_handlers[intr];
+	void* arg = ext_intr_args[intr];
 
-		if (handler != NULL)
-			handler(arg);
-	}
+	if (handler != NULL)
+		handler(arg);
 
 	clear_interrupt(EXTERNAL_INTERRUPT);
 }

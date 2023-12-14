@@ -139,7 +139,7 @@ module cpu_csrs (
 				inst_cnt <= inst_cnt + 32'b1;
 
 			if (ext_intr_tick)
-				sip[1] <= 1'b1;
+				sip[9] <= 1'b1;
 
 			cycle_cnt <= cycle_cnt + 32'b1;
 		end

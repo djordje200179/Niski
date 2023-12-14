@@ -17,6 +17,7 @@ void intr_mngr_allow_single(uint8_t irq) {
 void intr_mngr_allow_all(void) {
 	INTR_MNGR.mask = 0xFFFF;
 }
+
 void intr_mngr_block_single(uint8_t irq) {
 	INTR_MNGR.mask &= ~(1 << irq);
 }

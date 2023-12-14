@@ -3467,11 +3467,6 @@ https://fpgasoftware.intel.com/eula.
 	(pt 144 416)
 )
 (connector
-	(pt 968 1008)
-	(pt 960 1008)
-	(bus)
-)
-(connector
 	(text "clk_50_mhz" (rect 467 1048 543 1067)(font "Intel Clear" ))
 	(pt 464 1064)
 	(pt 536 1064)
@@ -3576,11 +3571,6 @@ https://fpgasoftware.intel.com/eula.
 (connector
 	(pt 792 1240)
 	(pt 800 1240)
-)
-(connector
-	(pt 128 1168)
-	(pt 128 1216)
-	(bus)
 )
 (connector
 	(text "clk_50_mhz" (rect -69 1352 7 1371)(font "Intel Clear" ))
@@ -3859,10 +3849,6 @@ https://fpgasoftware.intel.com/eula.
 (connector
 	(pt 784 1992)
 	(pt 848 1992)
-)
-(connector
-	(pt 848 1976)
-	(pt 784 1976)
 )
 (connector
 	(pt 352 144)
@@ -4178,6 +4164,21 @@ https://fpgasoftware.intel.com/eula.
 	(text "fc_bus" (rect 409 2088 428 2130)(font "Intel Clear" )(vertical))
 	(pt 432 2000)
 	(pt 432 2144)
+)
+(connector
+	(pt 128 1168)
+	(pt 128 1216)
+	(bus)
+)
+(connector
+	(text "<<__$DEF_ALIAS317>>" (rect 807 1952 958 1971)(font "Intel Clear" )(invisible))
+	(pt 848 1976)
+	(pt 784 1976)
+)
+(connector
+	(pt 960 1008)
+	(pt 968 1008)
+	(bus)
 )
 (junction (pt 352 424))
 (junction (pt 368 440))
