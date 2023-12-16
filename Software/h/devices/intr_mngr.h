@@ -11,5 +11,4 @@ void intr_mngr_block_all(void);
 
 uint16_t intr_mngr_get_statuses(void);
 
-#define NO_INTR 0xFF
 uint8_t intr_mngr_get_next(void);

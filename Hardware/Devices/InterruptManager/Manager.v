@@ -1,7 +1,7 @@
 module interrupt_manager#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 
-	input [15:0] intr_reqs,
+	input [15:1] intr_reqs,
 	output has_req,
 
 	input [31:0] addr_bus, 
@@ -38,21 +38,30 @@ module interrupt_manager#(parameter START_ADDR = 32'h0) (
 		.incoming_data(incoming_data)
 	);
 	
-	wire [31:0] next_pending_intr_reg = pending_intr_reg & existing_data_mask | incoming_data;
-	wire [31:0] next_enable_intr_reg = enable_intr_reg & existing_data_mask | incoming_data;
+	wire [15:0] next_pending_intr_reg = pending_intr_reg & existing_data_mask | incoming_data;
+	wire [15:0] next_enable_intr_reg = enable_intr_reg & existing_data_mask | incoming_data;
 
-	task get_claimable_intr (output [3:0] intr_code);
-		integer i;
-		
-		begin
-			intr_code = 4'b0;
-			
-			for (i = 0; i < 16; i = i + 1) begin
-				if (pending_intr_reg[i] && enable_intr_reg[i])
-					intr_code = i;
-			end
-		end
-	endtask
+	reg [3:0] next_intr;
+	always @* begin
+		next_intr = 4'd0;
+		casez (pending_intr_reg & enable_intr_reg)
+		16'b1zzzzzzzzzzzzzzz: next_intr = 4'd15;
+		16'b01zzzzzzzzzzzzzz: next_intr = 4'd14;
+		16'b001zzzzzzzzzzzzz: next_intr = 4'd13;
+		16'b0001zzzzzzzzzzzz: next_intr = 4'd12;
+		16'b00001zzzzzzzzzzz: next_intr = 4'd11;
+		16'b000001zzzzzzzzzz: next_intr = 4'd10;
+		16'b0000001zzzzzzzzz: next_intr = 4'd9;
+		16'b00000001zzzzzzzz: next_intr = 4'd8;
+		16'b000000001zzzzzzz: next_intr = 4'd7;
+		16'b0000000001zzzzzz: next_intr = 4'd6;
+		16'b00000000001zzzzz: next_intr = 4'd5;
+		16'b000000000001zzzz: next_intr = 4'd4;
+		16'b0000000000001zzz: next_intr = 4'd3;
+		16'b00000000000001zz: next_intr = 4'd2;
+		16'b000000000000001z: next_intr = 4'd1;
+		endcase
+	end
 
 	reg [31:0] data_out;
 	always @* begin
@@ -61,36 +70,33 @@ module interrupt_manager#(parameter START_ADDR = 32'h0) (
 		case (reg_index)
 		2'd0: data_out = pending_intr_reg;
 		2'd1: data_out = enable_intr_reg;
-		2'd2: begin 
-			if (|intr_reqs)
-				get_claimable_intr(data_out);
-			else
-				data_out = 32'hffffffff;
-		end
+		2'd2: data_out = next_intr;
 		endcase
 
 		data_out = data_out >> (8 * word_offset);
 	end
 
-	reg data_written;
+	reg data_written, data_read;
+	reg [1:0] readen_reg_index;
 	assign data_bus = read_req ? data_out : 32'bz,
 		   fc_bus = addr_hit ? (read_req || data_written) : 1'bz;
 
 	task register_interrupts;
 		integer i;
 		begin
-			for (i = 0; i < 16; i = i + 1) begin
-				if (intr_reqs[i] && enable_intr_reg[i])
+			for (i = 1; i < 16; i = i + 1) begin
+				if (intr_reqs[i])
 					pending_intr_reg[i] <= 1'b1;
 			end
 		end
 	endtask
 
-	assign has_req = |pending_intr_reg;
+	assign has_req = |next_intr;
 
 	task reset;
 		begin
 			data_written <= 1'b0;
+			data_read <= 1'b0;
 
 			pending_intr_reg <= 16'b0;
 			enable_intr_reg <= 16'b0;
@@ -109,11 +115,16 @@ module interrupt_manager#(parameter START_ADDR = 32'h0) (
 				case (reg_index)
 				2'd0: pending_intr_reg <= next_pending_intr_reg;
 				2'd1: enable_intr_reg <= next_enable_intr_reg;
-				2'd2: begin
-					if (data_out != 32'hffffffff)
-						pending_intr_reg[data_out[3:0]] <= 1'b0;
-				end
 				endcase
+			end else if (data_read && !read_req) begin
+				data_read <= 1'b0;
+				
+				case (readen_reg_index)
+				2'd2: pending_intr_reg[next_intr] <= 1'b0;
+				endcase
+			end else if (read_req) begin
+				data_read <= 1'b1;
+				readen_reg_index <= reg_index;
 			end
 		end
 	endtask

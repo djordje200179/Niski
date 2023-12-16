@@ -25,18 +25,18 @@ https://fpgasoftware.intel.com/eula.
 	(text "buttons_bus_interface" (rect 5 0 150 15)(font "Arial" ))
 	(text "inst" (rect 8 192 31 207)(font "Arial" ))
 	(port
-		(pt 0 184)
+		(pt 0 200)
 		(input)
 		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 176 41 191)(font "Arial" ))
-		(line (pt 0 184)(pt 16 184))
+		(text "clk" (rect 24 192 41 207)(font "Arial" ))
+		(line (pt 0 200)(pt 16 200))
 	)
 	(port
-		(pt 0 168)
+		(pt 0 184)
 		(input)
 		(text "rst" (rect 0 0 16 15)(font "Arial" ))
-		(text "rst" (rect 24 160 40 175)(font "Arial" ))
-		(line (pt 0 168)(pt 16 168))
+		(text "rst" (rect 24 176 40 191)(font "Arial" ))
+		(line (pt 0 184)(pt 16 184))
 	)
 	(port
 		(pt 248 80)
@@ -95,18 +95,39 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 0 88)(pt 16 88)(line_width 3))
 	)
 	(port
+		(pt 0 120)
+		(output)
+		(text "intr_0" (rect 0 0 36 15)(font "Arial" ))
+		(text "intr_0" (rect 24 112 60 127)(font "Arial" ))
+		(line (pt 16 120)(pt 0 120))
+	)
+	(port
+		(pt 0 136)
+		(output)
+		(text "intr_1" (rect 0 0 36 15)(font "Arial" ))
+		(text "intr_1" (rect 24 128 60 143)(font "Arial" ))
+		(line (pt 16 136)(pt 0 136))
+	)
+	(port
+		(pt 0 152)
+		(output)
+		(text "intr_2" (rect 0 0 36 15)(font "Arial" ))
+		(text "intr_2" (rect 24 144 60 159)(font "Arial" ))
+		(line (pt 16 152)(pt 0 152))
+	)
+	(port
+		(pt 0 168)
+		(output)
+		(text "intr_3" (rect 0 0 36 15)(font "Arial" ))
+		(text "intr_3" (rect 24 160 60 175)(font "Arial" ))
+		(line (pt 16 168)(pt 0 168))
+	)
+	(port
 		(pt 0 104)
 		(output)
 		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
 		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
 		(line (pt 16 104)(pt 0 104))
-	)
-	(port
-		(pt 0 152)
-		(output)
-		(text "interrupt" (rect 0 0 53 15)(font "Arial" ))
-		(text "interrupt" (rect 24 144 77 159)(font "Arial" ))
-		(line (pt 16 152)(pt 0 152))
 	)
 	(port
 		(pt 0 40)
@@ -116,17 +137,12 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 16 40)(pt 0 40)(line_width 3))
 	)
 	(parameter
-		"CTRL_REG_ADDR"
+		"START_ADDR"
 		"00000000000000000000000000000000"
-		""
-		(type "PARAMETER_UNSIGNED_BIN")	)
-	(parameter
-		"DATA_REG_ADDR"
-		"00000000000000000000000000000100"
 		""
 		(type "PARAMETER_UNSIGNED_BIN")	)
 	(drawing
 		(rectangle (rect 16 16 232 192))
 	)
-	(annotation_block (parameter)(rect 312 0 792 64))
+	(annotation_block (parameter)(rect 264 -24 720 16))
 )

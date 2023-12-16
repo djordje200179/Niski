@@ -15,7 +15,7 @@
 
 // PROGRAM		"Quartus Prime"
 // VERSION		"Version 22.1std.1 Build 917 02/14/2023 SC Lite Edition"
-// CREATED		"Thu Dec 14 13:47:04 2023"
+// CREATED		"Sun Dec 17 20:03:50 2023"
 
 module niski_dut(
 	CLK_PIN,
@@ -77,7 +77,10 @@ output wire	[7:0] SEVSEG_SEG_PINS;
 output wire	[3:0] SEVSEG_SEL_PINS;
 
 wire	[31:0] addr_bus;
-wire	btn_irq;
+wire	btn_0_irq;
+wire	btn_1_irq;
+wire	btn_2_irq;
+wire	btn_3_irq;
 wire	btn_rst;
 wire	clk_1_hz;
 wire	clk_1_khz;
@@ -121,17 +124,17 @@ wire	SYNTHESIZED_WIRE_27;
 wire	[31:0] SYNTHESIZED_WIRE_28;
 wire	SYNTHESIZED_WIRE_29;
 wire	SYNTHESIZED_WIRE_45;
-wire	[15:0] SYNTHESIZED_WIRE_31;
+wire	[15:1] SYNTHESIZED_WIRE_31;
 wire	SYNTHESIZED_WIRE_32;
 wire	SYNTHESIZED_WIRE_33;
 wire	SYNTHESIZED_WIRE_34;
-wire	SYNTHESIZED_WIRE_35;
-wire	SYNTHESIZED_WIRE_36;
-wire	SYNTHESIZED_WIRE_37;
-wire	SYNTHESIZED_WIRE_38;
-wire	[31:0] SYNTHESIZED_WIRE_40;
-wire	[3:0] SYNTHESIZED_WIRE_41;
-wire	[31:0] SYNTHESIZED_WIRE_42;
+wire	[31:0] SYNTHESIZED_WIRE_36;
+wire	[3:0] SYNTHESIZED_WIRE_37;
+wire	[31:0] SYNTHESIZED_WIRE_38;
+wire	SYNTHESIZED_WIRE_39;
+wire	SYNTHESIZED_WIRE_40;
+wire	SYNTHESIZED_WIRE_41;
+wire	SYNTHESIZED_WIRE_42;
 wire	SYNTHESIZED_WIRE_43;
 wire	SYNTHESIZED_WIRE_44;
 
@@ -242,7 +245,7 @@ bus_arbitrator	b2v_inst16(
 	.rst(btn_rst),
 	.cpu_req(SYNTHESIZED_WIRE_12),
 	.dma_req(SYNTHESIZED_WIRE_13),
-	.cpu_grant(SYNTHESIZED_WIRE_36),
+	.cpu_grant(SYNTHESIZED_WIRE_32),
 	.dma_grant(SYNTHESIZED_WIRE_29),
 	.wr_bus(wr_bus),
 	.rd_bus(rd_bus),
@@ -355,11 +358,11 @@ cpu	b2v_inst25(
 	.timer_intr(SYNTHESIZED_WIRE_26),
 	.ext_intr(SYNTHESIZED_WIRE_27),
 	.ma_data_in(SYNTHESIZED_WIRE_28),
-	.ma_rd_req(SYNTHESIZED_WIRE_38),
-	.ma_wr_req(SYNTHESIZED_WIRE_37),
-	.ma_addr(SYNTHESIZED_WIRE_40),
-	.ma_data_mask(SYNTHESIZED_WIRE_41),
-	.ma_data_out(SYNTHESIZED_WIRE_42));
+	.ma_rd_req(SYNTHESIZED_WIRE_34),
+	.ma_wr_req(SYNTHESIZED_WIRE_33),
+	.ma_addr(SYNTHESIZED_WIRE_36),
+	.ma_data_mask(SYNTHESIZED_WIRE_37),
+	.ma_data_out(SYNTHESIZED_WIRE_38));
 	defparam	b2v_inst25.EXEC_START_ADDR = 32'b01000000000000000000000000000000;
 	defparam	b2v_inst25.MORE_REGISTERS = 1'b0;
 
@@ -407,18 +410,6 @@ rising_edge_detector	b2v_inst28(
 	.rising_edge(SYNTHESIZED_WIRE_27));
 
 
-interrupt_splitter	b2v_inst29(
-	
-	
-	
-	.btn_pressed(btn_irq),
-	.requests(SYNTHESIZED_WIRE_31));
-	defparam	b2v_inst29.BTN_INTR_CODE = 4;
-	defparam	b2v_inst29.IR_INTR_CODE = 3;
-	defparam	b2v_inst29.PS2_INTR_CODE = 1;
-	defparam	b2v_inst29.UART_INTR_CODE = 2;
-
-
 ps2_keyboard_controller	b2v_inst3(
 	.clk(clk_50_mhz),
 	.rst(1),
@@ -431,36 +422,18 @@ ps2_keyboard_controller	b2v_inst3(
 	);
 
 
-buttons_bus_interface	b2v_inst30(
-	.clk(clk_50_mhz),
-	.rst(btn_rst),
-	.btn_0(SYNTHESIZED_WIRE_32),
-	.btn_1(SYNTHESIZED_WIRE_33),
-	.btn_2(SYNTHESIZED_WIRE_34),
-	.btn_3(SYNTHESIZED_WIRE_35),
-	.rd_bus(rd_bus),
-	.wr_bus(wr_bus),
-	.addr_bus(addr_bus),
-	.data_bus(data_bus),
-	.data_mask_bus(data_mask_bus),
-	.fc_bus(fc_bus),
-	.interrupt(btn_irq)
-	);
-	defparam	b2v_inst30.START_ADDR = 32'b01110000000000000000000001100000;
-
-
 cpu_bus_interface	b2v_inst31(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
-	.bus_grant(SYNTHESIZED_WIRE_36),
+	.bus_grant(SYNTHESIZED_WIRE_32),
 	.fc_bus(fc_bus),
-	.wr_req(SYNTHESIZED_WIRE_37),
-	.rd_req(SYNTHESIZED_WIRE_38),
+	.wr_req(SYNTHESIZED_WIRE_33),
+	.rd_req(SYNTHESIZED_WIRE_34),
 	.watchdog(SYNTHESIZED_WIRE_45),
-	.addr(SYNTHESIZED_WIRE_40),
+	.addr(SYNTHESIZED_WIRE_36),
 	.data_bus(data_bus),
-	.data_mask(SYNTHESIZED_WIRE_41),
-	.data_out(SYNTHESIZED_WIRE_42),
+	.data_mask(SYNTHESIZED_WIRE_37),
+	.data_out(SYNTHESIZED_WIRE_38),
 	.bus_req(SYNTHESIZED_WIRE_12),
 	.rd_bus(rd_bus),
 	.wr_bus(wr_bus),
@@ -472,13 +445,52 @@ cpu_bus_interface	b2v_inst31(
 	.data_mask_bus(data_mask_bus));
 
 
+buttons_bus_interface	b2v_inst32(
+	.clk(clk_50_mhz),
+	.rst(btn_rst),
+	.btn_0(SYNTHESIZED_WIRE_39),
+	.btn_1(SYNTHESIZED_WIRE_40),
+	.btn_2(SYNTHESIZED_WIRE_41),
+	.btn_3(SYNTHESIZED_WIRE_42),
+	.rd_bus(rd_bus),
+	.wr_bus(wr_bus),
+	.addr_bus(addr_bus),
+	.data_bus(data_bus),
+	.data_mask_bus(data_mask_bus),
+	.intr_0(btn_0_irq),
+	.intr_1(btn_1_irq),
+	.intr_2(btn_2_irq),
+	.intr_3(btn_3_irq),
+	.fc_bus(fc_bus)
+	);
+	defparam	b2v_inst32.START_ADDR = 32'b01110000000000000000000001100000;
+
+
+interrupt_splitter	b2v_inst33(
+	
+	
+	
+	.btn_0_pressed(btn_0_irq),
+	.btn_1_pressed(btn_1_irq),
+	.btn_2_pressed(btn_2_irq),
+	.btn_3_pressed(btn_3_irq),
+	.requests(SYNTHESIZED_WIRE_31));
+	defparam	b2v_inst33.BTN_0_INTR_CODE = 4;
+	defparam	b2v_inst33.BTN_1_INTR_CODE = 5;
+	defparam	b2v_inst33.BTN_2_INTR_CODE = 6;
+	defparam	b2v_inst33.BTN_3_INTR_CODE = 7;
+	defparam	b2v_inst33.IR_INTR_CODE = 3;
+	defparam	b2v_inst33.PS2_INTR_CODE = 1;
+	defparam	b2v_inst33.UART_INTR_CODE = 2;
+
+
 buttons_controller	b2v_inst4(
-	.clk(clk_1_khz),
+	.clk(clk_50_mhz), //clk_1_khz),
 	.button_pins(BTN_PINS),
-	.btn_0(SYNTHESIZED_WIRE_32),
-	.btn_1(SYNTHESIZED_WIRE_33),
-	.btn_2(SYNTHESIZED_WIRE_34),
-	.btn_3(SYNTHESIZED_WIRE_35),
+	.btn_0(SYNTHESIZED_WIRE_39),
+	.btn_1(SYNTHESIZED_WIRE_40),
+	.btn_2(SYNTHESIZED_WIRE_41),
+	.btn_3(SYNTHESIZED_WIRE_42),
 	.btn_rst(btn_rst));
 	defparam	b2v_inst4.DEBOUNCING_TICKS = 4;
 

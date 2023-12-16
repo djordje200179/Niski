@@ -69,8 +69,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 128 0)
 		(input)
-		(text "intr_reqs[15..0]" (rect 0 0 96 15)(font "Arial" ))
-		(text "intr_reqs[15..0]" (rect 120 25 135 121)(font "Arial" )(vertical))
+		(text "intr_reqs[15..1]" (rect 0 0 96 15)(font "Arial" ))
+		(text "intr_reqs[15..1]" (rect 120 25 135 121)(font "Arial" )(vertical))
 		(line (pt 128 0)(pt 128 16)(line_width 3))
 	)
 	(port

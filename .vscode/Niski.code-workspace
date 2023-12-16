@@ -23,7 +23,8 @@
 			"cstdlib": "c",
 			"dma.h": "c",
 			"limits": "c",
-			"heap_allocator.h": "c"
+			"heap_allocator.h": "c",
+			"exceptions.h": "c"
 		}
 	}
 }

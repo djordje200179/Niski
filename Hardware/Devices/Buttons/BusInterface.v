@@ -2,7 +2,7 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 
 	input btn_0, btn_1, btn_2, btn_3,
-	output interrupt,
+	output intr_0, intr_1, intr_2, intr_3,
 
 	input [31:0] addr_bus, 
 	inout [31:0] data_bus, 
@@ -11,9 +11,41 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 	output fc_bus
 );
 	reg [7:0] ctrl_reg;
-	reg [31:0] data_reg;
 
-	assign interrupt = data_reg[24] | data_reg[16] | data_reg[8] | data_reg[0];
+	wire btn_0_pressed, btn_1_pressed, btn_2_pressed, btn_3_pressed;
+	
+	rising_edge_detector red_0 (
+		.clk(clk), .rst(rst),
+
+		.raw_input(btn_0),
+		.rising_edge(btn_0_pressed)
+	);
+
+	rising_edge_detector red_1 (
+		.clk(clk), .rst(rst),
+
+		.raw_input(btn_1),
+		.rising_edge(btn_1_pressed)
+	);
+
+	rising_edge_detector red_2 (
+		.clk(clk), .rst(rst),
+
+		.raw_input(btn_2),
+		.rising_edge(btn_2_pressed)
+	);
+
+	rising_edge_detector red_3 (
+		.clk(clk), .rst(rst),
+
+		.raw_input(btn_3),
+		.rising_edge(btn_3_pressed)
+	);
+
+	assign intr_0 = btn_0_pressed && ctrl_reg[0],
+		   intr_1 = btn_1_pressed && ctrl_reg[1],
+		   intr_2 = btn_2_pressed && ctrl_reg[2],
+		   intr_3 = btn_3_pressed && ctrl_reg[3];
 
 	wire addr_hit;
 	wire [0:0] reg_index;
@@ -48,7 +80,7 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 
 		case (reg_index)
 		1'd0: data_out = ctrl_reg;
-		1'd1: data_out = data_reg;
+		1'd1: data_out = {{7{1'b0}}, btn_0, {7{1'b0}}, btn_1, {7{1'b0}}, btn_2, {7{1'b0}}, btn_3};
 		endcase
 
 		data_out = data_out >> (8 * word_offset);
@@ -63,7 +95,6 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 			data_written <= 1'b0;
 
 			ctrl_reg <= 8'b0;
-			data_reg <= 32'b0;
 		end
 	endtask
 
@@ -78,11 +109,6 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 				1'd0: ctrl_reg <= next_ctrl_reg;
 				endcase
 			end
-
-			if (btn_0) data_reg[24] <= 1'b1;
-			if (btn_1) data_reg[16] <= 1'b1;
-			if (btn_2) data_reg[8] <= 1'b1;
-			if (btn_3) data_reg[0] <= 1'b1;
 		end
 	endtask
 

@@ -40,11 +40,13 @@ module niski_tb;
 		.LCD_DATA_PINS(lcd_data)
 	);
 
-	always @(dut.b2v_inst25.pc) begin
-		if (dut.b2v_inst25.pc == 32'h40000538) begin
-			#10000;
-			$stop;
-		end
+	initial begin
+		#100000;
+		btn = 1'b1;
+		#200;
+		btn = 1'b0;
+		#10000;
+		$stop;
 	end
 
 	always @(dut.b2v_inst25.pc) $strobe("PC: %h, at %t", dut.b2v_inst25.pc, $time);
