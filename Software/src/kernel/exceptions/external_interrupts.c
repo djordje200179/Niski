@@ -16,27 +16,11 @@ enum external_interrupt_type {
 	EXT_INTR_TYPE_BTN_3 = 7
 };
 
-static void handle_btn_0_press(void* arg) {
-	ssds_set_hex_number(1);
-}
-
-static void handle_btn_1_press(void* arg) {
-	ssds_set_hex_number(2);
-}
-
-static void handle_btn_2_press(void* arg) {
-	ssds_set_hex_number(3);
-}
-
-static void handle_btn_3_press(void* arg) {
-	ssds_set_hex_number(4);
-}
-
 static void (*ext_intr_handlers[16])(void*) = {
-	[EXT_INTR_TYPE_BTN_0] = handle_btn_0_press,
-	[EXT_INTR_TYPE_BTN_1] = handle_btn_1_press,
-	[EXT_INTR_TYPE_BTN_2] = handle_btn_2_press,
-	[EXT_INTR_TYPE_BTN_3] = handle_btn_3_press
+	[EXT_INTR_TYPE_BTN_0] = btns_on_0_pressed,
+	[EXT_INTR_TYPE_BTN_1] = btns_on_1_pressed,
+	[EXT_INTR_TYPE_BTN_2] = btns_on_2_pressed,
+	[EXT_INTR_TYPE_BTN_3] = btns_on_3_pressed
 };
 
 static void* ext_intr_args[16] = {NULL};

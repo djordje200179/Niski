@@ -34,6 +34,22 @@ int second_thread(void* arg) {
 	return 0;
 }
 
+void btns_on_0_pressed(void) {
+	ssds_set_hex_number(1);
+}
+
+void btns_on_1_pressed(void) {
+	ssds_set_hex_number(2);
+}
+
+void btns_on_2_pressed(void) {
+	ssds_set_hex_number(3);
+}
+
+void btns_on_3_pressed(void) {
+	ssds_set_hex_number(4);
+}
+
 void main() {
 	leds_on();
 	ssds_on();
