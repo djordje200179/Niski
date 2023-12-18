@@ -2,8 +2,8 @@
 
 This system combines several university assignments into a functional whole project. 
 It integrates FPGA design, low-level programming, and system programming. 
-The ultimate objective of this project is to develop a programmable microcontroller 
-capable of running any multithreaded program while also facilitating communication with the outside world."
+The ultimate objective of this project is to develop a programmable microcontroller
+capable of running any multithreaded program while also facilitating communication with the outside world.
 
 ## Hardware
 For this project Cyclone IV EP4CE6E22C8 FPGA development board was used:
@@ -75,6 +75,13 @@ Currently, the DMA operation isn't as efficient as it could be,
 as it reads/writes only one byte per bus request. 
 In my future plans, I intend to enhance the efficiency 
 by enabling the controller to read/write 4 bytes at a time.
+
+### PLIC
+The PLIC (Platform-Level Interrupt Controller) is a peripheral
+that manages interrupts from external devices (such as the UART,
+PS/2, buttons, etc.) and forwards them to the processor.
+Every interrupt can be enabled or disabled individually.
+In future, I plan to implement priority levels for interrupts.
 
 ### Watchdog
 To prevent the processor from becoming stuck 
