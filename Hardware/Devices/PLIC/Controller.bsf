@@ -22,7 +22,7 @@ https://fpgasoftware.intel.com/eula.
 (header "symbol" (version "1.2"))
 (symbol
 	(rect 64 64 312 240)
-	(text "interrupt_manager" (rect 5 0 125 15)(font "Arial" ))
+	(text "plic" (rect 5 0 27 15)(font "Arial" ))
 	(text "inst" (rect 8 160 31 175)(font "Arial" ))
 	(port
 		(pt 0 152)
@@ -67,11 +67,11 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 232 136)(pt 248 136)(line_width 3))
 	)
 	(port
-		(pt 128 0)
+		(pt 96 176)
 		(input)
-		(text "intr_reqs[15..1]" (rect 0 0 96 15)(font "Arial" ))
-		(text "intr_reqs[15..1]" (rect 120 25 135 121)(font "Arial" )(vertical))
-		(line (pt 128 0)(pt 128 16)(line_width 3))
+		(text "irqs[15..1]" (rect 0 0 63 15)(font "Arial" ))
+		(text "irqs[15..1]" (rect 88 88 103 151)(font "Arial" )(vertical))
+		(line (pt 96 160)(pt 96 176)(line_width 3))
 	)
 	(port
 		(pt 248 152)
@@ -95,18 +95,8 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 248 88)(pt 232 88)(line_width 3))
 	)
 	(parameter
-		"PENDING_INTR_REG_ADDR"
-		"00000000000000000000000000000000"
-		""
-		(type "PARAMETER_UNSIGNED_BIN")	)
-	(parameter
-		"ENABLE_INTR_REG_ADDR"
-		"00000000000000000000000000000100"
-		""
-		(type "PARAMETER_UNSIGNED_BIN")	)
-	(parameter
-		"CLAIM_INTR_REG_ADDR"
-		"00000000000000000000000000001000"
+		"START_ADDR"
+		"00000000"
 		""
 		(type "PARAMETER_UNSIGNED_BIN")	)
 	(drawing

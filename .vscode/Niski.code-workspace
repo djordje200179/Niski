@@ -24,7 +24,8 @@
 			"dma.h": "c",
 			"limits": "c",
 			"heap_allocator.h": "c",
-			"exceptions.h": "c"
+			"exceptions.h": "c",
+			"plic.h": "c"
 		}
 	}
 }

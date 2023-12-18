@@ -388,7 +388,7 @@ dma	b2v_inst26(
 	defparam	b2v_inst26.START_ADDR = 32'b01110000000000000000000001000000;
 
 
-interrupt_manager	b2v_inst27(
+plic	b2v_inst27(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.rd_bus(rd_bus),

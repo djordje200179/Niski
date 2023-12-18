@@ -1,7 +1,7 @@
-module interrupt_manager#(parameter START_ADDR = 32'h0) (
+module plic#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 
-	input [15:1] intr_reqs,
+	input [15:1] irqs,
 	output has_req,
 
 	input [31:0] addr_bus, 
@@ -85,7 +85,7 @@ module interrupt_manager#(parameter START_ADDR = 32'h0) (
 		integer i;
 		begin
 			for (i = 1; i < 16; i = i + 1) begin
-				if (intr_reqs[i])
+				if (irqs[i])
 					pending_intr_reg[i] <= 1'b1;
 			end
 		end
