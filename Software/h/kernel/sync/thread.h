@@ -28,16 +28,17 @@ struct kthread {
 	uint32_t* stack;
 	void* tdata;
 
+	struct kthread* next;
+	struct kmutex* waiting_on;
+
+	struct kthread_ld* local_data_head;
+	
 	enum kthread_state {
 		KTHREAD_STATE_CREATED,
 		KTHREAD_STATE_READY,
 		KTHREAD_STATE_RUNNING,
 		KTHREAD_STATE_BLOCKED
 	} state;
-	struct kthread* next;
-	struct kmutex* waiting_on;
-
-	struct kthread_ld* local_data_head;
 };
 
 extern struct kthread* kthread_current;

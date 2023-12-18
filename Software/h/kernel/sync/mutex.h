@@ -6,11 +6,11 @@
 
 struct kmutex {
 	struct kthread* owner;
-	bool recursive;
-	uint16_t lock_count;
-
 	struct kthread* queue_head;
 	struct kthread* queue_tail;
+
+	uint16_t lock_count;
+	bool recursive;
 };
 
 struct kmutex* kmutex_create(bool recursive);
