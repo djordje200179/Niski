@@ -23,10 +23,25 @@ enum lcd_command {
 	LCD_CMD_REGISTER_CHAR = 0x40
 };
 
-void lcd_init();
-void lcd_clear();
-void lcd_move_to(unsigned short x, unsigned short y);
-
-void lcd_send_command(enum lcd_command cmd, uint8_t data);
-void lcd_write_char(char ch);
+void lcd_send_cmd(enum lcd_command cmd, uint8_t data);
+void lcd_write_ch(char ch);
 //void lcd_register_char(char code, const char* data);
+
+inline static void lcd_clear(void) {
+	lcd_send_cmd(LCD_CMD_CLEAR_SCREEN, 0);
+	lcd_send_cmd(LCD_CMD_RETURN_HOME, 0);
+}
+
+inline static void lcd_init(void) {
+	lcd_send_cmd(LCD_CMD_INIT, 0);
+	lcd_send_cmd(LCD_CMD_DISPLAY_ON_CURSOR_OFF, 0);
+
+	lcd_clear();
+}
+
+inline static void lcd_move_cursor(uint8_t y, uint8_t x) {
+	x &= 0x0F;
+	y &= 0x01;
+
+	lcd_send_cmd(LCD_CMD_SET_CURSOR_POSITION | (y << 6) | x, 0);
+}

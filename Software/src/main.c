@@ -35,19 +35,19 @@ int second_thread(void* arg) {
 }
 
 void btns_on_0_pressed(void) {
-	ssds_set_hex_number(1);
+	leds_toggle_single(0);
 }
 
 void btns_on_1_pressed(void) {
-	ssds_set_hex_number(2);
+	leds_toggle_single(1);
 }
 
 void btns_on_2_pressed(void) {
-	ssds_set_hex_number(3);
+	leds_toggle_single(2);
 }
 
 void btns_on_3_pressed(void) {
-	ssds_set_hex_number(4);
+	leds_toggle_single(3);
 }
 
 void main() {
@@ -56,7 +56,7 @@ void main() {
 	
 	puts("Main started.\n");
 
-	ssds_set_dec_number(1234);
+	ssds_set_dec_num(1234);
 
 	thrd_t handles[2];
 	thrd_create(&handles[0], first_thread, NULL);

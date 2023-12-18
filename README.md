@@ -176,28 +176,41 @@ At present, the following header files and functions have been fully implemented
 	- `buzzer_on`
 	- `buzzer_off`
 	- `buzzer_set`
+	- `buzzer_toggle`
 - __devices/leds.h__
 	- `leds_on`
 	- `leds_off`
 	- `leds_set_single`
+	- `leds_toggle_single`
 	- `leds_set`
 - __devices/ssds.h__
 	- `ssds_on`
 	- `ssds_off`
-	- `ssds_set_single`
 	- `ssds_set`
 	- `ssds_set_dots`
 	- `ssds_set_digit`
-	- `ssds_set_dec_number`
-	- `ssds_set_hex_number`
+	- `ssds_set_dec_num`
+	- `ssds_set_hex_num`
 - __devices/lcd.h__
 	- `lcd_init`
 	- `lcd_clear`
-	- `lcd_move_to`
-	- `lcd_send_command`
-	- `lcd_write_char`
+	- `lcd_move_cursor`
+	- `lcd_send_cmd`
+	- `lcd_write_ch`
 - __devices/dma.h__
 	- `dma_transfer`
 	- `dma_fill`
 	- `dma_copy`
 	- `dma_rcopy`
+- __devices/btns.h__
+	- `btns_enable_single`
+	- `btns_disable_single`
+	- `btns_enable_all`
+	- `btns_disable_all`
+	- `btns_get_statuses`
+	- `btns_is_pressed`
+	- `btns_on_1_pressed` *(weak)*
+	- `btns_on_2_pressed` *(weak)*
+	- `btns_on_3_pressed` *(weak)*
+	- `btns_on_4_pressed` *(weak)*
+	

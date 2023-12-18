@@ -2,18 +2,31 @@
 #include <stdint.h>
 
 extern volatile struct {
-	uint32_t ctrl;
-	uint32_t data;
+	struct {
+		bool en : 1;
+
+		uint32_t : 0;
+	} ctrl;
+
+	struct {
+		bool state : 1;
+
+		uint32_t : 0;
+	} data;
 } BUZZER;
 
 void buzzer_on(void) {
-	BUZZER.ctrl = 0b1;
+	BUZZER.ctrl.en = true;
 }
 
 void buzzer_off(void) {
-	BUZZER.ctrl = 0b0;
+	BUZZER.ctrl.en = false;
 }
 
 void buzzer_set(bool state) {
-	BUZZER.ctrl = state;
+	BUZZER.data.state = state;
+}
+
+void buzzer_toggle(void) {
+	BUZZER.data.state = !BUZZER.data.state;
 }

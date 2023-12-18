@@ -4,13 +4,13 @@
 int putchar(int ch) {
 	switch (ch) {
 	case '\n':
-		lcd_move_to(0, 1);
+		lcd_move_cursor(1, 0);
 		break;
 	case '\r':
-		lcd_move_to(0, 0);
+		lcd_move_cursor(1, 0);
 		break;
 	default:
-		lcd_write_char(ch);
+		lcd_write_ch(ch);
 		break;
 	}
 

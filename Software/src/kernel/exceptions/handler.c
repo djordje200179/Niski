@@ -6,7 +6,7 @@
 static void handle_illegal_action(uint32_t cause) {
 	ssds_on();
 
-	ssds_set_dec_number(cause);
+	ssds_set_dec_num(cause);
 
 	while(true);
 }
