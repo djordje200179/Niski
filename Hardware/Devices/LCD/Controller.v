@@ -1,52 +1,60 @@
 module lcd_controller (
 	input clk, rst,
 
-	output rs_pin, e_pin, rw_pin,
-	output [7:0] data_pins,
+	output reg rs_pin, e_pin, rw_pin,
+	inout [7:0] data_pins,
 
 	input [7:0] data_in, 
 	input data_is_cmd, data_req, 
 	output data_ack
 );
 	reg [1:0] state;
-	localparam STATE_IDLE 		= 2'b00,
-			   STATE_HOLDING_RS = 2'b01,
-			   STATE_HOLDING_E	= 2'b10,
-			   STATE_WAITING	= 2'b11;
+	localparam STATE_IDLE 		= 2'd0,
+			   STATE_WAIT	= 2'd1,
+			   STATE_WRITE		= 2'd2,
+			   STATE_DONE		= 2'd3;
 
-	reg [16:0] counter;
-	localparam RS_HOLD_TIME		= 17'd1_000,
-			   E_HOLD_TIME		= 17'd1_000,
-			   SHORT_WAIT_TIME	= 17'd5_000,
-			   LONG_WAIT_TIME	= 17'd110_000;
+	reg [7:0] counter;
+	localparam HOLD_TIME = 8'd150;
 
 	reg [7:0] data;
 	reg is_cmd;
-	reg completed;
-
-	reg [16:0] delay;
-
-	assign rs_pin = ~is_cmd;
-	assign rw_pin = 1'b0;
-	assign e_pin = state == STATE_HOLDING_E;
-	assign data_pins = data;
-
-	assign data_ack = state == STATE_WAITING && !completed;
 
 	always @* begin
-		delay = SHORT_WAIT_TIME;
+		rs_pin = 1'b0;
+		rw_pin = 1'b0;
 
-		if (is_cmd && ~|data[7:2])
-			delay = LONG_WAIT_TIME;
+		case (state)
+		STATE_WAIT: begin
+			rs_pin = 1'b0;
+			rw_pin = 1'b1;
+		end
+		STATE_WRITE: begin
+			rs_pin = !is_cmd;
+			rw_pin = 1'b0;
+		end
+		endcase
 	end
+
+	always @* begin
+		e_pin = 1'b0;
+
+		case (state)
+		STATE_WAIT, STATE_WRITE: e_pin = 1'b1;
+		endcase
+	end
+
+	assign data_pins = state == STATE_WRITE ? data : 8'bz;
+
+	wire [7:0] status = data_pins;
+	wire is_busy = status[7];
+
+	assign data_ack = state == STATE_DONE;
 
 	task reset;
 		begin
 			state <= STATE_IDLE;
-			counter <= 17'b0;
-			data <= 8'b0;
-			is_cmd <= 1'b0;
-			completed <= 1'b0;
+			counter <= 8'b0;
 		end
 	endtask
 
@@ -57,40 +65,33 @@ module lcd_controller (
 				if (data_req) begin
 					data <= data_in;
 					is_cmd <= data_is_cmd;
-					state <= STATE_HOLDING_RS;
+					state <= STATE_WAIT;
 				end
 			end
-			STATE_HOLDING_RS: begin
-				if (counter == RS_HOLD_TIME) begin
-					state <= STATE_HOLDING_E;
-					counter <= 17'b0;
-				end else
-					counter <= counter + 1'b1;
-			end
-			STATE_HOLDING_E: begin
-				if (counter == E_HOLD_TIME) begin
-					counter <= 17'b0;
-					state <= STATE_WAITING;
-				end else
-					counter <= counter + 1'b1;
-			end
-			STATE_WAITING: begin
-				if (counter == delay) begin
-					if (completed) begin
-						state <= STATE_IDLE;
-						completed <= 1'b0;
-						counter <= 16'b0;
+			STATE_WAIT: begin
+				if (counter == HOLD_TIME) begin
+					if (!is_busy) begin
+						state <= STATE_WRITE;
+						counter <= 8'b0;
 					end
 				end else
 					counter <= counter + 1'b1;
-				
+			end
+			STATE_WRITE: begin
+				if (counter == HOLD_TIME) begin
+					state <= STATE_DONE;
+					counter <= 8'b0;
+				end else
+					counter <= counter + 1'b1;
+			end
+			STATE_DONE: begin
 				if (!data_req)
-					completed <= 1'b1;
+					state <= STATE_IDLE;
 			end
 			endcase
 		end
 	endtask
-
+	
 	always @(posedge clk or posedge rst) begin
 		if (rst) reset;
 		else on_clock;

@@ -1,7 +1,7 @@
 module lcd_bus_interface#(parameter START_ADDR = 32'h0) (
 	input clk, rst,
 	
-	output reg [7:0] ctrl_data,
+	output [7:0] ctrl_data,
 	output reg ctrl_data_is_cmd, ctrl_data_req,
 	input ctrl_data_ack,
 	
@@ -34,25 +34,22 @@ module lcd_bus_interface#(parameter START_ADDR = 32'h0) (
 		end
 	endtask
 
+	assign ctrl_data = data_bus[7:0];
+
+	always @* begin
+		case (reg_index)
+		1'd0: ctrl_data_is_cmd <= 1'b0;
+		1'd1: ctrl_data_is_cmd <= 1'b1;
+		endcase
+	end
+
 	task on_clock;
 		begin
 			if (ctrl_data_ack && !write_req)
 				ctrl_data_req <= 1'b0;
 			else if (!ctrl_data_ack && write_req) begin
-				if (word_offset == 2'd0 && data_mask_bus[0]) begin
-					case (reg_index)
-					1'd0: begin
-						ctrl_data <= data_bus[7:0];
-						ctrl_data_is_cmd <= 1'b0;
-						ctrl_data_req <= 1'b1;
-					end
-					1'd1: begin
-						ctrl_data <= data_bus[7:0];
-						ctrl_data_is_cmd <= 1'b1;
-						ctrl_data_req <= 1'b1;
-					end
-					endcase
-				end
+				if (word_offset == 2'd0 && data_mask_bus[0])
+					ctrl_data_req <= 1'b1;
 			end
 		end
 	endtask

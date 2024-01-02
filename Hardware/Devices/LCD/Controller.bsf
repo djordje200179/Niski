@@ -81,18 +81,18 @@ https://fpgasoftware.intel.com/eula.
 		(line (pt 208 64)(pt 192 64))
 	)
 	(port
-		(pt 208 96)
-		(output)
-		(text "data_pins[7..0]" (rect 0 0 95 15)(font "Arial" ))
-		(text "data_pins[7..0]" (rect 104 88 199 103)(font "Arial" ))
-		(line (pt 208 96)(pt 192 96)(line_width 3))
-	)
-	(port
 		(pt 0 72)
 		(output)
 		(text "data_ack" (rect 0 0 59 15)(font "Arial" ))
 		(text "data_ack" (rect 24 64 83 79)(font "Arial" ))
 		(line (pt 16 72)(pt 0 72))
+	)
+	(port
+		(pt 208 96)
+		(bidir)
+		(text "data_pins[7..0]" (rect 0 0 95 15)(font "Arial" ))
+		(text "data_pins[7..0]" (rect 104 88 199 103)(font "Arial" ))
+		(line (pt 208 96)(pt 192 96)(line_width 3))
 	)
 	(drawing
 		(rectangle (rect 16 16 192 128))
