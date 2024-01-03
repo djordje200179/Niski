@@ -16,9 +16,9 @@ module leds_bus_interface#(parameter START_ADDR = 32'h0) (
 	assign {ctrl_led0, ctrl_led1, ctrl_led2, ctrl_led3} = {data_reg[24], data_reg[16], data_reg[8], data_reg[0]};
 
 	wire addr_hit;
-	wire [0:0] reg_index;
+	wire [1:0] reg_index;
 	wire [1:0] word_offset;
-	addr_splitter#(START_ADDR, 2) addr_splitter (
+	addr_splitter#(START_ADDR, 3) addr_splitter (
 		.addr_bus(addr_bus),
 
 		.addr_hit(addr_hit),
@@ -39,6 +39,7 @@ module leds_bus_interface#(parameter START_ADDR = 32'h0) (
 
 	wire [7:0] next_ctrl_reg = ctrl_reg & existing_data_mask | incoming_data;
 	wire [31:0] next_data_reg = data_reg & existing_data_mask | incoming_data;
+	wire [31:0] next_data_toggled = data_reg ^ incoming_data;
 
 	wire read_req = addr_hit && rd_bus,
 		 write_req = addr_hit && wr_bus;
@@ -46,8 +47,9 @@ module leds_bus_interface#(parameter START_ADDR = 32'h0) (
 	reg [31:0] data_out;
 	always @* begin
 		case (reg_index)
-		1'd0: data_out = ctrl_reg;
-		1'd1: data_out = data_reg;
+		2'd0: data_out = ctrl_reg;
+		2'd1: data_out = data_reg;
+		2'd2: data_out = data_reg;
 		endcase
 
 		data_out = data_out >> (8 * word_offset);
@@ -74,8 +76,9 @@ module leds_bus_interface#(parameter START_ADDR = 32'h0) (
 				data_written <= 1'b1;
 
 				case (reg_index)
-				1'd0: ctrl_reg <= next_ctrl_reg;
-				1'd1: data_reg <= next_data_reg;
+				2'd0: ctrl_reg <= next_ctrl_reg;
+				2'd1: data_reg <= next_data_reg;
+				2'd2: data_reg <= next_data_toggled;
 				endcase
 			end
 		end
