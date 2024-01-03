@@ -215,9 +215,9 @@ set_global_assignment -name SDC_FILE Clocks/Timings.sdc
 set_global_assignment -name VERILOG_FILE Clocks/FrequencyDivider.v
 set_global_assignment -name VERILOG_FILE Clocks/LowFreqClock.v
 set_global_assignment -name QIP_FILE Clocks/PLL.qip
-set_global_assignment -name VERILOG_FILE Memory/BusInterface.v
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/BusInterface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/RAM.sv
-set_global_assignment -name VERILOG_FILE Memory/ROM.v
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/ROM.sv
 set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v
