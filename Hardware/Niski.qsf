@@ -209,7 +209,7 @@ set_global_assignment -name VERILOG_INCLUDE_FILE CPU/ExceptionCauses.vh
 set_global_assignment -name VERILOG_FILE CPU/ALU.v
 set_global_assignment -name VERILOG_FILE CPU/PC.v
 set_global_assignment -name VERILOG_FILE CPU/IR.v
-set_global_assignment -name VERILOG_FILE Bus/Arbitrator.v
+set_global_assignment -name SYSTEMVERILOG_FILE Bus/Arbitrator.sv
 set_global_assignment -name VERILOG_FILE Bus/Watchdog.v
 set_global_assignment -name SDC_FILE Clocks/Timings.sdc
 set_global_assignment -name VERILOG_FILE Clocks/FrequencyDivider.v
