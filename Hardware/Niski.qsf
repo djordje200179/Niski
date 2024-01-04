@@ -229,7 +229,7 @@ set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/BusInterface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/Controller.sv
 set_global_assignment -name VERILOG_FILE Devices/DMA/DMA.v
-set_global_assignment -name SYSTEMVERILOG_FILE Devices/PLIC/Controller.v
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/PLIC/Controller.sv
 set_global_assignment -name VERILOG_FILE Devices/LCD/BusInterface.v
 set_global_assignment -name VERILOG_FILE Devices/LCD/Controller.v
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/LEDs/BusInterface.sv
