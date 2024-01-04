@@ -1,9 +1,8 @@
-module ssds_digit_mapper (digit, segments);
-	input [3:0] digit;
-	
-	output reg [6:0] segments;
-
-	always @* begin
+module ssds_digit_mapper (
+	input [3:0] digit,
+	output logic [6:0] segments
+);
+	always_comb begin
 		case (digit)
 		4'h0: segments = 7'b0111111;
 		4'h1: segments = 7'b0000110;
