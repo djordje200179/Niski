@@ -81,7 +81,7 @@ module ssds_bus_interface#(START_ADDR = 32'h0) (
 	assign data_bus = read_req ? data_out : 'z,
 		   fc_bus = addr_hit ? (read_req || state == STATE_DONE) : 'z;
 
-	task reset;
+	task automatic reset;
 		begin
 			state <= STATE_IDLE;
 
@@ -91,9 +91,9 @@ module ssds_bus_interface#(START_ADDR = 32'h0) (
 		end
 	endtask
 
-	task on_clock;
+	task automatic on_clock;
 		begin
-		case (state)
+		unique case (state)
 			STATE_IDLE: begin
 				if (write_req) begin
 					state <= STATE_DONE;

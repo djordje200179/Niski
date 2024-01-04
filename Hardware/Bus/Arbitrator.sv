@@ -31,7 +31,7 @@ module bus_arbitrator (
 
 	task automatic on_clock;
 		begin
-			case (state)
+			unique case (state)
 			STATE_IDLE: begin
 				if (cpu_req)
 					state <= STATE_CPU;
