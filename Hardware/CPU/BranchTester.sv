@@ -14,7 +14,7 @@ module cpu_branch_tester (
 		INST_BRANCH_FUNCT3_GE:	condition_satisfied = $signed(operand_a) >= $signed(operand_b);
 		INST_BRANCH_FUNCT3_LTU: condition_satisfied = operand_a < operand_b;
 		INST_BRANCH_FUNCT3_GEU: condition_satisfied = operand_a >= operand_b;
-		dеfault: condition_satisfied = 0;
+		default: condition_satisfied = 0;
 		endcase
 	end
 endmodule
