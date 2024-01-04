@@ -71,7 +71,7 @@ module plic#(START_ADDR = 32'h0, INTR_NUM = 16) (
 		begin
 			for (int i = 1; i < INTR_NUM; i++) begin
 				if (irqs[i])
-					pending_intr_reg[i] <= '1;
+					pending_intr_reg[i] <= 1;
 			end
 		end
 	endtask
@@ -114,7 +114,7 @@ module plic#(START_ADDR = 32'h0, INTR_NUM = 16) (
 					state <= STATE_IDLE;
 
 					if (readen_reg_index == 2)
-						pending_intr_reg[next_intr] <= '0;
+						pending_intr_reg[next_intr] <= 0;
 				end
 			end
 			endcase

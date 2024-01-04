@@ -18,10 +18,10 @@ module bus_arbitrator (
 	
 	assign addr_bus = bus_used ? 'z : '0;
 	assign data_bus = bus_used ? 'z : '0;
-	assign wr_bus = bus_used ? 'z : '0;
-	assign rd_bus = bus_used ? 'z : '0;
+	assign wr_bus = bus_used ? 'z : 0;
+	assign rd_bus = bus_used ? 'z : 0;
 	assign data_mask_bus = bus_used ? 'z : '0;
-	assign fc_bus = bus_used ? 'z : '0;
+	assign fc_bus = bus_used ? 'z : 0;
 
 	task automatic reset;
 		begin

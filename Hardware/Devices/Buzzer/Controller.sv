@@ -3,5 +3,5 @@ module buzzer_controller (
 
 	output buzzer_pin
 );
-	assign buzzer_pin = en ? ~buzz : '1;
+	assign buzzer_pin = en ? ~buzz : 1;
 endmodule
