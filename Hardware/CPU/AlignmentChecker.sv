@@ -5,10 +5,11 @@ module cpu_alignment_checker (
 	output logic overflow
 );
 	always_comb begin
+		overflow = 0;
+
 		unique case (addr_offset)
-		0: overflow = 0;
 		1: begin
-			if (mask[3:1])
+			if (mask[3])
 				overflow = 1;
 		end
 		2: begin
