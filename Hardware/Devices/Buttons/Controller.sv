@@ -1,21 +1,15 @@
-module buttons_controller (
-	clk, 
-	button_pins, 
-	btn_0, btn_1, btn_2, btn_3, btn_rst
+module buttons_controller#(DEBOUNCING_TICKS = 4) (
+	input clk, 
+	
+	input [4:0] button_pins, 
+	
+	output btn_0, btn_1, btn_2, btn_3, btn_rst
 );
-	parameter DEBOUNCING_TICKS = 4;
-	
-	input clk;
-	
-	output btn_0, btn_1, btn_2, btn_3, btn_rst;
-	
-	input [4:0] button_pins;
-
 	assign btn_rst = ~button_pins[4];
 	
 	generate
 		genvar i;
-		for(i = 0; i < 4; i = i + 1) begin : debouncers
+		for(i = 0; i < 4; i++) begin : debouncers
 			wire debounced_input;
 			
 			case (i)

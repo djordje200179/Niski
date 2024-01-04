@@ -222,10 +222,10 @@ set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v
 set_global_assignment -name VERILOG_FILE Components/PWM.v
-set_global_assignment -name VERILOG_FILE Devices/DataShifter.v
-set_global_assignment -name VERILOG_FILE Devices/AddrSplitter.v
-set_global_assignment -name VERILOG_FILE Devices/Buttons/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/DataShifter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/AddrSplitter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buttons/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buttons/Controller.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/BusInterface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/Controller.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/DMA/DMA.sv

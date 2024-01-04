@@ -1,4 +1,4 @@
-module addr_splitter#(parameter START_ADDR = 32'h0, REGS = 2) (
+module addr_splitter#(START_ADDR = 32'h0, REGS = 2) (
 	input [31:0] addr_bus,
 
 	output addr_hit,
