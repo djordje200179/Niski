@@ -1,8 +1,8 @@
-module lcd_bus_interface#(parameter START_ADDR = 32'h0) (
+module lcd_bus_interface#(START_ADDR = 32'h0) (
 	input clk, rst,
 	
 	output [7:0] ctrl_data,
-	output reg ctrl_data_is_cmd, ctrl_data_req,
+	output logic ctrl_data_is_cmd, ctrl_data_req,
 	input ctrl_data_ack,
 	
 	input [31:0] addr_bus, 
@@ -25,36 +25,36 @@ module lcd_bus_interface#(parameter START_ADDR = 32'h0) (
 	wire read_req = addr_hit && rd_bus,
 		 write_req = addr_hit && wr_bus;
 
-	assign data_bus = read_req ? 32'b0 : 32'bz,
-		   fc_bus = addr_hit ? ctrl_data_ack : 1'bz;
+	assign data_bus = read_req ? '0 : 'z,
+		   fc_bus = addr_hit ? ctrl_data_ack : 'z;
 
-	task reset;
+	task automatic reset;
 		begin
-			ctrl_data_req <= 1'b0;
+			ctrl_data_req <= 0;
 		end
 	endtask
 
 	assign ctrl_data = data_bus[7:0];
 
-	always @* begin
-		case (reg_index)
-		1'd0: ctrl_data_is_cmd <= 1'b0;
-		1'd1: ctrl_data_is_cmd <= 1'b1;
+	always_comb begin
+		unique case (reg_index)
+		0: ctrl_data_is_cmd <= 0;
+		1: ctrl_data_is_cmd <= 1;
 		endcase
 	end
 
-	task on_clock;
+	task automatic on_clock;
 		begin
 			if (ctrl_data_ack && !write_req)
-				ctrl_data_req <= 1'b0;
+				ctrl_data_req <= 0;
 			else if (!ctrl_data_ack && write_req) begin
-				if (word_offset == 2'd0 && data_mask_bus[0])
-					ctrl_data_req <= 1'b1;
+				if (word_offset == 0 && data_mask_bus[0])
+					ctrl_data_req <= 1;
 			end
 		end
 	endtask
 
-	always @(posedge clk or posedge rst) begin
+	always_ff @(posedge clk or posedge rst) begin
 		if (rst) reset;
 		else on_clock;
 	end

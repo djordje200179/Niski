@@ -93,7 +93,7 @@ module ssds_bus_interface#(START_ADDR = 32'h0) (
 
 	task on_clock;
 		begin
-			case (state)
+		case (state)
 			STATE_IDLE: begin
 				if (write_req) begin
 					state <= STATE_DONE;
