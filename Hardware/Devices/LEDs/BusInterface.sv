@@ -9,7 +9,8 @@ module leds_bus_interface#(START_ADDR = 32'h0) (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	reg [31:0] ctrl_reg, data_reg;
+	reg [0:0] ctrl_reg;
+	reg [31:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
 	assign {ctrl_led0, ctrl_led1, ctrl_led2, ctrl_led3} = {data_reg[24], data_reg[16], data_reg[8], data_reg[0]};

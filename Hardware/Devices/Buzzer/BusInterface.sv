@@ -9,7 +9,8 @@ module buzzer_bus_interface#(START_ADDR = 32'h0) (
 	input [3:0] data_mask_bus, 
 	output fc_bus
 );
-	reg [31:0] ctrl_reg, data_reg;
+	reg [0:0] ctrl_reg;
+	reg [0:0] data_reg;
 
 	assign ctrl_en = ctrl_reg[0];
 	assign ctrl_buzz = data_reg[0];
