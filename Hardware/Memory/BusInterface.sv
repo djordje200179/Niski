@@ -1,4 +1,4 @@
-module memory_bus_interface #(MEM_ADDR_WIDTH = 16, START_ADDR = 0) (
+module memory_bus_interface#(MEM_ADDR_WIDTH = 16, START_ADDR = 0) (
 	input clk, rst,
 
 	output [MEM_ADDR_WIDTH-1:0] mem_addr, 

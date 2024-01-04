@@ -1,4 +1,4 @@
-module rom #(ADDR_BITS = 10, MEM_FILE = "") (
+module rom#(ADDR_BITS = 10, MEM_FILE = "") (
 	input clk,
 
 	input [ADDR_BITS-1:0] addr, 

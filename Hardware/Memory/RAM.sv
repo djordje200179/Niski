@@ -1,4 +1,4 @@
-module ram #(ADDR_BITS = 10, MEM_FILE = "") (
+module ram#(ADDR_BITS = 10, MEM_FILE = "") (
 	input clk,
 
 	input wr, 
