@@ -49,6 +49,7 @@ module leds_bus_interface#(START_ADDR = 32'h0) (
 		0: data_out = ctrl_reg;
 		1: data_out = data_reg;
 		2: data_out = data_reg;
+		default: data_out = 0;
 		endcase
 
 		data_out = data_out >> (8 * word_offset);

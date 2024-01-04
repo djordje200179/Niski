@@ -44,11 +44,10 @@ module buzzer_bus_interface#(START_ADDR = 32'h0) (
 
 	logic [31:0] data_out;
 	always_comb begin
-		data_out = '0;
-
 		unique case (reg_index)
 		0: data_out = ctrl_reg;
 		1: data_out = data_reg;
+		default: data_out = 0;
 		endcase
 
 		data_out = data_out >> (8 * word_offset);
