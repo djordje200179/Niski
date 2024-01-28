@@ -4,7 +4,7 @@ module cpu_branch_tester (
 	input [31:0] operand_a, operand_b,
 	output reg condition_satisfied
 );
-	`include "instructions.vh"
+	`include "Instructions.vh"
 
 	always @* begin
 		condition_satisfied = 1'b0;
