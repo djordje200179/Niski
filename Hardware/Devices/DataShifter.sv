@@ -10,13 +10,13 @@ module data_shifter (
 	wire [31:0] mask = {{8{shifted_mask[3]}}, {8{shifted_mask[2]}}, {8{shifted_mask[1]}}, {8{shifted_mask[0]}}};
 	assign existing_data_mask = ~mask;
 
-	reg [31:0] shifted_data;
-	always @* begin
-		case (word_offset)
-		2'b00: shifted_data = data_bus;
-		2'b01: shifted_data = {data_bus[0 +: 24], 8'b0};
-		2'b10: shifted_data = {data_bus[0 +: 16], 16'b0};
-		2'b11: shifted_data = {data_bus[0 +: 8], 24'b0};
+	logic [31:0] shifted_data;
+	always_comb begin
+		unique case (word_offset)
+		0: shifted_data = data_bus;
+		1: shifted_data = {data_bus[0 +: 24], '0};
+		2: shifted_data = {data_bus[0 +: 16], '0};
+		3: shifted_data = {data_bus[0 +: 8], '0};
 		endcase
 	end
 

@@ -1,7 +1,7 @@
-module dma#(parameter START_ADDR = 32'h0) (
+module dma#(START_ADDR = 32'h0) (
 	input clk, rst,
 
-	output reg bus_req,
+	output logic bus_req,
 	input bus_grant,
 
 	inout [31:0] addr_bus, data_bus,
@@ -11,7 +11,7 @@ module dma#(parameter START_ADDR = 32'h0) (
 
 	input watchdog
 );
-	reg [7:0] ctrl_reg;
+	reg [4:0] ctrl_reg;
 	reg [31:0] src_reg, dest_reg, cnt_reg;
 
 	wire burst;
@@ -42,53 +42,46 @@ module dma#(parameter START_ADDR = 32'h0) (
 		.incoming_data(incoming_data)
 	);
 
-	wire [7:0] next_ctrl_reg = ctrl_reg & existing_data_mask | incoming_data;
+	wire [31:0] next_ctrl_reg = ctrl_reg & existing_data_mask | incoming_data;
 	wire [31:0] next_src_reg = src_reg & existing_data_mask | incoming_data;
 	wire [31:0] next_dest_reg = dest_reg & existing_data_mask | incoming_data;
 	wire [31:0] next_cnt_reg = cnt_reg & existing_data_mask | incoming_data;
 
 	wire read_req = addr_hit && rd_bus,
 		 write_req = addr_hit && wr_bus;
-	
+
 	reg process_started;
+	enum {STATE_IDLE, STATE_WAIT_ACK, STATE_WAIT_BUS, STATE_TRANSFER_READING, STATE_TRANSFER_WRITING} state;
 
-	reg [2:0] state;
-	localparam STATE_IDLE 		 		= 3'd0,
-			   STATE_WAIT_ACK       	= 3'd1,
-			   STATE_WAIT_BUS			= 3'd2,
-			   STATE_TRANSFER_READING	= 3'd3,
-			   STATE_TRANSFER_WRITING	= 3'd4;
+	logic [31:0] addr_out, data_out;
 
-	reg [31:0] addr_out, data_out;
+	assign addr_bus = bus_grant ? addr_out : 'z,
+		   data_bus = (read_req || state == STATE_TRANSFER_WRITING) ? data_out : 'z,
+		   rd_bus = bus_grant ? state == STATE_TRANSFER_READING : 'z,
+		   wr_bus = bus_grant ? state == STATE_TRANSFER_WRITING : 'z,
+		   data_mask_bus = bus_grant ? 4'b0001 : 'z,
+		   fc_bus = addr_hit ? (read_req || state == STATE_WAIT_ACK) : 'z;
 
-	assign addr_bus = bus_grant ? addr_out : 32'bz,
-		   data_bus = (read_req || state == STATE_TRANSFER_WRITING) ? data_out : 32'bz,
-		   rd_bus = bus_grant ? state == STATE_TRANSFER_READING : 1'bz,
-		   wr_bus = bus_grant ? state == STATE_TRANSFER_WRITING : 1'bz,
-		   data_mask_bus = bus_grant ? 4'b0001 : 4'bz,
-		   fc_bus = addr_hit ? (read_req || state == STATE_WAIT_ACK) : 1'bz;
-
-	reg [7:0] curr_data;
-
-	always @* begin
-		addr_out = 32'b0;
-
-		case (state)
+	always_comb begin
+		unique case (state)
 		STATE_TRANSFER_READING: addr_out = src_reg;
 		STATE_TRANSFER_WRITING: addr_out = dest_reg;
+		default: addr_out = 0;
 		endcase
 	end
 
-	always @* begin
-		data_out = 32'b0;
+	reg [7:0] curr_data;
+
+	always_comb begin
+		data_out = 0;
 
 		case (state)
 		STATE_IDLE: begin
-			case (reg_index)
-			2'd0: data_out = ctrl_reg;
-			2'd1: data_out = src_reg;
-			2'd2: data_out = dest_reg;
-			2'd3: data_out = cnt_reg;
+			unique case (reg_index)
+			0: data_out = ctrl_reg;
+			1: data_out = src_reg;
+			2: data_out = dest_reg;
+			3: data_out = cnt_reg;
 			endcase
 
 			data_out = data_out >> (8 * word_offset);
@@ -97,29 +90,30 @@ module dma#(parameter START_ADDR = 32'h0) (
 		endcase
 	end
 
-	task reset;
+	task automatic reset;
 		begin
 			state <= STATE_IDLE;
-			bus_req <= 1'b0;
-			ctrl_reg <= 8'b0;
-			process_started <= 1'b0;
+			process_started <= 0;
+
+			bus_req <= 0;
+			ctrl_reg <= '0;
 		end
 	endtask
 
-	task on_clock;
+	task automatic on_clock;
 		begin
-			case (state)
+			unique case (state)
 			STATE_IDLE: begin
 				if (write_req) begin
 					case (reg_index)
-					2'd0: ctrl_reg <= next_ctrl_reg;
-					2'd1: src_reg <= next_src_reg;
-					2'd2: dest_reg <= next_dest_reg;
-					2'd3: cnt_reg <= next_cnt_reg;
+					0: ctrl_reg <= next_ctrl_reg;
+					1: src_reg <= next_src_reg;
+					2: dest_reg <= next_dest_reg;
+					3: cnt_reg <= next_cnt_reg;
 					endcase
 
-					if (reg_index == 2'd0)
-						process_started <= 1'b1;
+					if (reg_index == 0)
+						process_started <= 1;
 					
 					state <= STATE_WAIT_ACK;
 				end
@@ -127,13 +121,13 @@ module dma#(parameter START_ADDR = 32'h0) (
 			STATE_WAIT_ACK: begin
 				if (!addr_hit) begin
 					if (process_started) begin
-						if (cnt_reg > 32'd0) begin
+						if (cnt_reg != 0) begin
 							state <= STATE_WAIT_BUS;
-							bus_req <= 1'b1;
+							bus_req <= 1;
 						end else
 							state <= STATE_IDLE;
 					
-						process_started <= 1'b0;
+						process_started <= 0;
 					end else
 						state <= STATE_IDLE;
 				end
@@ -144,37 +138,29 @@ module dma#(parameter START_ADDR = 32'h0) (
 			end
 			STATE_TRANSFER_READING: begin
 				if (watchdog) begin
-					bus_req <= 1'b0;
+					bus_req <= 0;
 					state <= STATE_IDLE;
 				end else if (fc_bus) begin
 					curr_data <= data_bus[7:0];
 					state <= STATE_TRANSFER_WRITING;
 
-					if (move_src) begin
-						if (incr_src) 
-							src_reg <= src_reg + 32'd1;
-						else 
-							src_reg <= src_reg - 32'd1;
-					end
+					if (move_src)
+						src_reg <= src_reg + (incr_src ? 1 : -1);
 				end
 			end
 			STATE_TRANSFER_WRITING: begin
 				if (watchdog) begin
-					bus_req <= 1'b0;
+					bus_req <= 0;
 					state <= STATE_IDLE;
 				end else if (fc_bus) begin
-					if (move_dest) begin
-						if (incr_dest) 
-							dest_reg <= dest_reg + 32'd1;
-						else 
-							dest_reg <= dest_reg - 32'd1;
-					end
+					if (move_dest)
+						dest_reg <= dest_reg + (incr_dest ? 1 : -1);
 
-					if (cnt_reg > 32'd0) begin
-						cnt_reg <= cnt_reg - 32'd1;
+					if (cnt_reg != 0) begin
+						cnt_reg <= cnt_reg - 1;
 						state <= STATE_TRANSFER_READING;
 					end else begin
-						bus_req <= 1'b0;
+						bus_req <= 0;
 						state <= STATE_IDLE;
 					end
 				end

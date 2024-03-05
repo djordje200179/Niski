@@ -8,6 +8,8 @@ extern volatile struct {
 	} ctrl;
 
 	union leds_state data;
+
+	bool toggle[4];
 } LEDS;
 
 void leds_on(void) {
@@ -27,5 +29,5 @@ void leds_set(union leds_state state) {
 }
 
 void leds_toggle_single(uint8_t led) {
-	LEDS.data.leds[led] = !LEDS.data.leds[led];
+	LEDS.toggle[led] = true;
 }

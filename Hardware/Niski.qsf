@@ -134,7 +134,7 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name ENABLE_SIGNALTAP OFF
 set_global_assignment -name USE_SIGNALTAP_FILE Debugging/TimerInterrupt.stp
-set_global_assignment -name EDA_SIMULATION_TOOL "QuestaSim (SystemVerilog)"
+set_global_assignment -name EDA_SIMULATION_TOOL "Questa Intel FPGA (SystemVerilog)"
 set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "SYSTEMVERILOG HDL" -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_timing
@@ -164,10 +164,6 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME bus_arbitrator_tb -sectio
 set_global_assignment -name EDA_TEST_BENCH_NAME Niski -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id Niski
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME niski_tb -section_id Niski
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU/CPU.sv -section_id CPU
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Devices/LEDs/BusInterface.sv -section_id "LEDs Bus Interface"
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Bus/Arbitrator.sv -section_id "Bus Arbitrator"
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Niski.sv -section_id Niski
 set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
@@ -200,51 +196,50 @@ set_global_assignment -name FLOW_DISABLE_ASSEMBLER OFF
 set_global_assignment -name BDF_FILE Niski.bdf
 set_global_assignment -name VERILOG_FILE CPU/CPU.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Instructions.vh
-set_global_assignment -name VERILOG_FILE CPU/AlignmentChecker.v
-set_global_assignment -name VERILOG_FILE CPU/BranchTester.v
+set_global_assignment -name SYSTEMVERILOG_FILE CPU/AlignmentChecker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE CPU/BranchTester.sv
 set_global_assignment -name VERILOG_FILE CPU/BusInterface.v
-set_global_assignment -name VERILOG_FILE CPU/RegFile.v
+set_global_assignment -name SYSTEMVERILOG_FILE CPU/RegFile.sv
 set_global_assignment -name VERILOG_FILE CPU/CSRs.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/ExceptionCauses.vh
 set_global_assignment -name VERILOG_FILE CPU/ALU.v
 set_global_assignment -name VERILOG_FILE CPU/PC.v
 set_global_assignment -name VERILOG_FILE CPU/IR.v
-set_global_assignment -name VERILOG_FILE Bus/Arbitrator.v
+set_global_assignment -name SYSTEMVERILOG_FILE Bus/Arbitrator.sv
 set_global_assignment -name VERILOG_FILE Bus/Watchdog.v
 set_global_assignment -name SDC_FILE Clocks/Timings.sdc
 set_global_assignment -name VERILOG_FILE Clocks/FrequencyDivider.v
 set_global_assignment -name VERILOG_FILE Clocks/LowFreqClock.v
 set_global_assignment -name QIP_FILE Clocks/PLL.qip
-set_global_assignment -name VERILOG_FILE Memory/BusInterface.v
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/BusInterface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/RAM.sv
-set_global_assignment -name VERILOG_FILE Memory/ROM.v
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/ROM.sv
 set_global_assignment -name VERILOG_FILE Components/Counter.v
 set_global_assignment -name VERILOG_FILE Components/Debouncer.v
 set_global_assignment -name VERILOG_FILE Components/RisingEdgeDetector.v
 set_global_assignment -name VERILOG_FILE Components/PWM.v
-set_global_assignment -name VERILOG_FILE Devices/DataShifter.v
-set_global_assignment -name VERILOG_FILE Devices/AddrSplitter.v
-set_global_assignment -name VERILOG_FILE Devices/Buttons/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/Buttons/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/Buzzer/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/Buzzer/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/DMA/DMA.v
-set_global_assignment -name VERILOG_FILE Devices/PLIC/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/PLIC/Splitter.v
-set_global_assignment -name VERILOG_FILE Devices/LCD/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/LCD/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/LEDs/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/LEDs/Controller.v
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/DataShifter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/AddrSplitter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buttons/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buttons/Controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/Buzzer/Controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/DMA/DMA.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/PLIC/Controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/LCD/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/LCD/Controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/LEDs/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/LEDs/Controller.sv
 set_global_assignment -name VERILOG_FILE Devices/I2C/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/I2C/States.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/PS2Keyboard/Keys.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Mappers/Digit.v
-set_global_assignment -name VERILOG_FILE Devices/SSDs/BusInterface.v
-set_global_assignment -name VERILOG_FILE Devices/SSDs/Controller.v
-set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/Digit.v
-set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/HexNumber.v
-set_global_assignment -name VERILOG_FILE Devices/SSDs/Mappers/DecNumber.v
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/SSDs/BusInterface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/SSDs/Controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/SSDs/Mappers/Digit.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/SSDs/Mappers/HexNumber.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/SSDs/Mappers/DecNumber.sv
 set_global_assignment -name VERILOG_FILE Devices/SDRAM/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/SDRAM/States.vh
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/SDRAM/Commands.vh
@@ -259,4 +254,8 @@ set_global_assignment -name SYSTEMVERILOG_FILE Tests/Bus/Arbitrator.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Tests/Devices/LEDs/BusInterface.sv
 set_global_assignment -name SIGNALTAP_FILE Debugging/MemoryRead.stp
 set_global_assignment -name SIGNALTAP_FILE Debugging/TimerInterrupt.stp
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU/CPU.sv -section_id CPU
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Devices/LEDs/BusInterface.sv -section_id "LEDs Bus Interface"
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Bus/Arbitrator.sv -section_id "Bus Arbitrator"
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Niski.sv -section_id Niski
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
