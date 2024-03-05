@@ -3,7 +3,7 @@ module ssds_digit_mapper (
 	output logic [6:0] segments
 );
 	always_comb begin
-		case (digit)
+		unique case (digit)
 		4'h0: segments = 7'b0111111;
 		4'h1: segments = 7'b0000110;
 		4'h2: segments = 7'b1011011;

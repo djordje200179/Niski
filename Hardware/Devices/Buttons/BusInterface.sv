@@ -4,10 +4,10 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 	input btn_0, btn_1, btn_2, btn_3,
 	output irq_0, irq_1, irq_2, irq_3,
 
-	input [31:0] addr_bus, 
-	inout [31:0] data_bus, 
-	input rd_bus, wr_bus, 
-	input [3:0] data_mask_bus, 
+	input [31:0] addr_bus,
+	inout [31:0] data_bus,
+	input rd_bus, wr_bus,
+	input [3:0] data_mask_bus,
 	output fc_bus
 );
 	reg [7:0] ctrl_reg;
@@ -31,7 +31,7 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 		end
 	endgenerate
 
-	assign irq_0 = irqs[0], irq_1 = irqs[1], irq_2 = irqs[2], irq_3 = irqs[3];
+	assign '{irq_0, irq_1, irq_2, irq_3} = irqs;
 
 	wire addr_hit;
 	wire [0:0] reg_index;
@@ -96,7 +96,7 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 				end
 			end
 			STATE_DONE: begin
-				if (!write_req) 
+				if (!write_req)
 					state <= STATE_IDLE;
 			end
 			endcase

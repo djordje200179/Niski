@@ -19,7 +19,7 @@ module ssds_bus_interface#(START_ADDR = 32'h0) (
 	assign ctrl_dots = data_dots_reg[3:0];
 
 	wire [6:0] segments [4];
-	assign segments = '{ctrl_digit_3, ctrl_digit_2, ctrl_digit_1, ctrl_digit_0};
+	assign '{ctrl_digit_0, ctrl_digit_1, ctrl_digit_2, ctrl_digit_3} = segments;
 
 	generate
 		genvar i;
@@ -106,7 +106,7 @@ module ssds_bus_interface#(START_ADDR = 32'h0) (
 				end
 			end
 			STATE_DONE: begin
-				if (!write_req) 
+				if (!write_req)
 					state <= STATE_IDLE;
 			end
 			endcase

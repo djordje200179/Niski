@@ -8,6 +8,9 @@ module cpu_alignment_checker (
 		overflow = 0;
 
 		unique case (addr_offset)
+		0: begin
+			overflow = 0;
+		end
 		1: begin
 			if (mask[3])
 				overflow = 1;

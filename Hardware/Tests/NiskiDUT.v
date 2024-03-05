@@ -292,7 +292,7 @@ ram	b2v_inst20(
 	defparam	b2v_inst20.MEM_FILE = "../../Software/out/ram.mem";
 
 
-memory_bus_interface	b2v_inst21(
+memory_bus_interface#(12, 32'h50000000) b2v_inst21(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.wr_bus(wr_bus),
@@ -307,11 +307,8 @@ memory_bus_interface	b2v_inst21(
 	.mem_addr(SYNTHESIZED_WIRE_19),
 	.mem_data_in(SYNTHESIZED_WIRE_20),
 	.mem_wr_mask(SYNTHESIZED_WIRE_21));
-	defparam	b2v_inst21.MEM_ADDR_WIDTH = 12;
-	defparam	b2v_inst21.START_ADDR = 32'b01010000000000000000000000000000;
 
-
-memory_bus_interface	b2v_inst22(
+memory_bus_interface#(11, 32'h40000000) b2v_inst22(
 	.clk(clk_50_mhz),
 	.rst(btn_rst),
 	.wr_bus(wr_bus),
@@ -326,8 +323,6 @@ memory_bus_interface	b2v_inst22(
 	.mem_addr(SYNTHESIZED_WIRE_14)
 	
 	);
-	defparam	b2v_inst22.MEM_ADDR_WIDTH = 11;
-	defparam	b2v_inst22.START_ADDR = 32'b01000000000000000000000000000000;
 
 
 watchdog	b2v_inst23(

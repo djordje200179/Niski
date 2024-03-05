@@ -5,9 +5,9 @@ Info: NativeLink has detected Verilog design -- Verilog simulation models will b
 
 Sim Mode              :  RTL
 Family                :  cycloneive
-Quartus root          :  c:/quartus/quartus/bin64/
-Quartus sim root      :  c:/quartus/quartus/eda/sim_lib
-Simulation Tool       :  questasim
+Quartus root          :  c:/intel/quartus/quartus/bin64/
+Quartus sim root      :  c:/intel/quartus/quartus/eda/sim_lib
+Simulation Tool       :  questa intel fpga
 Simulation Language   :  verilog
 Simulation Mode       :  GUI
 Sim Output File       :  
@@ -16,8 +16,8 @@ Sim dir               :  simulation\questa
 
 =======================================================
 
-Info: Starting NativeLink simulation with Questasim software
-Sourced NativeLink script c:/quartus/quartus/common/tcl/internal/nativelink/modelsim.tcl
+Info: Starting NativeLink simulation with Questa Intel FPGA software
+Sourced NativeLink script c:/intel/quartus/quartus/common/tcl/internal/nativelink/modelsim.tcl
 Warning: File Niski_run_msim_rtl_verilog.do already exists - backing up current file as Niski_run_msim_rtl_verilog.do.bak11
-Info: Spawning QuestaSim Simulation software 
+Info: Spawning Questa Intel FPGA Simulation software 
 Info: NativeLink simulation flow was successful
