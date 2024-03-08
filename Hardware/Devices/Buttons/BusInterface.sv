@@ -12,26 +12,26 @@ module buttons_bus_interface#(parameter START_ADDR = 32'h0) (
 );
 	reg [7:0] ctrl_reg;
 
-	wire raw_inputs [4];
-	assign raw_inputs = '{btn_0, btn_1, btn_2, btn_3};
-
-	wire btns_pressed [4], irqs [4];
+	wire [3:0] raw_inputs = {btn_0, btn_1, btn_2, btn_3};
+	wire [3:0] irqs;
 
 	generate
 		genvar i;
 		for (i = 0; i < 4; i++) begin : edge_detectors
+			wire btn_pressed;
+			
 			rising_edge_detector red (
 				.clk(clk), .rst(rst),
 
 				.raw_input(raw_inputs[i]),
-				.rising_edge(btns_pressed[i])
+				.rising_edge(btns_pressed)
 			);
 
-			assign irqs[i] = btns_pressed[i] && ctrl_reg[i];
+			assign irqs[i] = btns_pressed && ctrl_reg[i];
 		end
 	endgenerate
 
-	assign '{irq_0, irq_1, irq_2, irq_3} = irqs;
+	assign {irq_0, irq_1, irq_2, irq_3} = irqs;
 
 	wire addr_hit;
 	wire [0:0] reg_index;

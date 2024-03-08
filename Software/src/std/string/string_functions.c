@@ -106,7 +106,7 @@ int strncmp(const char* lhs, const char* rhs, size_t count) {
 char* strchr(const char* str, int ch) {
 	for (size_t i = 0; str[i]; i++) {
 		if (str[i] == ch)
-			return &str[i];
+			return (char*)&str[i];
 	}
 
 	return NULL;
@@ -116,7 +116,7 @@ char* strrchr(const char* str, int ch) {
 	char* last = NULL;
 	for (size_t i = 0; str[i]; i++) {
 		if (str[i] == ch)
-			last = &str[i];
+			last = (char*)&str[i];
 	}
 
 	return last;
@@ -126,7 +126,7 @@ char* strstr(const char* str, const char* substr) {
 	size_t len = strlen(substr);
 	for (size_t i = 0; str[i]; i++) {
 		if (strncmp(&str[i], substr, len) == 0)
-			return &str[i];
+			return (char*)&str[i];
 	}
 
 	return NULL;

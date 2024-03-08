@@ -34,26 +34,26 @@ int second_thread(void* arg) {
 	return 0;
 }
 
-void btns_on_0_pressed(void) {
+void btns_on_0_pressed(void* arg) {
 	leds_toggle_single(0);
 }
 
-void btns_on_1_pressed(void) {
+void btns_on_1_pressed(void* arg) {
 	leds_toggle_single(1);
 }
 
-void btns_on_2_pressed(void) {
+void btns_on_2_pressed(void* arg) {
 	leds_toggle_single(2);
 }
 
-void btns_on_3_pressed(void) {
+void btns_on_3_pressed(void* arg) {
 	leds_toggle_single(3);
 }
 
 void main() {
 	leds_on();
 	ssds_on();
-	
+
 	puts("Main started.\n");
 
 	ssds_set_dec_num(1234);

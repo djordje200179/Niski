@@ -16,6 +16,11 @@ enum external_interrupt_type {
 	EXT_INTR_TYPE_BTN_3 = 7
 };
 
+void __attribute__((weak)) btns_on_0_pressed(void* arg) {}
+void __attribute__((weak)) btns_on_1_pressed(void* arg) {}
+void __attribute__((weak)) btns_on_2_pressed(void* arg) {}
+void __attribute__((weak)) btns_on_3_pressed(void* arg) {}
+
 static void (*ext_intr_handlers[16])(void*) = {
 	[EXT_INTR_TYPE_BTN_0] = btns_on_0_pressed,
 	[EXT_INTR_TYPE_BTN_1] = btns_on_1_pressed,

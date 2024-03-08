@@ -14,9 +14,9 @@ module data_shifter (
 	always_comb begin
 		unique case (word_offset)
 		0: shifted_data = data_bus;
-		1: shifted_data = {data_bus[0 +: 24], '0};
-		2: shifted_data = {data_bus[0 +: 16], '0};
-		3: shifted_data = {data_bus[0 +: 8], '0};
+		1: shifted_data = {data_bus[0 +: 24], 8'b0};
+		2: shifted_data = {data_bus[0 +: 16], 16'b0};
+		3: shifted_data = {data_bus[0 +: 8], 24'b0};
 		endcase
 	end
 
