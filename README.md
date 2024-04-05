@@ -173,6 +173,9 @@ Currently, the following header files and functions have been fully implemented:
 	- `memcpy`
 	- `memccpy`
 	- `memmove`
+- __setjmp.h__
+  	- `setjmp`
+  	- `longjmp`
 
 ### I/O devices
 In order to facilitate communication with external devices 
