@@ -139,6 +139,9 @@ Currently, the following header files and functions have been fully implemented:
     - `srand`
     - `[l/ll]div`
     - `[l/ll]abs`
+    - `strtol[l]`
+    - `strtoul[l]`
+    - `ato(i|l|ll)`
 - __inttypes.h__
 	- `imaxdiv`
     - `imaxabs`

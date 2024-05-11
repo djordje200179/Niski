@@ -31,3 +31,12 @@ static inline struct lldiv_t { long long quot, rem; } lldiv(long long numer, lon
 static inline int abs(int n) { return n < 0 ? -n : n; }
 static inline long labs(long n) {	return n < 0 ? -n : n; }
 static inline long long llabs(long long n) { return n < 0 ? -n : n; }
+
+long strtol(const char* restrict str, char** restrict str_end, int base);
+long long strtoll(const char* restrict str, char** restrict str_end, int base);
+unsigned long strtoul(const char* restrict str, char** restrict str_end, int base);
+unsigned long long strtoull(const char* restrict str, char** restrict str_end, int base);
+
+static inline int atoi(const char* str) { return strtol(str, NULL, 10); }
+static inline long atol(const char* str) { return strtol(str, NULL, 10); }
+static inline long long atoll(const char* str) { return strtoll(str, NULL, 10); }
