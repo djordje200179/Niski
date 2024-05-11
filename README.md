@@ -114,10 +114,15 @@ and other definitions that are architecture-dependent
 rather than tied to the specific operating system
 
 Therefore, following header files already exist:
+- __ctype.h__
+- __iso646.h__
+- __stdarg.h__
+- __stdalign.h__
+- __stdbool.h__
 - __stddef.h__
 - __stdint.h__
-- __stdbool.h__
-- __ctype.h__
+- __stdnoreturn.h__
+- __limits.h__
 
 The OS developer is responsible for implementing additional header files. 
 Some functions will be designed as system calls, 
@@ -128,6 +133,10 @@ Currently, the following header files and functions have been fully implemented:
 	- `malloc`
 	- `calloc`
 	- `free`
+    - `realloc`
+    - `bsearch`
+    - `rand`
+    - `srand`
 - __stdio.h__
 	- `putchar`
 	- `puts`
@@ -173,6 +182,7 @@ Currently, the following header files and functions have been fully implemented:
 	- `memcpy`
 	- `memccpy`
 	- `memmove`
+    - `strerror`
 - __setjmp.h__
   	- `setjmp`
   	- `longjmp`
