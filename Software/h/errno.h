@@ -1,11 +1,11 @@
 #pragma once
 
-#ifndef errno
+inline static int* __errno_location(void) {
+	static _Thread_local int errno;
+	return &errno;
+}
 
-_Thread_local int errno_value = 0;
-#define errno errno_value
-
-#endif
+#define errno (*(__errno_location()))
 
 typedef int errno_t;
 
