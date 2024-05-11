@@ -3,12 +3,12 @@
 #include "kernel/sync/thread.h"
 #include <stddef.h>
 
-struct kthread_ls* kthread_ls_create(void (*destructor)(void*)) {
+struct kthread_ls* kthread_ls_create(void (*dtor)(void*)) {
 	struct kthread_ls* local_storage = kheap_alloc(sizeof(struct kthread_ls));
 	if (!local_storage)
 		return NULL;
 
-	local_storage->destructor = destructor;
+	local_storage->dtor = dtor;
 	local_storage->data_head = NULL;
 
 	return local_storage;

@@ -1,7 +1,7 @@
 #pragma once
 
 struct kthread_ls {
-	void (*destructor)(void*);
+	void (*dtor)(void*);
 
 	struct kthread_ld* data_head;
 };
@@ -19,7 +19,7 @@ struct kthread_ld {
 	struct kthread_ld* next_data;
 };
 
-struct kthread_ls* kthread_ls_create(void (*destructor)(void*));
+struct kthread_ls* kthread_ls_create(void (*dtor)(void*));
 void kthread_ls_destroy(struct kthread_ls* local_storage);
 
 struct kthread;

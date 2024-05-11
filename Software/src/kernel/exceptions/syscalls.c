@@ -149,27 +149,27 @@ static void syscall_cond_create() {
 		return;
 	}
 
-	struct kcond* condition = kcond_create();
-	if (!condition) {
+	struct kcond* cond = kcond_create();
+	if (!cond) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
-	*location = condition;
+	*location = cond;
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_wait() {
-	struct kcond* condition = GET_PARAM(0, struct kcond*);
+	struct kcond* cond = GET_PARAM(0, struct kcond*);
 	struct kmutex* mutex = GET_PARAM(1, struct kmutex*);
 
-	if (!condition || !mutex) {
+	if (!cond || !mutex) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	kcond_wait(condition, mutex, kthread_current);
+	kcond_wait(cond, mutex, kthread_current);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 
@@ -178,54 +178,54 @@ static void syscall_cond_wait() {
 }
 
 static void syscall_cond_signal() {
-	struct kcond* condition = GET_PARAM(0, struct kcond*);
+	struct kcond* cond = GET_PARAM(0, struct kcond*);
 
-	if (!condition) {
+	if (!cond) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	kcond_signal(condition);
+	kcond_signal(cond);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_signal_all() {
-	struct kcond* condition = GET_PARAM(0, struct kcond*);
+	struct kcond* cond = GET_PARAM(0, struct kcond*);
 
-	if (!condition) {
+	if (!cond) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	kcond_signal_all(condition);
+	kcond_signal_all(cond);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_cond_destroy() {
-	struct kcond* condition = GET_PARAM(0, struct kcond*);
+	struct kcond* cond = GET_PARAM(0, struct kcond*);
 
-	if (!condition) {
+	if (!cond) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	kcond_destroy(condition);
+	kcond_destroy(cond);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
 static void syscall_ts_create() {
 	struct kthread_ls** location = GET_PARAM(0, struct kthread_ls**);
-	void (*destructor)(void*) = GET_PARAM(1, void (*)(void*));
+	void (*dtor)(void*) = GET_PARAM(1, void (*)(void*));
 
 	if (!location) {
 		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
 		return;
 	}
 
-	struct kthread_ls* local_storage = kthread_ls_create(destructor);
+	struct kthread_ls* local_storage = kthread_ls_create(dtor);
 	if (!local_storage) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
@@ -295,11 +295,11 @@ static void (*syscalls[100])() = {
 	[SYSCALL_MUTEX_DESTROY] = syscall_mutex_destroy,
 	[SYSCALL_MUTEX_TRY_LOCK] = syscall_mutex_try_lock,
 
-	[SYSCALL_CONDITION_CREATE] = syscall_cond_create,
-	[SYSCALL_CONDITION_WAIT] = syscall_cond_wait,
-	[SYSCALL_CONDITION_SIGNAL] = syscall_cond_signal,
-	[SYSCALL_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
-	[SYSCALL_CONDITION_DESTROY] = syscall_cond_destroy,
+	[SYSCALL_COND_CREATE] = syscall_cond_create,
+	[SYSCALL_COND_WAIT] = syscall_cond_wait,
+	[SYSCALL_COND_SIGNAL] = syscall_cond_signal,
+	[SYSCALL_COND_SIGNAL_ALL] = syscall_cond_signal_all,
+	[SYSCALL_COND_DESTROY] = syscall_cond_destroy,
 
 	[SYSCALL_TS_CREATE] = syscall_ts_create,
 	[SYSCALL_TS_DESTROY] = syscall_ts_destroy,

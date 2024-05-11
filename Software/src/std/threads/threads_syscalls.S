@@ -61,31 +61,31 @@ mtx_trylock:
 	ret
 
 cnd_init:
-	li a5, SYSCALL_CONDITION_CREATE
+	li a5, SYSCALL_COND_CREATE
 	ecall
 	ret
 
 cnd_signal:
 	lw a0, 0(a0)
-	li a5, SYSCALL_CONDITION_SIGNAL
+	li a5, SYSCALL_COND_SIGNAL
 	ecall
 	ret
 
 cnd_broadcast:
 	lw a0, 0(a0)
-	li a5, SYSCALL_CONDITION_SIGNAL_ALL
+	li a5, SYSCALL_COND_SIGNAL_ALL
 	ecall
 	ret
 
 cnd_wait:
 	lw a0, 0(a0)
-	li a5, SYSCALL_CONDITION_WAIT
+	li a5, SYSCALL_COND_WAIT
 	ecall
 	ret
 
 cnd_destroy:
 	lw a0, 0(a0)
-	li a5, SYSCALL_CONDITION_DESTROY
+	li a5, SYSCALL_COND_DESTROY
 	ecall
 	ret
 

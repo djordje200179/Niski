@@ -4,45 +4,45 @@
 #include "kernel/mem_alloc/heap_allocator.h"
 
 struct kcond* kcond_create() {
-	struct kcond* condition = kheap_alloc(sizeof(struct kcond));
-	if (!condition)
+	struct kcond* cond = kheap_alloc(sizeof(struct kcond));
+	if (!cond)
 		return NULL;
 
-	condition->queue_head = NULL;
-	condition->queue_tail = NULL;
+	cond->queue_head = NULL;
+	cond->queue_tail = NULL;
 
-	return condition;
+	return cond;
 }
 
-void kcond_wait(struct kcond* condition, struct kmutex* mutex, struct kthread* thread) {
+void kcond_wait(struct kcond* cond, struct kmutex* mutex, struct kthread* thread) {
 	thread->state = KTHREAD_STATE_BLOCKED;
 	thread->waiting_on = mutex;
 
-	if (!condition->queue_head)
-		condition->queue_head = thread;
+	if (!cond->queue_head)
+		cond->queue_head = thread;
 	else
-		condition->queue_tail->next = thread;
-	
-	condition->queue_tail = thread;
+		cond->queue_tail->next = thread;
+
+	cond->queue_tail = thread;
 
 	kmutex_unlock(mutex, thread);
 }
 
-void kcond_signal(struct kcond* condition) {
-	if (!condition->queue_head)
+void kcond_signal(struct kcond* cond) {
+	if (!cond->queue_head)
 		return;
 
-	struct kthread* thread = condition->queue_head;
+	struct kthread* thread = cond->queue_head;
 
-	condition->queue_head = thread->next;
-	if (!condition->queue_head)
-		condition->queue_tail = NULL;
+	cond->queue_head = thread->next;
+	if (!cond->queue_head)
+		cond->queue_tail = NULL;
 
 	kmutex_lock(thread->waiting_on, thread);
 }
 
-void kcond_signal_all(struct kcond* condition) {
-	for (struct kthread* thread = condition->queue_head; thread; ) {
+void kcond_signal_all(struct kcond* cond) {
+	for (struct kthread* thread = cond->queue_head; thread; ) {
 		struct kthread* next = thread->next;
 
 		kmutex_lock(thread->waiting_on, thread);
@@ -50,12 +50,12 @@ void kcond_signal_all(struct kcond* condition) {
 		thread = next;
 	}
 
-	condition->queue_head = NULL;
-	condition->queue_tail = NULL;
+	cond->queue_head = NULL;
+	cond->queue_tail = NULL;
 }
 
-void kcond_destroy(struct kcond* condition) {
-	for (struct kthread* thread = condition->queue_head; thread; ) {
+void kcond_destroy(struct kcond* cond) {
+	for (struct kthread* thread = cond->queue_head; thread; ) {
 		struct kthread* next = thread->next;
 
 		kthread_destroy(thread);
@@ -63,5 +63,5 @@ void kcond_destroy(struct kcond* condition) {
 		thread = next;
 	}
 
-	kheap_dealloc(condition);
+	kheap_dealloc(cond);
 }

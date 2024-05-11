@@ -6,7 +6,7 @@ struct kcond {
 };
 
 struct kcond* kcond_create();
-void kcond_wait(struct kcond* condition, struct kmutex* mutex, struct kthread* thread);
-void kcond_signal(struct kcond* condition);
-void kcond_signal_all(struct kcond* condition);
-void kcond_destroy(struct kcond* condition);
+void kcond_wait(struct kcond* cond, struct kmutex* mutex, struct kthread* thread);
+void kcond_signal(struct kcond* cond);
+void kcond_signal_all(struct kcond* cond);
+void kcond_destroy(struct kcond* cond);

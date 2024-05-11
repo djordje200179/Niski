@@ -104,8 +104,8 @@ static void kthread_clean_td(struct kthread* thread) {
 		if (local_data->next_data)
 			local_data->next_data->prev_data = local_data->prev_data;
 
-		if (local_data->storage->destructor)
-			local_data->storage->destructor(local_data->data);
+		if (local_data->storage->dtor)
+			local_data->storage->dtor(local_data->data);
 
 		kheap_dealloc(local_data);
 
