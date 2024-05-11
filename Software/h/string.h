@@ -55,6 +55,6 @@ void* memccpy(void* restrict dest, const void* restrict src, int c, size_t count
 void* memmove(void* dest, const void* src, size_t count);
 // errno_t memmove_s(void* dest, rsize_t destsz, const void* src, rsize_t count);
 
-// char* strerror(int errnum);
-// errno_t strerror_s(char* buf, rsize_t bufsz, errno_t errnum);
-// size_t strerrorlen_s(errno_t errnum);
+char* strerror(int errnum);
+//errno_t strerror_s(char* buf, rsize_t bufsz, errno_t errnum);
+//size_t strerrorlen_s(errno_t errnum);

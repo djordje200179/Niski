@@ -155,3 +155,11 @@ char* strtok(char* restrict str, const char* restrict delim) {
 
 	return str;
 }
+
+char* strerror(int errnum) {
+	static char* errors[] = {
+		[EDOM] = "Argument out of domain",
+		[ERANGE] = "Result too large",
+		[EILSEQ] = "Illegal byte sequence",
+	};
+}
