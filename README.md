@@ -137,8 +137,8 @@ Currently, the following header files and functions have been fully implemented:
     - `bsearch`
     - `rand`
     - `srand`
-    - `div/ldiv/lldiv`
-    - `abs/labs/llabs`
+    - `[l/ll]div`
+    - `[l/ll]abs`
 - __inttypes.h__
 	- `imaxdiv`
     - `imaxabs`
@@ -234,8 +234,5 @@ At present, the following header files and functions have been fully implemented
 	- `btns_disable_all`
 	- `btns_get_statuses`
 	- `btns_is_pressed`
-	- `btns_on_1_pressed` *(weak)*
-	- `btns_on_2_pressed` *(weak)*
-	- `btns_on_3_pressed` *(weak)*
-	- `btns_on_4_pressed` *(weak)*
+	- `btns_on_(1/2/3/4)_pressed` *(weak)*
 	
