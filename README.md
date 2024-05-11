@@ -189,8 +189,8 @@ Currently, the following header files and functions have been fully implemented:
 	- `memmove`
     - `strerror`
 - __setjmp.h__
-  	- `setjmp`
-  	- `longjmp`
+	- `setjmp`
+    - `longjmp`
 
 ### I/O devices
 In order to facilitate communication with external devices 
