@@ -22,6 +22,13 @@ static void syscall_mem_free() {
 	kheap_dealloc(ptr);
 }
 
+static void syscall_mem_try_realloc() {
+	void* ptr = GET_PARAM(0, void*);
+	size_t bytes = GET_PARAM(1, size_t);
+
+	SET_RET_VALUE(kheap_try_realloc(ptr, bytes));
+}
+
 static void syscall_thread_create() {
 	struct kthread** location = GET_PARAM(0, struct kthread**);
 	int (*func)() = GET_PARAM(1, int (*)());
@@ -275,6 +282,7 @@ static void syscall_ts_set() {
 static void (*syscalls[100])() = {
 	[SYSCALL_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_MEM_FREE] = syscall_mem_free,
+	[SYSCALL_MEM_TRY_REALLOC] = syscall_mem_try_realloc,
 
 	[SYSCALL_THREAD_CREATE] = syscall_thread_create,
 	[SYSCALL_THREAD_EXIT] = syscall_thread_exit,
@@ -300,8 +308,6 @@ static void (*syscalls[100])() = {
 };
 
 void handle_syscall() {
-	extern struct kthread* kthread_current;
-
 	uint32_t curr_pc = (uint32_t)(kthread_current->context.pc);
 	curr_pc += 4;
 	kthread_current->context.pc = (void(*))(curr_pc);

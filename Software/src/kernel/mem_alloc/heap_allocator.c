@@ -120,3 +120,61 @@ void kheap_dealloc(void* ptr) {
 	if (segment->prev)
 		try_join_next_segment(segment->prev);
 }
+
+bool kheap_try_realloc(void* ptr, size_t bytes) {
+	struct mem_segment* segment = (struct mem_segment*)(ptr) - 1;
+	size_t new_blocks = calculate_blocks(bytes);
+	size_t old_blocks = segment->blocks;
+
+	if (old_blocks == new_blocks)
+		return true;
+
+	if (old_blocks < new_blocks) {
+		size_t diff_blocks = new_blocks - old_blocks;
+		struct mem_segment* surplus_segment = (struct mem_segment*)((char*)segment + new_blocks * KMEM_BLOCK_SIZE);
+		surplus_segment->blocks = diff_blocks;
+
+		kheap_dealloc(surplus_segment->data);
+		segment->blocks = new_blocks;
+
+		return true;
+	}
+
+	struct mem_segment* prev_segment = NULL;
+	for (struct mem_segment* curr = head_segment; curr; prev_segment = curr, curr = curr->next) {
+		if (segment < curr)
+			break;
+	}
+
+	struct mem_segment* next_segment = prev_segment ? prev_segment->next : head_segment;
+
+	if (next_segment != (struct mem_segment*)((char*)segment + old_blocks * KMEM_BLOCK_SIZE))
+		return false;
+
+	if (next_segment->blocks + old_blocks < new_blocks)
+		return false;
+
+	if (next_segment->blocks + old_blocks == new_blocks) {
+		segment->blocks = new_blocks;
+
+		if (next_segment->next)
+			next_segment->next->prev = segment;
+		else
+			head_segment = segment;
+
+		return true;
+	}
+
+	size_t diff_blocks = new_blocks - old_blocks;
+	struct mem_segment* surplus_segment = (struct mem_segment*)((char*)segment + new_blocks * KMEM_BLOCK_SIZE);
+	surplus_segment->blocks = next_segment->blocks - diff_blocks;
+
+	if (next_segment->next)
+		next_segment->next->prev = surplus_segment;
+	else
+		head_segment = surplus_segment;
+
+	segment->blocks = new_blocks;
+
+	return true;
+}
