@@ -137,6 +137,11 @@ Currently, the following header files and functions have been fully implemented:
     - `bsearch`
     - `rand`
     - `srand`
+    - `div/ldiv/lldiv`
+    - `abs/labs/llabs`
+- __inttypes.h__
+	- `imaxdiv`
+    - `imaxabs`
 - __stdio.h__
 	- `putchar`
 	- `puts`

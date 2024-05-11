@@ -15,3 +15,19 @@ void srand(unsigned int seed);
 
 void* bsearch(const void* key, const void* base, size_t num, size_t size, int (*comp)(const void*, const void*));
 // errno_t bsearch_s(const void* key, const void* base, size_t num, size_t size, int (*compare)(void*, const void*, const void*), void* context);
+
+static inline struct div_t { int quot, rem; } div(int numer, int denom) {
+	return (struct div_t){ numer / denom, numer % denom };
+}
+
+static inline struct ldiv_t { long quot, rem; } ldiv(long numer, long denom) {
+	return (struct ldiv_t){ numer / denom, numer % denom };
+}
+
+static inline struct lldiv_t { long long quot, rem; } lldiv(long long numer, long long denom) {
+	return (struct lldiv_t){ numer / denom, numer % denom };
+}
+
+static inline int abs(int n) { return n < 0 ? -n : n; }
+static inline long labs(long n) {	return n < 0 ? -n : n; }
+static inline long long llabs(long long n) { return n < 0 ? -n : n; }
