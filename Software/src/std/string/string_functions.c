@@ -162,4 +162,9 @@ char* strerror(int errnum) {
 		[ERANGE] = "Result too large",
 		[EILSEQ] = "Illegal byte sequence",
 	};
+
+	if (errnum < 0 || errnum >= (int)(sizeof(errors) / sizeof(errors[0])))
+		return NULL;
+
+	return errors[errnum];
 }

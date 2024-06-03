@@ -6,7 +6,7 @@
 static void handle_illegal_action(uint32_t cause) {
 	ssds_on();
 
-	ssds_set_dec_num(cause);
+	ssds_set_dec_num((short)cause);
 
 	while(true);
 }
@@ -36,5 +36,8 @@ void exception_handler(uint32_t type) {
 	case EXCEPTION_INTERRUPT | TIMER_INTERRUPT:
 		handle_timer_interrupt();
 		break;
+	default:
+		// TODO: Implement
+		while(true);
 	}
 }

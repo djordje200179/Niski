@@ -51,7 +51,7 @@ static void insert_block(struct free_block* block) {
 	free_blocks[block->order] = block;
 }
 
-static bool contains_block(struct free_block* block, int order) {
+static bool contains_block(struct free_block* block, size_t order) {
 	for(struct free_block* curr = free_blocks[order]; curr; curr = curr->next) {
 		if(curr == block)
 			return true;

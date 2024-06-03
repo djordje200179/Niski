@@ -15,7 +15,7 @@ TOOL_PREFIX = riscv64-unknown-elf-
 
 GCC = $(TOOL_PREFIX)gcc
 
-GCC_FLAGS = -march=rv32em -mabi=ilp32e -mno-div
+GCC_FLAGS = -march=rv32emzicsr -mabi=ilp32e -mno-div
 GCC_FLAGS += --no-pic
 GCC_FLAGS += -std=c2x -ffreestanding -nostdlib
 

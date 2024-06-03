@@ -6,7 +6,7 @@
 
 void handle_timer_interrupt() {
 	time_t seconds = time(NULL);
-	ssds_set_dec_num(seconds);
+	ssds_set_dec_num((short)seconds);
 
 	clear_interrupt(TIMER_INTERRUPT);
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <ctype.h>
+#include <limits.h>
 
 long strtol(const char* restrict str, char** restrict str_end, int base) {
 	long long result = strtoll(str, str_end, base);
@@ -51,13 +52,13 @@ long long strtoll(const char* restrict str, char** restrict str_end, int base) {
 		if (digit >= base)
 			break;
 
-		if (result > (LONG_LONG_MAX - digit) / base) {
+		if (result > (LLONG_MAX - digit) / base) {
 			errno = ERANGE;
-			result = LONG_LONG_MAX;
+			result = LLONG_MAX;
 			break;
-		} else if (result < (LONG_LONG_MIN + digit) / base) {
+		} else if (result < (LLONG_MIN + digit) / base) {
 			errno = ERANGE;
-			result = LONG_LONG_MIN;
+			result = LLONG_MIN;
 			break;
 		}
 
@@ -118,13 +119,9 @@ unsigned long long strtoull(const char* restrict str, char** restrict str_end, i
 		if (digit >= base)
 			break;
 
-		if (result > (LONG_LONG_MAX - digit) / base) {
+		if (result > (ULLONG_MAX - digit) / base) {
 			errno = ERANGE;
-			result = LONG_LONG_MAX;
-			break;
-		} else if (result < (LONG_LONG_MIN + digit) / base) {
-			errno = ERANGE;
-			result = LONG_LONG_MIN;
+			result = LLONG_MAX;
 			break;
 		}
 

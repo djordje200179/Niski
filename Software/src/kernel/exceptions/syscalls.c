@@ -31,7 +31,7 @@ static void syscall_mem_try_realloc() {
 
 static void syscall_thread_create() {
 	struct kthread** location = GET_PARAM(0, struct kthread**);
-	int (*func)() = GET_PARAM(1, int (*)());
+	int (*func)(void*) = GET_PARAM(1, int (*)(void*));
 	void* arg = GET_PARAM(2, void*);
 
 	if (!location || !func) {
@@ -308,7 +308,7 @@ static void (*syscalls[100])() = {
 };
 
 void handle_syscall() {
-	uint32_t curr_pc = (uint32_t)(kthread_current->context.pc);
+	intptr_t curr_pc = (intptr_t)(kthread_current->context.pc);
 	curr_pc += 4;
 	kthread_current->context.pc = (void(*))(curr_pc);
 

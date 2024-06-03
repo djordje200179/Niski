@@ -7,7 +7,7 @@ int putchar(int ch) {
 		lcd_move_cursor(1, 0);
 		break;
 	case '\r':
-		lcd_move_cursor(1, 0);
+		lcd_move_cursor(0, 0);
 		break;
 	default:
 		lcd_write_ch(ch);
