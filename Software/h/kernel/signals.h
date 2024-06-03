@@ -1,0 +1,12 @@
+#pragma once
+
+#define SIGNAL_ABORT 0x01
+#define SIGNAL_ILLEGAL 0x02
+#define SIGNAL_INTERRUPT 0x03
+#define SIGNAL_MEM_ACCESS 0x04
+
+#define SIGNAL_KEY 0x05
+#define SIGNAL_BTN_0 0x06
+#define SIGNAL_BTN_1 0x07
+#define SIGNAL_BTN_2 0x08
+#define SIGNAL_BTN_3 0x09

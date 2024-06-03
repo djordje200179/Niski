@@ -279,6 +279,14 @@ static void syscall_ts_set() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
+static void syscall_sig_set() {
+	// TODO: implement
+}
+
+static void syscall_sig_raise() {
+	// TODO: implement
+}
+
 static void (*syscalls[100])() = {
 	[SYSCALL_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_MEM_FREE] = syscall_mem_free,
@@ -304,7 +312,10 @@ static void (*syscalls[100])() = {
 	[SYSCALL_TS_CREATE] = syscall_ts_create,
 	[SYSCALL_TS_DESTROY] = syscall_ts_destroy,
 	[SYSCALL_TS_GET] = syscall_ts_get,
-	[SYSCALL_TS_SET] = syscall_ts_set
+	[SYSCALL_TS_SET] = syscall_ts_set,
+
+	[SYSCALL_SIG_SET] = syscall_sig_set,
+	[SYSCALL_SIG_RAISE] = syscall_sig_raise,
 };
 
 void handle_syscall() {
