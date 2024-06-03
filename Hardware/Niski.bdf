@@ -57,7 +57,7 @@ https://fpgasoftware.intel.com/eula.
 )
 (pin
 	(input)
-	(rect 1984 1248 2176 1264)
+	(rect 1024 2264 1216 2280)
 	(text "INPUT" (rect 7 0 43 13)(font "Arial" (font_size 6)))
 	(text "PS2_CLK_PIN" (rect 92 0 187 15)(font "Arial" ))
 	(pt 0 8)
@@ -71,11 +71,11 @@ https://fpgasoftware.intel.com/eula.
 	)
 	(flipy)
 	(text "VCC" (rect 16 7 40 20)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect 2168 1248 2176 1264))
+	(annotation_block (location)(rect 1208 2264 1216 2280))
 )
 (pin
 	(input)
-	(rect 1984 1232 2184 1248)
+	(rect 1024 2248 1224 2264)
 	(text "INPUT" (rect 7 0 43 13)(font "Arial" (font_size 6)))
 	(text "PS2_DATA_PIN" (rect 93 0 195 15)(font "Arial" ))
 	(pt 0 8)
@@ -89,7 +89,7 @@ https://fpgasoftware.intel.com/eula.
 	)
 	(flipy)
 	(text "VCC" (rect 16 7 40 20)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect 2184 1232 2192 1248))
+	(annotation_block (location)(rect 1224 2248 1232 2264))
 )
 (pin
 	(input)
@@ -808,7 +808,7 @@ https://fpgasoftware.intel.com/eula.
 	(annotation_block (parameter)(rect 1776 552 1992 592))
 )
 (symbol
-	(rect 1800 1176 1976 1320)
+	(rect 840 2192 1016 2336)
 	(text "ps2_keyboard_controller" (rect 5 0 165 15)(font "Arial" ))
 	(text "inst3" (rect 8 128 39 143)(font "Arial" ))
 	(port
@@ -1219,156 +1219,6 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 536 664 896 840)
-	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
-	(text "inst22" (rect 8 160 48 179)(font "Intel Clear" ))
-	(port
-		(pt 0 152)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 144 41 159)(font "Arial" ))
-		(line (pt 0 152)(pt 16 152))
-	)
-	(port
-		(pt 0 136)
-		(input)
-		(text "rst" (rect 0 0 16 15)(font "Arial" ))
-		(text "rst" (rect 24 128 40 143)(font "Arial" ))
-		(line (pt 0 136)(pt 16 136))
-	)
-	(port
-		(pt 360 40)
-		(input)
-		(text "mem_data_out[31..0]" (rect 0 0 138 15)(font "Arial" ))
-		(text "mem_data_out[31..0]" (rect 224 32 362 47)(font "Arial" ))
-		(line (pt 344 40)(pt 360 40)(line_width 3))
-	)
-	(port
-		(pt 0 24)
-		(input)
-		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
-		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
-	)
-	(port
-		(pt 0 72)
-		(input)
-		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
-		(text "wr_bus" (rect 24 64 72 79)(font "Arial" ))
-		(line (pt 0 72)(pt 16 72))
-	)
-	(port
-		(pt 0 56)
-		(input)
-		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
-		(text "rd_bus" (rect 24 48 70 63)(font "Arial" ))
-		(line (pt 0 56)(pt 16 56))
-	)
-	(port
-		(pt 0 88)
-		(input)
-		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
-		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
-		(line (pt 0 88)(pt 16 88)(line_width 3))
-	)
-	(port
-		(pt 360 56)
-		(output)
-		(text "mem_data_in[31..0]" (rect 0 0 129 15)(font "Arial" ))
-		(text "mem_data_in[31..0]" (rect 232 48 361 63)(font "Arial" ))
-		(line (pt 360 56)(pt 344 56)(line_width 3))
-	)
-	(port
-		(pt 360 72)
-		(output)
-		(text "mem_wr" (rect 0 0 57 15)(font "Arial" ))
-		(text "mem_wr" (rect 288 64 345 79)(font "Arial" ))
-		(line (pt 360 72)(pt 344 72))
-	)
-	(port
-		(pt 360 88)
-		(output)
-		(text "mem_wr_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
-		(text "mem_wr_mask[3..0]" (rect 224 80 357 95)(font "Arial" ))
-		(line (pt 360 88)(pt 344 88)(line_width 3))
-	)
-	(port
-		(pt 0 104)
-		(output)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
-		(line (pt 16 104)(pt 0 104))
-	)
-	(port
-		(pt 360 24)
-		(output)
-		(text "mem_addr[(MEM_ADDR_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
-		(text "mem_addr" (rect 280 16 351 31)(font "Arial" ))
-		(line (pt 360 24)(pt 344 24)(line_width 3))
-	)
-	(port
-		(pt 0 40)
-		(bidir)
-		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
-		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
-		(line (pt 16 40)(pt 0 40)(line_width 3))
-	)
-	(parameter
-		"MEM_ADDR_WIDTH"
-		"11"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"START_ADDR"
-		"40000000"
-		""
-		(type "PARAMETER_UNSIGNED_HEX")	)
-	(drawing
-		(rectangle (rect 16 16 344 160))
-	)
-	(annotation_block (parameter)(rect 536 600 822 660))
-)
-(symbol
-	(rect 976 664 1240 744)
-	(text "rom" (rect 5 0 30 15)(font "Arial" ))
-	(text "inst18" (rect 8 64 48 83)(font "Intel Clear" ))
-	(port
-		(pt 0 56)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 48 41 63)(font "Arial" ))
-		(line (pt 0 56)(pt 16 56))
-	)
-	(port
-		(pt 0 24)
-		(input)
-		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
-		(text "addr" (rect 24 16 53 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
-	)
-	(port
-		(pt 0 40)
-		(output)
-		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
-		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
-		(line (pt 16 40)(pt 0 40)(line_width 3))
-	)
-	(parameter
-		"ADDR_BITS"
-		"11"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"MEM_FILE"
-		"../Software/out/rom.mem"
-		""
-		(type "PARAMETER_STRING")	)
-	(drawing
-		(rectangle (rect 16 16 248 64))
-	)
-	(annotation_block (parameter)(rect 976 600 1302 660))
-)
-(symbol
 	(rect 1072 -104 1368 88)
 	(text "PLL" (rect 134 0 168 19)(font "Arial" (font_size 10)))
 	(text "inst17" (rect 8 173 48 192)(font "Intel Clear" ))
@@ -1739,177 +1589,6 @@ https://fpgasoftware.intel.com/eula.
 	(drawing
 		(rectangle (rect 16 16 168 96))
 	)
-)
-(symbol
-	(rect 976 400 1240 544)
-	(text "ram" (rect 5 0 30 15)(font "Arial" ))
-	(text "inst20" (rect 8 128 48 147)(font "Intel Clear" ))
-	(port
-		(pt 0 120)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 112 41 127)(font "Arial" ))
-		(line (pt 0 120)(pt 16 120))
-	)
-	(port
-		(pt 0 72)
-		(input)
-		(text "wr" (rect 0 0 15 15)(font "Arial" ))
-		(text "wr" (rect 24 64 39 79)(font "Arial" ))
-		(line (pt 0 72)(pt 16 72))
-	)
-	(port
-		(pt 0 88)
-		(input)
-		(text "wr_mask[3..0]" (rect 0 0 90 15)(font "Arial" ))
-		(text "wr_mask[3..0]" (rect 24 80 114 95)(font "Arial" ))
-		(line (pt 0 88)(pt 16 88)(line_width 3))
-	)
-	(port
-		(pt 0 56)
-		(input)
-		(text "data_in[31..0]" (rect 0 0 87 15)(font "Arial" ))
-		(text "data_in[31..0]" (rect 24 48 111 63)(font "Arial" ))
-		(line (pt 0 56)(pt 16 56)(line_width 3))
-	)
-	(port
-		(pt 0 24)
-		(input)
-		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
-		(text "addr" (rect 24 16 53 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
-	)
-	(port
-		(pt 0 40)
-		(output)
-		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
-		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
-		(line (pt 16 40)(pt 0 40)(line_width 3))
-	)
-	(parameter
-		"ADDR_BITS"
-		"12"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"MEM_FILE"
-		"../Software/out/ram.mem"
-		""
-		(type "PARAMETER_STRING")	)
-	(drawing
-		(rectangle (rect 16 16 248 128))
-	)
-	(annotation_block (parameter)(rect 976 336 1301 396))
-)
-(symbol
-	(rect 536 400 896 576)
-	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
-	(text "inst21" (rect 8 160 48 179)(font "Intel Clear" ))
-	(port
-		(pt 0 152)
-		(input)
-		(text "clk" (rect 0 0 17 15)(font "Arial" ))
-		(text "clk" (rect 24 144 41 159)(font "Arial" ))
-		(line (pt 0 152)(pt 16 152))
-	)
-	(port
-		(pt 0 136)
-		(input)
-		(text "rst" (rect 0 0 16 15)(font "Arial" ))
-		(text "rst" (rect 24 128 40 143)(font "Arial" ))
-		(line (pt 0 136)(pt 16 136))
-	)
-	(port
-		(pt 360 40)
-		(input)
-		(text "mem_data_out[31..0]" (rect 0 0 138 15)(font "Arial" ))
-		(text "mem_data_out[31..0]" (rect 224 32 362 47)(font "Arial" ))
-		(line (pt 344 40)(pt 360 40)(line_width 3))
-	)
-	(port
-		(pt 0 24)
-		(input)
-		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
-		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
-		(line (pt 0 24)(pt 16 24)(line_width 3))
-	)
-	(port
-		(pt 0 72)
-		(input)
-		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
-		(text "wr_bus" (rect 24 64 72 79)(font "Arial" ))
-		(line (pt 0 72)(pt 16 72))
-	)
-	(port
-		(pt 0 56)
-		(input)
-		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
-		(text "rd_bus" (rect 24 48 70 63)(font "Arial" ))
-		(line (pt 0 56)(pt 16 56))
-	)
-	(port
-		(pt 0 88)
-		(input)
-		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
-		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
-		(line (pt 0 88)(pt 16 88)(line_width 3))
-	)
-	(port
-		(pt 360 56)
-		(output)
-		(text "mem_data_in[31..0]" (rect 0 0 129 15)(font "Arial" ))
-		(text "mem_data_in[31..0]" (rect 232 48 361 63)(font "Arial" ))
-		(line (pt 360 56)(pt 344 56)(line_width 3))
-	)
-	(port
-		(pt 360 72)
-		(output)
-		(text "mem_wr" (rect 0 0 57 15)(font "Arial" ))
-		(text "mem_wr" (rect 288 64 345 79)(font "Arial" ))
-		(line (pt 360 72)(pt 344 72))
-	)
-	(port
-		(pt 360 88)
-		(output)
-		(text "mem_wr_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
-		(text "mem_wr_mask[3..0]" (rect 224 80 357 95)(font "Arial" ))
-		(line (pt 360 88)(pt 344 88)(line_width 3))
-	)
-	(port
-		(pt 0 104)
-		(output)
-		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
-		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
-		(line (pt 16 104)(pt 0 104))
-	)
-	(port
-		(pt 360 24)
-		(output)
-		(text "mem_addr[(MEM_ADDR_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
-		(text "mem_addr" (rect 280 16 351 31)(font "Arial" ))
-		(line (pt 360 24)(pt 344 24)(line_width 3))
-	)
-	(port
-		(pt 0 40)
-		(bidir)
-		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
-		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
-		(line (pt 16 40)(pt 0 40)(line_width 3))
-	)
-	(parameter
-		"MEM_ADDR_WIDTH"
-		"12"
-		""
-		(type "PARAMETER_SIGNED_DEC")	)
-	(parameter
-		"START_ADDR"
-		"50000000"
-		""
-		(type "PARAMETER_UNSIGNED_HEX")	)
-	(drawing
-		(rectangle (rect 16 16 344 160))
-	)
-	(annotation_block (parameter)(rect 536 336 822 396))
 )
 (symbol
 	(rect -424 152 -168 328)
@@ -2860,6 +2539,327 @@ https://fpgasoftware.intel.com/eula.
 	)
 	(annotation_block (parameter)(rect 536 1856 773 1896))
 )
+(symbol
+	(rect 976 400 1240 544)
+	(text "ram" (rect 5 0 30 15)(font "Arial" ))
+	(text "inst20" (rect 8 128 48 147)(font "Intel Clear" ))
+	(port
+		(pt 0 120)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 112 41 127)(font "Arial" ))
+		(line (pt 0 120)(pt 16 120))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "wr" (rect 0 0 15 15)(font "Arial" ))
+		(text "wr" (rect 24 64 39 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "wr_mask[3..0]" (rect 0 0 90 15)(font "Arial" ))
+		(text "wr_mask[3..0]" (rect 24 80 114 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
+	)
+	(port
+		(pt 0 56)
+		(input)
+		(text "data_in[31..0]" (rect 0 0 87 15)(font "Arial" ))
+		(text "data_in[31..0]" (rect 24 48 111 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56)(line_width 3))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
+		(text "addr" (rect 24 16 53 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(output)
+		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
+		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"ADDR_BITS"
+		"11"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"MEM_FILE"
+		"../Software/out/ram.mem"
+		""
+		(type "PARAMETER_STRING")	)
+	(drawing
+		(rectangle (rect 16 16 248 128))
+	)
+	(annotation_block (parameter)(rect 976 336 1301 396))
+)
+(symbol
+	(rect 536 400 896 576)
+	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
+	(text "inst21" (rect 8 160 48 179)(font "Intel Clear" ))
+	(port
+		(pt 0 152)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 144 41 159)(font "Arial" ))
+		(line (pt 0 152)(pt 16 152))
+	)
+	(port
+		(pt 0 136)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 128 40 143)(font "Arial" ))
+		(line (pt 0 136)(pt 16 136))
+	)
+	(port
+		(pt 360 40)
+		(input)
+		(text "mem_data_out[31..0]" (rect 0 0 138 15)(font "Arial" ))
+		(text "mem_data_out[31..0]" (rect 224 32 362 47)(font "Arial" ))
+		(line (pt 344 40)(pt 360 40)(line_width 3))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
+		(text "wr_bus" (rect 24 64 72 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
+		(pt 0 56)
+		(input)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 24 48 70 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
+	)
+	(port
+		(pt 360 56)
+		(output)
+		(text "mem_data_in[31..0]" (rect 0 0 129 15)(font "Arial" ))
+		(text "mem_data_in[31..0]" (rect 232 48 361 63)(font "Arial" ))
+		(line (pt 360 56)(pt 344 56)(line_width 3))
+	)
+	(port
+		(pt 360 72)
+		(output)
+		(text "mem_wr" (rect 0 0 57 15)(font "Arial" ))
+		(text "mem_wr" (rect 288 64 345 79)(font "Arial" ))
+		(line (pt 360 72)(pt 344 72))
+	)
+	(port
+		(pt 360 88)
+		(output)
+		(text "mem_wr_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
+		(text "mem_wr_mask[3..0]" (rect 224 80 357 95)(font "Arial" ))
+		(line (pt 360 88)(pt 344 88)(line_width 3))
+	)
+	(port
+		(pt 0 104)
+		(output)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
+		(line (pt 16 104)(pt 0 104))
+	)
+	(port
+		(pt 360 24)
+		(output)
+		(text "mem_addr[(MEM_ADDR_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
+		(text "mem_addr" (rect 280 16 351 31)(font "Arial" ))
+		(line (pt 360 24)(pt 344 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(bidir)
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"MEM_ADDR_WIDTH"
+		"11"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"START_ADDR"
+		"50000000"
+		""
+		(type "PARAMETER_UNSIGNED_HEX")	)
+	(drawing
+		(rectangle (rect 16 16 344 160))
+	)
+	(annotation_block (parameter)(rect 536 336 822 396))
+)
+(symbol
+	(rect 536 664 896 840)
+	(text "memory_bus_interface" (rect 5 0 154 15)(font "Arial" ))
+	(text "inst22" (rect 8 160 48 179)(font "Intel Clear" ))
+	(port
+		(pt 0 152)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 144 41 159)(font "Arial" ))
+		(line (pt 0 152)(pt 16 152))
+	)
+	(port
+		(pt 0 136)
+		(input)
+		(text "rst" (rect 0 0 16 15)(font "Arial" ))
+		(text "rst" (rect 24 128 40 143)(font "Arial" ))
+		(line (pt 0 136)(pt 16 136))
+	)
+	(port
+		(pt 360 40)
+		(input)
+		(text "mem_data_out[31..0]" (rect 0 0 138 15)(font "Arial" ))
+		(text "mem_data_out[31..0]" (rect 224 32 362 47)(font "Arial" ))
+		(line (pt 344 40)(pt 360 40)(line_width 3))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr_bus[31..0]" (rect 0 0 101 15)(font "Arial" ))
+		(text "addr_bus[31..0]" (rect 24 16 125 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 72)
+		(input)
+		(text "wr_bus" (rect 0 0 48 15)(font "Arial" ))
+		(text "wr_bus" (rect 24 64 72 79)(font "Arial" ))
+		(line (pt 0 72)(pt 16 72))
+	)
+	(port
+		(pt 0 56)
+		(input)
+		(text "rd_bus" (rect 0 0 46 15)(font "Arial" ))
+		(text "rd_bus" (rect 24 48 70 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 88)
+		(input)
+		(text "data_mask_bus[3..0]" (rect 0 0 136 15)(font "Arial" ))
+		(text "data_mask_bus[3..0]" (rect 24 80 160 95)(font "Arial" ))
+		(line (pt 0 88)(pt 16 88)(line_width 3))
+	)
+	(port
+		(pt 360 56)
+		(output)
+		(text "mem_data_in[31..0]" (rect 0 0 129 15)(font "Arial" ))
+		(text "mem_data_in[31..0]" (rect 232 48 361 63)(font "Arial" ))
+		(line (pt 360 56)(pt 344 56)(line_width 3))
+	)
+	(port
+		(pt 360 72)
+		(output)
+		(text "mem_wr" (rect 0 0 57 15)(font "Arial" ))
+		(text "mem_wr" (rect 288 64 345 79)(font "Arial" ))
+		(line (pt 360 72)(pt 344 72))
+	)
+	(port
+		(pt 360 88)
+		(output)
+		(text "mem_wr_mask[3..0]" (rect 0 0 133 15)(font "Arial" ))
+		(text "mem_wr_mask[3..0]" (rect 224 80 357 95)(font "Arial" ))
+		(line (pt 360 88)(pt 344 88)(line_width 3))
+	)
+	(port
+		(pt 0 104)
+		(output)
+		(text "fc_bus" (rect 0 0 43 15)(font "Arial" ))
+		(text "fc_bus" (rect 24 96 67 111)(font "Arial" ))
+		(line (pt 16 104)(pt 0 104))
+	)
+	(port
+		(pt 360 24)
+		(output)
+		(text "mem_addr[(MEM_ADDR_WIDTH-1)..0]" (rect 0 0 250 15)(font "Arial" ))
+		(text "mem_addr" (rect 280 16 351 31)(font "Arial" ))
+		(line (pt 360 24)(pt 344 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(bidir)
+		(text "data_bus[31..0]" (rect 0 0 100 15)(font "Arial" ))
+		(text "data_bus[31..0]" (rect 24 32 124 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"MEM_ADDR_WIDTH"
+		"12"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"START_ADDR"
+		"40000000"
+		""
+		(type "PARAMETER_UNSIGNED_HEX")	)
+	(drawing
+		(rectangle (rect 16 16 344 160))
+	)
+	(annotation_block (parameter)(rect 536 600 822 660))
+)
+(symbol
+	(rect 976 664 1240 744)
+	(text "rom" (rect 5 0 30 15)(font "Arial" ))
+	(text "inst18" (rect 8 64 48 83)(font "Intel Clear" ))
+	(port
+		(pt 0 56)
+		(input)
+		(text "clk" (rect 0 0 17 15)(font "Arial" ))
+		(text "clk" (rect 24 48 41 63)(font "Arial" ))
+		(line (pt 0 56)(pt 16 56))
+	)
+	(port
+		(pt 0 24)
+		(input)
+		(text "addr[(ADDR_BITS-1)..0]" (rect 0 0 153 15)(font "Arial" ))
+		(text "addr" (rect 24 16 53 31)(font "Arial" ))
+		(line (pt 0 24)(pt 16 24)(line_width 3))
+	)
+	(port
+		(pt 0 40)
+		(output)
+		(text "data_out[31..0]" (rect 0 0 95 15)(font "Arial" ))
+		(text "data_out[31..0]" (rect 24 32 119 47)(font "Arial" ))
+		(line (pt 16 40)(pt 0 40)(line_width 3))
+	)
+	(parameter
+		"ADDR_BITS"
+		"12"
+		""
+		(type "PARAMETER_SIGNED_DEC")	)
+	(parameter
+		"MEM_FILE"
+		"../Software/out/rom.mem"
+		""
+		(type "PARAMETER_STRING")	)
+	(drawing
+		(rectangle (rect 16 16 248 64))
+	)
+	(annotation_block (parameter)(rect 976 600 1302 660))
+)
 (connector
 	(pt 1976 672)
 	(pt 1984 672)
@@ -2871,14 +2871,6 @@ https://fpgasoftware.intel.com/eula.
 (connector
 	(pt 1976 848)
 	(pt 1984 848)
-)
-(connector
-	(pt 1976 1240)
-	(pt 1984 1240)
-)
-(connector
-	(pt 1976 1256)
-	(pt 1984 1256)
 )
 (connector
 	(pt 1984 1464)
@@ -2941,21 +2933,6 @@ https://fpgasoftware.intel.com/eula.
 (connector
 	(pt 1984 1760)
 	(pt 1976 1760)
-)
-(connector
-	(text "clk_50_mhz" (rect 1731 1280 1807 1299)(font "Intel Clear" ))
-	(pt 1728 1296)
-	(pt 1800 1296)
-)
-(connector
-	(text "1" (rect 1788 1248 1796 1267)(font "Intel Clear" ))
-	(pt 1784 1264)
-	(pt 1800 1264)
-)
-(connector
-	(text "btn_rst" (rect 1760 1264 1804 1283)(font "Intel Clear" ))
-	(pt 1760 1280)
-	(pt 1800 1280)
 )
 (connector
 	(text "clk_50_mhz" (rect 1712 1800 1788 1819)(font "Intel Clear" ))
@@ -4157,6 +4134,29 @@ https://fpgasoftware.intel.com/eula.
 	(text "ext_irqs[6]" (rect 648 2096 667 2163)(font "Intel Clear" )(vertical))
 	(pt 672 2104)
 	(pt 672 2160)
+)
+(connector
+	(pt 1016 2256)
+	(pt 1024 2256)
+)
+(connector
+	(pt 1016 2272)
+	(pt 1024 2272)
+)
+(connector
+	(text "clk_50_mhz" (rect 771 2296 847 2315)(font "Intel Clear" ))
+	(pt 768 2312)
+	(pt 840 2312)
+)
+(connector
+	(text "1" (rect 828 2264 836 2283)(font "Intel Clear" ))
+	(pt 824 2280)
+	(pt 840 2280)
+)
+(connector
+	(text "btn_rst" (rect 800 2280 844 2299)(font "Intel Clear" ))
+	(pt 800 2296)
+	(pt 840 2296)
 )
 (junction (pt 352 424))
 (junction (pt 368 440))
