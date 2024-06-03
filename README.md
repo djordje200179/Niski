@@ -114,7 +114,6 @@ and other definitions that are architecture-dependent
 rather than tied to the specific operating system
 
 Therefore, following header files already exist:
-- __ctype.h__
 - __iso646.h__
 - __stdarg.h__
 - __stdalign.h__
@@ -169,6 +168,21 @@ Currently, the following header files and functions have been fully implemented:
 	- `clock`
 	- `timespec_get`
 	- `timespec_getres`
+- __ctype.h__
+  - `isalnum`
+  - `isalpha`
+  - `islower`
+  - `isupper`
+  - `isdigit`
+  - `isxdigit`
+  - `iscntrl`
+  - `isgraph`
+  - `isspace`
+  - `isblank`
+  - `isprint`
+  - `ispunct`
+  - `tolower`
+  - `toupper`
 - __string.h__
 	- `strcpy`
 	- `strncpy`
