@@ -13,6 +13,7 @@ enum __thread_status __thread_create(struct __thrd** thread, int (*func)(void*),
 [[ noreturn ]] void __thread_exit(int res);
 enum __thread_status __thread_detach(struct __thrd* thread);
 void __thread_dispatch();
+struct __thrd* __thread_get_current();
 
 enum __thread_status __mutex_create(struct __mutex** mutex, enum __mutex_mode mode);
 enum __thread_status __mutex_lock(struct __mutex* mutex);

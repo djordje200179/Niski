@@ -17,10 +17,7 @@ enum {
 
 static inline int thrd_create(thrd_t* thr, thrd_start_t func, void* arg) { return __thread_create(thr, func, arg); }
 static inline int thrd_equal(thrd_t lhs, thrd_t rhs) { return lhs == rhs; }
-static inline thrd_t thrd_current(void) {
-	// TODO: Implement
-	return NULL;
-}
+static inline thrd_t thrd_current(void) { return __thread_get_current(); }
 // int thrd_sleep(const struct timespec* duration, struct timespec* remaining);
 static inline void thrd_yield(void) { __thread_dispatch(); }
 [[noreturn]] static inline void thrd_exit(int res) { __thread_exit(res); }

@@ -69,6 +69,10 @@ static void syscall_thread_join() {
 	// TODO: implement
 }
 
+static void syscall_thread_get_current() {
+	SET_RET_VALUE(kthread_current);
+}
+
 static void syscall_mutex_create() {
 	struct kmutex** location = GET_PARAM(0, struct kmutex**);
 	enum __mutex_mode mode = GET_PARAM(1, enum __mutex_mode);
@@ -316,6 +320,7 @@ static void (*syscalls[])() = {
 	[__SYSCALL_THREAD_DETACH] = syscall_thread_detach,
 	[__SYSCALL_THREAD_DISPATCH] = kthread_dispatch,
 	[__SYSCALL_THREAD_JOIN] = syscall_thread_join,
+	[__SYSCALL_THREAD_GET_CURRENT] = syscall_thread_get_current,
 
 	[__SYSCALL_MUTEX_CREATE] = syscall_mutex_create,
 	[__SYSCALL_MUTEX_LOCK] = syscall_mutex_lock,

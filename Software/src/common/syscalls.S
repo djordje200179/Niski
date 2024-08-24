@@ -1,5 +1,5 @@
 .global __memory_allocate, __memory_free, __memory_try_expand
-.global __thread_create, __thread_exit, __thread_detach, __thread_dispatch
+.global __thread_create, __thread_exit, __thread_detach, __thread_dispatch, __thread_get_current
 .global __mutex_create, __mutex_lock, __mutex_unlock, __mutex_destroy, __mutex_try_lock
 .global __condition_create, __condition_wait, __condition_signal, __con_signal_all, __condition_destroy
 .global __thread_storage_create, __thread_storage_destroy, __thread_storage_get, __thread_storage_set
@@ -40,6 +40,11 @@ __thread_detach:
 
 __thread_dispatch:
 	li a5, __SYSCALL_THREAD_DISPATCH
+	ecall
+	ret
+
+__thread_get_current:
+	li a5, __SYSCALL_THREAD_GET_CURRENT
 	ecall
 	ret
 
