@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 enum ksignal {
 	KSIGNAL_ABORT = 0x01,
 	KSIGNAL_ILLEGAL = 0x02,
@@ -13,6 +15,11 @@ enum ksignal {
 	KSIGNAL_BTN_3 = 0x09
 };
 
+extern volatile uint32_t* ksig_addr;
+
+typedef void (*ksignal_handler_t)(enum ksignal);
+
 void ksignal_init();
 
+ksignal_handler_t ksignal_handle(enum ksignal sig, ksignal_handler_t handler);
 void ksignal_send(enum ksignal sig);

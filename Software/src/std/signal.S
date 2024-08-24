@@ -1,9 +1,9 @@
-.global ksignal, raise
+.global signal, raise
 
 #include "kernel/syscalls.h"
 
 .text
-ksignal:
+signal:
 	li a5, SYSCALL_SIG_SET
 	ecall
 	ret

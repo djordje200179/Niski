@@ -1,20 +1,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "kernel/exceptions.h"
-#include "devices/ssds.h"
-
-static void handle_illegal_action(uint32_t cause) {
-	ssds_on();
-
-	ssds_set_dec_num((short)cause);
-
-	while(true);
-}
+#include "kernel/signals.h"
+#include "kernel/sync/thread.h"
 
 void exception_handler(uint32_t type) {	
 	void handle_syscall();
 	void handle_ext_intr();
-	void handle_timer_interrupt();
 
 	switch (type) {
 	case EXCEPTION_USER_ECALL:
@@ -24,20 +16,26 @@ void exception_handler(uint32_t type) {
 	case EXCEPTION_INST_ADDR_MISALIGNED:
 	case EXCEPTION_INST_ACCESS_FAULT:
 	case EXCEPTION_ILLEGAL_INST:
+		ksig_addr = kthread_current->context.pc;
+		ksignal_send(KSIGNAL_ILLEGAL);
+		kthread_stop();
+		break;
 	case EXCEPTION_LOAD_ADDR_MISALIGNED:
 	case EXCEPTION_LOAD_ACCESS_FAULT:
 	case EXCEPTION_STORE_ADDR_MISALIGNED:
 	case EXCEPTION_STORE_ACCESS_FAULT:
-		handle_illegal_action(type);
+		ksig_addr = kthread_current->context.pc;
+		ksignal_send(KSIGNAL_MEM_ACCESS);
+		kthread_stop();
 		break;
 	case EXCEPTION_INTERRUPT | EXTERNAL_INTERRUPT:
 		handle_ext_intr();
 		break;
 	case EXCEPTION_INTERRUPT | TIMER_INTERRUPT:
-		handle_timer_interrupt();
+		kthread_dispatch();
 		break;
 	default:
-		// TODO: Implement
+		// TODO: Handle unreachable exception
 		while(true);
 	}
 }

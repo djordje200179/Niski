@@ -1,8 +1,7 @@
 #include <stddef.h>
 #include "devices/plic.h"
-#include "devices/ssds.h"
-#include "devices/btns.h"
 #include "kernel/riscv.h"
+#include "kernel/signals.h"
 #include "kernel/exceptions.h"
 
 enum external_interrupt_type {
@@ -16,19 +15,19 @@ enum external_interrupt_type {
 	EXT_INTR_TYPE_BTN_3 = 7
 };
 
-void __attribute__((weak)) btns_on_0_pressed(void* arg) {}
-void __attribute__((weak)) btns_on_1_pressed(void* arg) {}
-void __attribute__((weak)) btns_on_2_pressed(void* arg) {}
-void __attribute__((weak)) btns_on_3_pressed(void* arg) {}
-
 static void (*ext_intr_handlers[16])(void*) = {
-	[EXT_INTR_TYPE_BTN_0] = btns_on_0_pressed,
-	[EXT_INTR_TYPE_BTN_1] = btns_on_1_pressed,
-	[EXT_INTR_TYPE_BTN_2] = btns_on_2_pressed,
-	[EXT_INTR_TYPE_BTN_3] = btns_on_3_pressed
+	[EXT_INTR_TYPE_BTN_0] = (void(*)(void*))ksignal_send,
+	[EXT_INTR_TYPE_BTN_1] = (void(*)(void*))ksignal_send,
+	[EXT_INTR_TYPE_BTN_2] = (void(*)(void*))ksignal_send,
+	[EXT_INTR_TYPE_BTN_3] = (void(*)(void*))ksignal_send
 };
 
-static void* ext_intr_args[16] = {NULL};
+static void* ext_intr_args[16] = {
+	[EXT_INTR_TYPE_BTN_0] = (void*)KSIGNAL_BTN_0,
+	[EXT_INTR_TYPE_BTN_1] = (void*)KSIGNAL_BTN_1,
+	[EXT_INTR_TYPE_BTN_2] = (void*)KSIGNAL_BTN_2,
+	[EXT_INTR_TYPE_BTN_3] = (void*)KSIGNAL_BTN_3
+};
 
 void handle_ext_intr() {
 	while (true) {

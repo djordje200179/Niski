@@ -19,8 +19,3 @@ union btns_status btns_get_statuses(void);
 static inline bool btns_is_pressed(uint8_t btn) {
 	return btns_get_statuses().pressed[btn];
 }
-
-void __attribute__((weak)) btns_on_0_released(void);
-void __attribute__((weak)) btns_on_1_released(void);
-void __attribute__((weak)) btns_on_2_released(void);
-void __attribute__((weak)) btns_on_3_released(void);

@@ -15,13 +15,13 @@ TOOL_PREFIX = riscv64-unknown-elf-
 
 GCC = $(TOOL_PREFIX)gcc
 
-GCC_FLAGS = -march=rv32emzicsr -mabi=ilp32e -mno-div
+GCC_FLAGS = -march=rv32em -mabi=ilp32e -mno-div
 GCC_FLAGS += --no-pic
 GCC_FLAGS += -std=c2x -ffreestanding -nostdlib
 
 CC_FLAGS = $(GCC_FLAGS)
 CC_FLAGS += -I$(I_DIR)
-CC_FLAGS += -O3
+CC_FLAGS += -Os
 CC_FLAGS += -Wall -Wextra
 CC_FLAGS += -Werror-implicit-function-declaration
 CC_FLAGS += -mstrict-align

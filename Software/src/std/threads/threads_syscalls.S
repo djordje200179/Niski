@@ -79,6 +79,7 @@ cnd_broadcast:
 
 cnd_wait:
 	lw a0, 0(a0)
+	lw a1, 0(a1)
 	li a5, SYSCALL_COND_WAIT
 	ecall
 	ret

@@ -1,21 +1,14 @@
 #include "kernel/sync/mutex.h"
-#include "kernel/mem_alloc/heap_allocator.h"
 #include "kernel/sync/thread.h"
 #include "kernel/sync/scheduler.h"
 #include <stddef.h>
 
-struct kmutex* kmutex_create(bool recursive) {
-	struct kmutex* mutex = kheap_alloc(sizeof(struct kmutex));
-	if (!mutex)
-		return NULL;
-
+void kmutex_init(struct kmutex* mutex, bool recursive) {
 	mutex->owner = NULL;
 	mutex->recursive = recursive;
 	mutex->lock_count = 0;
 	mutex->queue_head = NULL;
 	mutex->queue_tail = NULL;
-
-	return mutex;
 }
 
 bool kmutex_try_lock(struct kmutex* mutex, struct kthread* thread) {
@@ -91,6 +84,4 @@ void kmutex_destroy(struct kmutex* mutex) {
 
 		thread = next;
 	}
-
-	kheap_dealloc(mutex);
 }

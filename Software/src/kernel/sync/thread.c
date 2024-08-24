@@ -66,16 +66,23 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 	
 	thread->local_data_head = NULL;
 
-	void kthread_wrapper_function();
-	thread->context.pc = kthread_wrapper_function;
-
-	thread->function = function;
-	thread->arg = arg;
+	thread->context.pc = (uint32_t*)function;
+	thread->context.regs[REG_A0] = (uint32_t)arg;
+	
+	_Noreturn void thrd_exit(int res);
+	thread->context.regs[REG_RA] = (uint32_t)thrd_exit;
 
 	thread->state = KTHREAD_STATE_READY;
 	thread->next = NULL;
 
 	return thread;
+}
+
+void kthread_stop() {
+	//kthread_destroy(kthread_current);
+	kthread_current = NULL;
+
+	kthread_dispatch();
 }
 
 void kthread_dispatch() {

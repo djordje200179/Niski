@@ -19,11 +19,8 @@ struct kthread {
 		uint32_t regs[16];
 		uint32_t status;
 
-		void (*pc)();
+		uint32_t* pc;
 	} context;
-	
-	int (*function)(void*);
-	void* arg;
 	
 	uint32_t* stack;
 	void* tdata;
@@ -45,4 +42,5 @@ extern struct kthread* kthread_current;
 
 struct kthread* kthread_create(int (*function)(void*), void* arg, bool supervisor_mode);
 void kthread_dispatch();
+void kthread_stop();
 void kthread_destroy(struct kthread* thread);

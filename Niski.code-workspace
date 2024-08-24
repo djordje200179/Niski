@@ -1,0 +1,44 @@
+{
+	"folders": [
+		{
+			"path": "Hardware"
+		},
+		{
+			"path": "Software"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"btns",
+			"kcond",
+			"kmutex",
+			"kscheduler",
+			"ksig",
+			"ksignal",
+			"plic",
+			"repr",
+			"ssds",
+			"thrd"
+		],
+		"files.associations": {
+			"ssds.h": "c",
+			"lcd.h": "c",
+			"exceptions.h": "c",
+			"stdbool.h": "c",
+			"thread.h": "c",
+			"mutex.h": "c",
+			"leds.h": "c",
+			"signals.h": "c",
+			"scheduler.h": "c",
+			"syscalls.h": "c",
+			"riscv.h": "c",
+			"signal.C": "cpp",
+			"stddef.h": "c",
+			"condition.h": "c",
+			"plic.h": "c",
+			"dma.h": "c",
+			"thread_local.h": "c",
+			"stdint.h": "c"
+		}
+	}
+}

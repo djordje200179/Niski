@@ -5,6 +5,7 @@
 #include "kernel/sync/thread_local.h"
 #include "kernel/sync/scheduler.h"
 #include "kernel/syscalls.h"
+#include "kernel/signals.h"
 
 #define GET_PARAM(index, type) (type)(kthread_current->context.regs[REG_A ## index])
 #define SET_RET_VALUE(value) kthread_current->context.regs[REG_A0] = (uint32_t)value
@@ -52,13 +53,6 @@ static void syscall_thread_create() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
-static void syscall_thread_exit() {
-	kthread_destroy(kthread_current);
-	kthread_current = NULL;
-
-	kthread_dispatch();
-}
-
 static void syscall_thread_join() {
 	// TODO: implement
 }
@@ -72,12 +66,13 @@ static void syscall_mutex_create() {
 		return;
 	}
 
-	struct kmutex* mutex = kmutex_create(mode & KMUTEX_MODE_RECURSIVE);
+	struct kmutex* mutex = kheap_alloc(sizeof(struct kmutex));
 	if (!mutex) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
+	kmutex_init(mutex, mode & KMUTEX_MODE_RECURSIVE);
 	*location = mutex;
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
@@ -120,6 +115,7 @@ static void syscall_mutex_destroy() {
 	}
 
 	kmutex_destroy(mutex);
+	kheap_dealloc(mutex);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
@@ -149,12 +145,13 @@ static void syscall_cond_create() {
 		return;
 	}
 
-	struct kcond* cond = kcond_create();
+	struct kcond* cond = kheap_alloc(sizeof(struct kcond));
 	if (!cond) {
 		SET_RET_VALUE(KTHREAD_STATUS_NOMEM);
 		return;
 	}
 
+	kcond_init(cond);
 	*location = cond;
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
@@ -185,7 +182,7 @@ static void syscall_cond_signal() {
 		return;
 	}
 
-	kcond_signal(cond);
+	kcond_signal(cond, false);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
@@ -212,6 +209,7 @@ static void syscall_cond_destroy() {
 	}
 
 	kcond_destroy(cond);
+	kheap_dealloc(cond);
 
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
@@ -280,20 +278,29 @@ static void syscall_ts_set() {
 }
 
 static void syscall_sig_set() {
-	// TODO: implement
+	enum ksignal sig = GET_PARAM(0, enum ksignal);
+	ksignal_handler_t handler = GET_PARAM(1, ksignal_handler_t);
+
+	handler = ksignal_handle(sig, handler);
+
+	SET_RET_VALUE(handler);
 }
 
 static void syscall_sig_raise() {
-	// TODO: implement
+	int sig = GET_PARAM(0, int);
+
+	ksignal_send(sig);
+
+	SET_RET_VALUE(0);
 }
 
-static void (*syscalls[100])() = {
+static void (*syscalls[])() = {
 	[SYSCALL_MEM_ALLOC] = syscall_mem_alloc,
 	[SYSCALL_MEM_FREE] = syscall_mem_free,
 	[SYSCALL_MEM_TRY_REALLOC] = syscall_mem_try_realloc,
 
 	[SYSCALL_THREAD_CREATE] = syscall_thread_create,
-	[SYSCALL_THREAD_EXIT] = syscall_thread_exit,
+	[SYSCALL_THREAD_EXIT] = kthread_stop,
 	[SYSCALL_THREAD_DISPATCH] = kthread_dispatch,
 	[SYSCALL_THREAD_JOIN] = syscall_thread_join,
 
@@ -319,9 +326,7 @@ static void (*syscalls[100])() = {
 };
 
 void handle_syscall() {
-	intptr_t curr_pc = (intptr_t)(kthread_current->context.pc);
-	curr_pc += 4;
-	kthread_current->context.pc = (void(*))(curr_pc);
+	kthread_current->context.pc++;
 
 	uint32_t syscall_type = kthread_current->context.regs[REG_A5];
 	(syscalls[syscall_type])();

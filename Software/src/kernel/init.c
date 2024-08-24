@@ -11,7 +11,7 @@ void init() {
 	lcd_init();
 	plic_allow_all();
 	btns_enable_all();
-	//ksignal_init();
+	ksignal_init();
 
 	void main();
 	struct kthread* user_thread = kthread_create((void*)main, NULL, false);
