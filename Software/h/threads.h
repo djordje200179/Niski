@@ -19,7 +19,7 @@ thrd_t thrd_current(void);
 // int thrd_sleep(const struct timespec* duration, struct timespec* remaining);
 void thrd_yield(void);
 _Noreturn void thrd_exit(int res);
-// int thrd_detach(thrd_t thr);
+int thrd_detach(thrd_t thr);
 // int thrd_join(thrd_t thr, int* res);
 
 struct kmutex;

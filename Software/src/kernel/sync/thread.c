@@ -79,7 +79,6 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 }
 
 void kthread_stop() {
-	//kthread_destroy(kthread_current);
 	kthread_current = NULL;
 
 	kthread_dispatch();

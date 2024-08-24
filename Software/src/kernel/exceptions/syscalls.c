@@ -53,6 +53,18 @@ static void syscall_thread_create() {
 	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
 }
 
+static void syscall_thread_detach() {
+	struct kthread* thread = GET_PARAM(0, struct kthread*);
+	if (!thread) {
+		SET_RET_VALUE(KTHREAD_STATUS_ERROR);
+		return;
+	}
+
+	kthread_destroy(thread);
+
+	SET_RET_VALUE(KTHREAD_STATUS_SUCCESS);
+}
+
 static void syscall_thread_join() {
 	// TODO: implement
 }
@@ -301,6 +313,7 @@ static void (*syscalls[])() = {
 
 	[SYSCALL_THREAD_CREATE] = syscall_thread_create,
 	[SYSCALL_THREAD_EXIT] = kthread_stop,
+	[SYSCALL_THREAD_DETACH] = syscall_thread_detach,
 	[SYSCALL_THREAD_DISPATCH] = kthread_dispatch,
 	[SYSCALL_THREAD_JOIN] = syscall_thread_join,
 

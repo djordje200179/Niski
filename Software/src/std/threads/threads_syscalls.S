@@ -31,6 +31,11 @@ thrd_exit:
 	li a5, SYSCALL_THREAD_EXIT
 	ecall
 
+thrd_detach:
+	li a5, SYSCALL_THREAD_DETACH
+	ecall
+	ret
+
 mtx_init:
 	li a5, SYSCALL_MUTEX_CREATE
 	ecall
