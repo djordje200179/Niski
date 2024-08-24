@@ -5,7 +5,6 @@
 #include "kernel/sync/condition.h"
 #include "kernel/sync/scheduler.h"
 #include "devices/lcd.h"
-#include "devices/leds.h"
 #include <stdio.h>
 #include <threads.h>
 
@@ -65,17 +64,6 @@ _Noreturn static int signal_processor(void* arg) {
 		head = (head + 1) % 10;
 		mtx_unlock(&mutex);
 
-		lcd_clear();
-		puts("HEAD: ");
-		char head_str[2];
-		head_str[0] = '0' + (head / 10);
-		head_str[1] = '\0';
-		puts(head_str);
-
-		puts("\nTAIL: ");
-		head_str[0] = '0' + (tail / 10);
-		puts(head_str);
-
 		if (handlers[sig])
 			handlers[sig](sig);
 	}
@@ -97,7 +85,6 @@ ksignal_handler_t ksignal_handle(enum ksignal sig, ksignal_handler_t handler) {
 }
 
 void ksignal_send(enum ksignal sig) {
-	leds_set_single(3, true);
 	requests[tail] = sig;
 	tail = (tail + 1) % 10;
 	

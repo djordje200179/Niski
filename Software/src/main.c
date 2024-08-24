@@ -48,4 +48,7 @@ void main() {
 	thrd_create(&handles[1], second_thread, NULL);
 
 	puts("Created.");
+
+
+	while(true);
 }
