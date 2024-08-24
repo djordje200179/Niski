@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE EP4CE6E22C8
 set_global_assignment -name TOP_LEVEL_ENTITY Niski
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:42:07  OCTOBER 10, 2022"
-set_global_assignment -name LAST_QUARTUS_VERSION "23.1std.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "23.1std.1 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -193,6 +193,10 @@ set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_DUPLICATION ON
 set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING ON
 set_global_assignment -name ROUTER_LCELL_INSERTION_AND_LOGIC_DUPLICATION ON
 set_global_assignment -name FLOW_DISABLE_ASSEMBLER OFF
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU/CPU.sv -section_id CPU
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Devices/LEDs/BusInterface.sv -section_id "LEDs Bus Interface"
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Bus/Arbitrator.sv -section_id "Bus Arbitrator"
+set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Niski.sv -section_id Niski
 set_global_assignment -name BDF_FILE Niski.bdf
 set_global_assignment -name VERILOG_FILE CPU/CPU.v
 set_global_assignment -name VERILOG_INCLUDE_FILE CPU/Instructions.vh
@@ -232,6 +236,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE Devices/LEDs/BusInterface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Devices/LEDs/Controller.sv
 set_global_assignment -name VERILOG_FILE Devices/I2C/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/I2C/States.vh
+set_global_assignment -name SYSTEMVERILOG_FILE Devices/PS2Keyboard/BusInterface.sv
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Controller.v
 set_global_assignment -name VERILOG_INCLUDE_FILE Devices/PS2Keyboard/Keys.vh
 set_global_assignment -name VERILOG_FILE Devices/PS2Keyboard/Mappers/Digit.v
@@ -254,8 +259,4 @@ set_global_assignment -name SYSTEMVERILOG_FILE Tests/Bus/Arbitrator.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Tests/Devices/LEDs/BusInterface.sv
 set_global_assignment -name SIGNALTAP_FILE Debugging/MemoryRead.stp
 set_global_assignment -name SIGNALTAP_FILE Debugging/TimerInterrupt.stp
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/CPU/CPU.sv -section_id CPU
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Devices/LEDs/BusInterface.sv -section_id "LEDs Bus Interface"
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Bus/Arbitrator.sv -section_id "Bus Arbitrator"
-set_global_assignment -name EDA_TEST_BENCH_FILE Tests/Niski.sv -section_id Niski
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
