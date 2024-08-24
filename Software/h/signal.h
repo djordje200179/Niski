@@ -3,8 +3,8 @@
 #include "common/signals.h"
 #include "common/syscalls.h"
 
-static inline void (*signal(int sig, void (*func)(int)))(int) { return __sig_set(sig, func); }
-static inline int raise(int sig) { __sig_raise(sig); return 0; }
+static inline void (*signal(int sig, void (*func)(int)))(int) { return __signal_set_handler(sig, func); }
+static inline int raise(int sig) { __signal_raise(sig); return 0; }
 
 typedef volatile int sig_atomic_t;
 

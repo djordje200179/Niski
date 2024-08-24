@@ -1,25 +1,25 @@
-.global __mem_alloc, __mem_free, __mem_try_realloc
+.global __memory_allocate, __memory_free, __memory_try_expand
 .global __thread_create, __thread_exit, __thread_detach, __thread_dispatch
 .global __mutex_create, __mutex_lock, __mutex_unlock, __mutex_destroy, __mutex_try_lock
-.global __cond_create, __cond_wait, __cond_signal, __con_signal_all, __cond_destroy
-.global __ts_create, __ts_destroy, __ts_get, __ts_set
-.global __sig_set, __sig_raise
+.global __condition_create, __condition_wait, __condition_signal, __con_signal_all, __condition_destroy
+.global __thread_storage_create, __thread_storage_destroy, __thread_storage_get, __thread_storage_set
+.global __signal_set_handler, __signal_raise
 
 #include "common/syscall_codes.h"
 
 .text
-__mem_alloc:
-	li a5, __SYSCALL_MEM_ALLOC
+__memory_allocate:
+	li a5, __SYSCALL_MEMORY_ALLOCATE
 	ecall
 	ret
 
-__mem_free:
-	li a5, __SYSCALL_MEM_FREE
+__memory_free:
+	li a5, __SYSCALL_MEMORY_FREE
 	ecall
 	ret
 
-__mem_try_realloc:
-	li a5, __SYSCALL_MEM_TRY_REALLOC
+__memory_try_expand:
+	li a5, __SYSCALL_MEMORY_TRY_EXPAND
 	ecall
 	ret
 
@@ -68,57 +68,57 @@ __mutex_try_lock:
 	ecall
 	ret
 
-__cond_create:
-	li a5, __SYSCALL_COND_CREATE
+__condition_create:
+	li a5, __SYSCALL_CONDITION_CREATE
 	ecall
 	ret
 
-__cond_wait:
-	li a5, __SYSCALL_COND_WAIT
+__condition_wait:
+	li a5, __SYSCALL_CONDITION_WAIT
 	ecall
 	ret
 
-__cond_signal:
-	li a5, __SYSCALL_COND_SIGNAL
+__condition_signal:
+	li a5, __SYSCALL_CONDITION_SIGNAL
 	ecall
 	ret
 
 __con_signal_all:
-	li a5, __SYSCALL_COND_SIGNAL_ALL
+	li a5, __SYSCALL_CONDITION_SIGNAL_ALL
 	ecall
 	ret
 
-__cond_destroy:
-	li a5, __SYSCALL_COND_DESTROY
+__condition_destroy:
+	li a5, __SYSCALL_CONDITION_DESTROY
 	ecall
 	ret
 
-__ts_create:
-	li a5, __SYSCALL_TS_CREATE
+__thread_storage_create:
+	li a5, __SYSCALL_THREAD_STORAGE_CREATE
 	ecall
 	ret
 
-__ts_destroy:
-	li a5, __SYSCALL_TS_DESTROY
+__thread_storage_destroy:
+	li a5, __SYSCALL_THREAD_STORAGE_DESTROY
 	ecall
 	ret
 
-__ts_get:
-	li a5, __SYSCALL_TS_GET
+__thread_storage_get:
+	li a5, __SYSCALL_THREAD_STORAGE_GET
 	ecall
 	ret
 
-__ts_set:
-	li a5, __SYSCALL_TS_SET
+__thread_storage_set:
+	li a5, __SYSCALL_THREAD_STORAGE_SET
 	ecall
 	ret
 
-__sig_set:
-	li a5, __SYSCALL_SIG_SET
+__signal_set_handler:
+	li a5, __SYSCALL_SIGNAL_SET_HANDLER
 	ecall
 	ret
 
-__sig_raise:
-	li a5, __SYSCALL_SIG_RAISE
+__signal_raise:
+	li a5, __SYSCALL_SIGNAL_RAISE
 	ecall
 	ret

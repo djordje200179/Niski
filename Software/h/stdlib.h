@@ -4,11 +4,11 @@
 #include <errno.h>
 #include "common/syscalls.h"
 
-static inline void* malloc(size_t size) { return __mem_alloc(size); }
+static inline void* malloc(size_t size) { return __memory_allocate(size); }
 void* calloc(size_t num, size_t size);
 void* realloc(void* ptr, size_t size);
 
-static inline void free(void* ptr) { __mem_free(ptr); }
+static inline void free(void* ptr) { __memory_free(ptr); }
 
 int rand(void);
 void srand(unsigned int seed);

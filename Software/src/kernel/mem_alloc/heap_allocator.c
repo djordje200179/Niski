@@ -121,7 +121,7 @@ void kheap_dealloc(void* ptr) {
 		try_join_next_segment(segment->prev);
 }
 
-bool kheap_try_realloc(void* ptr, size_t bytes) {
+bool kheap_try_expand(void* ptr, size_t bytes) {
 	struct mem_segment* segment = (struct mem_segment*)(ptr) - 1;
 	size_t new_blocks = calculate_blocks(bytes);
 	size_t old_blocks = segment->blocks;

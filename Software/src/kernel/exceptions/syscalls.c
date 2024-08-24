@@ -23,11 +23,11 @@ static void syscall_mem_free() {
 	kheap_dealloc(ptr);
 }
 
-static void syscall_mem_try_realloc() {
+static void syscall_mem_try_expand() {
 	void* ptr = GET_PARAM(0, void*);
 	size_t bytes = GET_PARAM(1, size_t);
 
-	SET_RET_VALUE(kheap_try_realloc(ptr, bytes));
+	SET_RET_VALUE(kheap_try_expand(ptr, bytes));
 }
 
 static void syscall_thread_create() {
@@ -289,7 +289,7 @@ static void syscall_ts_set() {
 	SET_RET_VALUE(__THREAD_STATUS_SUCCESS);
 }
 
-static void syscall_sig_set() {
+static void syscall_sig_set_handler() {
 	enum __signal sig = GET_PARAM(0, enum __signal);
 	ksignal_handler_t handler = GET_PARAM(1, ksignal_handler_t);
 
@@ -307,9 +307,9 @@ static void syscall_sig_raise() {
 }
 
 static void (*syscalls[])() = {
-	[__SYSCALL_MEM_ALLOC] = syscall_mem_alloc,
-	[__SYSCALL_MEM_FREE] = syscall_mem_free,
-	[__SYSCALL_MEM_TRY_REALLOC] = syscall_mem_try_realloc,
+	[__SYSCALL_MEMORY_ALLOCATE] = syscall_mem_alloc,
+	[__SYSCALL_MEMORY_FREE] = syscall_mem_free,
+	[__SYSCALL_MEMORY_TRY_EXPAND] = syscall_mem_try_expand,
 
 	[__SYSCALL_THREAD_CREATE] = syscall_thread_create,
 	[__SYSCALL_THREAD_EXIT] = kthread_stop,
@@ -323,19 +323,19 @@ static void (*syscalls[])() = {
 	[__SYSCALL_MUTEX_DESTROY] = syscall_mutex_destroy,
 	[__SYSCALL_MUTEX_TRY_LOCK] = syscall_mutex_try_lock,
 
-	[__SYSCALL_COND_CREATE] = syscall_cond_create,
-	[__SYSCALL_COND_WAIT] = syscall_cond_wait,
-	[__SYSCALL_COND_SIGNAL] = syscall_cond_signal,
-	[__SYSCALL_COND_SIGNAL_ALL] = syscall_cond_signal_all,
-	[__SYSCALL_COND_DESTROY] = syscall_cond_destroy,
+	[__SYSCALL_CONDITION_CREATE] = syscall_cond_create,
+	[__SYSCALL_CONDITION_WAIT] = syscall_cond_wait,
+	[__SYSCALL_CONDITION_SIGNAL] = syscall_cond_signal,
+	[__SYSCALL_CONDITION_SIGNAL_ALL] = syscall_cond_signal_all,
+	[__SYSCALL_CONDITION_DESTROY] = syscall_cond_destroy,
 
-	[__SYSCALL_TS_CREATE] = syscall_ts_create,
-	[__SYSCALL_TS_DESTROY] = syscall_ts_destroy,
-	[__SYSCALL_TS_GET] = syscall_ts_get,
-	[__SYSCALL_TS_SET] = syscall_ts_set,
+	[__SYSCALL_THREAD_STORAGE_CREATE] = syscall_ts_create,
+	[__SYSCALL_THREAD_STORAGE_DESTROY] = syscall_ts_destroy,
+	[__SYSCALL_THREAD_STORAGE_GET] = syscall_ts_get,
+	[__SYSCALL_THREAD_STORAGE_SET] = syscall_ts_set,
 
-	[__SYSCALL_SIG_SET] = syscall_sig_set,
-	[__SYSCALL_SIG_RAISE] = syscall_sig_raise,
+	[__SYSCALL_SIGNAL_SET_HANDLER] = syscall_sig_set_handler,
+	[__SYSCALL_SIGNAL_RAISE] = syscall_sig_raise,
 };
 
 void handle_syscall() {

@@ -46,12 +46,12 @@ static inline void mtx_destroy(mtx_t* mutex) { __mutex_destroy(*mutex); }
 
 typedef struct __condition* cnd_t;
 
-static inline int cnd_init(cnd_t* cond) { return __cond_create(cond); }
-static inline int cnd_signal(cnd_t* cond) { return __cond_signal(*cond); }
-static inline int cnd_broadcast(cnd_t* cond) { return __cond_signal_all(*cond); }
-static inline int cnd_wait(cnd_t* cond, mtx_t* mutex) { return __cond_wait(*cond, *mutex); }
+static inline int cnd_init(cnd_t* cond) { return __condition_create(cond); }
+static inline int cnd_signal(cnd_t* cond) { return __condition_signal(*cond); }
+static inline int cnd_broadcast(cnd_t* cond) { return __condition_signal_all(*cond); }
+static inline int cnd_wait(cnd_t* cond, mtx_t* mutex) { return __condition_wait(*cond, *mutex); }
 //int cnd_timedwait(cnd_t* cond, mtx_t* mutex, const struct timespec* time_point);
-static inline void cnd_destroy(cnd_t* cond) { __cond_destroy(*cond); }
+static inline void cnd_destroy(cnd_t* cond) { __condition_destroy(*cond); }
 
 typedef struct __thread_storage* tss_t;
 
@@ -59,7 +59,7 @@ typedef struct __thread_storage* tss_t;
 
 typedef void (*tss_dtor_t)(void*);
 
-static inline int tss_create(tss_t* key, tss_dtor_t dtor) { return __ts_create(key, dtor); }
-static inline void* tss_get(tss_t key) { return __ts_get(key); }
-static inline int tss_set(tss_t key, void* val) { return __ts_set(key, val); }
-static inline void tss_delete(tss_t key) { __ts_destroy(key); }
+static inline int tss_create(tss_t* key, tss_dtor_t dtor) { return __thread_storage_create(key, dtor); }
+static inline void* tss_get(tss_t key) { return __thread_storage_get(key); }
+static inline int tss_set(tss_t key, void* val) { return __thread_storage_set(key, val); }
+static inline void tss_delete(tss_t key) { __thread_storage_destroy(key); }
