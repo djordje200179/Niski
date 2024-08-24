@@ -23,10 +23,10 @@ static void (*ext_intr_handlers[16])(void*) = {
 };
 
 static void* ext_intr_args[16] = {
-	[EXT_INTR_TYPE_BTN_0] = (void*)KSIGNAL_BTN_0,
-	[EXT_INTR_TYPE_BTN_1] = (void*)KSIGNAL_BTN_1,
-	[EXT_INTR_TYPE_BTN_2] = (void*)KSIGNAL_BTN_2,
-	[EXT_INTR_TYPE_BTN_3] = (void*)KSIGNAL_BTN_3
+	[EXT_INTR_TYPE_BTN_0] = (void*)__SIGNAL_BTN_0,
+	[EXT_INTR_TYPE_BTN_1] = (void*)__SIGNAL_BTN_1,
+	[EXT_INTR_TYPE_BTN_2] = (void*)__SIGNAL_BTN_2,
+	[EXT_INTR_TYPE_BTN_3] = (void*)__SIGNAL_BTN_3
 };
 
 void handle_ext_intr() {

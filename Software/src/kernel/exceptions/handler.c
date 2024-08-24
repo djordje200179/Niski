@@ -17,7 +17,7 @@ void exception_handler(uint32_t type) {
 	case EXCEPTION_INST_ACCESS_FAULT:
 	case EXCEPTION_ILLEGAL_INST:
 		ksig_addr = kthread_current->context.pc;
-		ksignal_send(KSIGNAL_ILLEGAL);
+		ksignal_send(__SIGNAL_ILLEGAL);
 		kthread_stop();
 		break;
 	case EXCEPTION_LOAD_ADDR_MISALIGNED:
@@ -25,7 +25,7 @@ void exception_handler(uint32_t type) {
 	case EXCEPTION_STORE_ADDR_MISALIGNED:
 	case EXCEPTION_STORE_ACCESS_FAULT:
 		ksig_addr = kthread_current->context.pc;
-		ksignal_send(KSIGNAL_MEM_ACCESS);
+		ksignal_send(__SIGNAL_MEM_ACCESS);
 		kthread_stop();
 		break;
 	case EXCEPTION_INTERRUPT | EXTERNAL_INTERRUPT:

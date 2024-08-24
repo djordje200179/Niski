@@ -43,17 +43,17 @@ void* kthread_ls_get(struct kthread_ls* local_storage, struct kthread* thread) {
 	return NULL;
 }
 
-enum kthread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthread* thread, void* data) {
+enum __thread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthread* thread, void* data) {
 	for (struct kthread_ld* local_data = thread->local_data_head; local_data; local_data = local_data->next_data) {
 		if (local_data->storage == local_storage) {
 			local_data->data = data;
-			return KTHREAD_STATUS_SUCCESS;
+			return __THREAD_STATUS_SUCCESS;
 		}
 	}
 
 	struct kthread_ld* local_data = kheap_alloc(sizeof(struct kthread_ld));
 	if (!local_data)
-		return KTHREAD_STATUS_NOMEM;
+		return __THREAD_STATUS_NO_MEMORY;
 
 	local_data->storage = local_storage;
 	local_data->thread = thread;
@@ -71,5 +71,5 @@ enum kthread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthr
 		local_storage->data_head->prev_thread = local_data;
 	local_storage->data_head = local_data;
 
-	return KTHREAD_STATUS_SUCCESS;
+	return __THREAD_STATUS_SUCCESS;
 }

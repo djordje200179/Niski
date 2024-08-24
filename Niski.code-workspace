@@ -38,7 +38,9 @@
 			"plic.h": "c",
 			"dma.h": "c",
 			"thread_local.h": "c",
-			"stdint.h": "c"
+			"stdint.h": "c",
+			"signal.h": "c",
+			"threads.h": "c"
 		}
 	}
 }

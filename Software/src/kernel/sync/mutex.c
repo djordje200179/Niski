@@ -2,6 +2,7 @@
 #include "kernel/sync/thread.h"
 #include "kernel/sync/scheduler.h"
 #include <stddef.h>
+#include "common/threads.h"
 
 void kmutex_init(struct kmutex* mutex, bool recursive) {
 	mutex->owner = NULL;
@@ -47,18 +48,18 @@ void kmutex_lock(struct kmutex* mutex, struct kthread* thread) {
 	mutex->queue_tail = thread;
 }
 
-enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread) {
+enum __thread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread) {
 	if (mutex->owner != thread)
-		return KTHREAD_STATUS_ERROR;
+		return __THREAD_STATUS_ERROR;
 
 	mutex->lock_count--;
 
 	if (mutex->recursive && mutex->lock_count > 0)
-		return KTHREAD_STATUS_SUCCESS;
+		return __THREAD_STATUS_SUCCESS;
 
 	if (!mutex->queue_head) {
 		mutex->owner = NULL;
-		return KTHREAD_STATUS_SUCCESS;
+		return __THREAD_STATUS_SUCCESS;
 	}
 
 	mutex->lock_count = 1;
@@ -73,7 +74,7 @@ enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread) 
 
 	kscheduler_enqueue(next_thread);
 
-	return KTHREAD_STATUS_SUCCESS;
+	return __THREAD_STATUS_SUCCESS;
 }
 
 void kmutex_destroy(struct kmutex* mutex) {

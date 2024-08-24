@@ -2,12 +2,13 @@
 
 #include <stddef.h>
 #include <errno.h>
+#include "common/syscalls.h"
 
-void* malloc(size_t size);
+static inline void* malloc(size_t size) { return __mem_alloc(size); }
 void* calloc(size_t num, size_t size);
 void* realloc(void* ptr, size_t size);
 
-void free(void* ptr);
+static inline void free(void* ptr) { __mem_free(ptr); }
 
 int rand(void);
 void srand(unsigned int seed);

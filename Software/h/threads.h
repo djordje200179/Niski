@@ -1,61 +1,65 @@
 #pragma once
 
+#include "common/syscalls.h"
+#include "common/threads.h"
+
 typedef int (*thrd_start_t)(void*);
 
-struct kthread;
-typedef struct kthread* thrd_t;
+typedef struct __thrd* thrd_t;
 
 enum {
-    thrd_success,
-    thrd_nomem,
-    thrd_timedout,
-    thrd_busy,
-    thrd_error
+    thrd_success = __THREAD_STATUS_SUCCESS,
+    thrd_nomem = __THREAD_STATUS_NO_MEMORY,
+    thrd_timedout = __THREAD_STATUS_TIMED_OUT,
+    thrd_busy = __THREAD_STATUS_BUSY,
+    thrd_error = __THREAD_STATUS_ERROR
 };
 
-int thrd_create(thrd_t* thr, thrd_start_t func, void* arg);
-int thrd_equal(thrd_t lhs, thrd_t rhs);
-thrd_t thrd_current(void);
+static inline int thrd_create(thrd_t* thr, thrd_start_t func, void* arg) { return __thread_create(thr, func, arg); }
+static inline int thrd_equal(thrd_t lhs, thrd_t rhs) { return lhs == rhs; }
+static inline thrd_t thrd_current(void) {
+	// TODO: Implement
+	return NULL;
+}
 // int thrd_sleep(const struct timespec* duration, struct timespec* remaining);
-void thrd_yield(void);
-_Noreturn void thrd_exit(int res);
-int thrd_detach(thrd_t thr);
+static inline void thrd_yield(void) { __thread_dispatch(); }
+[[noreturn]] static inline void thrd_exit(int res) { __thread_exit(res); }
+static inline int thrd_detach(thrd_t thr) { return __thread_detach(thr); }
 // int thrd_join(thrd_t thr, int* res);
 
-struct kmutex;
-typedef struct kmutex* mtx_t;
+typedef struct __mutex* mtx_t;
 
 enum {
-    mtx_plain,
-    mtx_timed,
-    mtx_recursive,
+    mtx_plain = __MUTEX_MODE_NORMAL,
+    mtx_timed = __MUTEX_MODE_TIMED,
+    mtx_recursive = __MUTEX_MODE_RECURSIVE
 };
 
-int mtx_init(mtx_t* mutex, int type);
-int mtx_lock(mtx_t* mutex);
+//TODO: Deref mutex and cond
+
+static inline int mtx_init(mtx_t* mutex, int type) { return __mutex_create(mutex, type); }
+static inline int mtx_lock(mtx_t* mutex) { return __mutex_lock(*mutex); }
 // int mtx_timedlock(mtx_t *restrict mutex, const struct timespec *restrict time_point);
-int mtx_trylock(mtx_t* mutex);
-int mtx_unlock(mtx_t* mutex);
-void mtx_destroy(mtx_t* mutex);
+static inline int mtx_trylock(mtx_t* mutex) { return __mutex_try_lock(*mutex); }
+static inline int mtx_unlock(mtx_t* mutex) { return __mutex_unlock(*mutex); }
+static inline void mtx_destroy(mtx_t* mutex) { __mutex_destroy(*mutex); }
 
-struct kcond;
-typedef struct kcond* cnd_t;
+typedef struct __condition* cnd_t;
 
-int cnd_init(cnd_t* cond);
-int cnd_signal(cnd_t* cond);
-int cnd_broadcast(cnd_t* cond);
-int cnd_wait(cnd_t* cond, mtx_t* mutex);
+static inline int cnd_init(cnd_t* cond) { return __cond_create(cond); }
+static inline int cnd_signal(cnd_t* cond) { return __cond_signal(*cond); }
+static inline int cnd_broadcast(cnd_t* cond) { return __cond_signal_all(*cond); }
+static inline int cnd_wait(cnd_t* cond, mtx_t* mutex) { return __cond_wait(*cond, *mutex); }
 //int cnd_timedwait(cnd_t* cond, mtx_t* mutex, const struct timespec* time_point);
-void cnd_destroy(cnd_t* cond);
+static inline void cnd_destroy(cnd_t* cond) { __cond_destroy(*cond); }
 
-struct kthread_ls;
-typedef struct kthread_ls* tss_t;
+typedef struct __thread_storage* tss_t;
 
 #define TSS_DTOR_ITERATIONS 1
 
 typedef void (*tss_dtor_t)(void*);
 
-int tss_create(tss_t* key, tss_dtor_t dtor);
-void* tss_get(tss_t key);
-int tss_set(tss_t key, void* val);
-void tss_delete(tss_t key);
+static inline int tss_create(tss_t* key, tss_dtor_t dtor) { return __ts_create(key, dtor); }
+static inline void* tss_get(tss_t key) { return __ts_get(key); }
+static inline int tss_set(tss_t key, void* val) { return __ts_set(key, val); }
+static inline void tss_delete(tss_t key) { __ts_destroy(key); }

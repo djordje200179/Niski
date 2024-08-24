@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "thread_status.h"
+#include "common/threads.h"
 
 struct kmutex {
 	struct kthread* owner;
@@ -16,11 +16,5 @@ struct kmutex {
 void kmutex_init(struct kmutex* mutex, bool recursive);
 void kmutex_lock(struct kmutex* mutex, struct kthread* thread);
 bool kmutex_try_lock(struct kmutex* mutex, struct kthread* thread);
-enum kthread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread);
+enum __thread_status kmutex_unlock(struct kmutex* mutex, struct kthread* thread);
 void kmutex_destroy(struct kmutex* mutex);
-
-enum kmutex_mode {
-	KMUTEX_MODE_NORMAL = 0b00,
-	KMUTEX_MODE_TIMED = 0b01,
-	KMUTEX_MODE_RECURSIVE = 0b10
-};

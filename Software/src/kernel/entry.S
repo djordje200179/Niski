@@ -1,7 +1,7 @@
 .global entry
 
 .extern init, trap
-.extern thrd_yield
+.extern __thread_dispatch
 
 .extern KERNEL_STACK_END, DATA_START
 
@@ -21,5 +21,5 @@ entry:
 	call init
 	
 spin:
-	call thrd_yield
+	call __thread_dispatch
 	j spin

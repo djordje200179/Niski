@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/threads.h"
+
 struct kthread_ls {
 	void (*dtor)(void*);
 
@@ -25,4 +27,4 @@ void kthread_ls_destroy(struct kthread_ls* local_storage);
 struct kthread;
 
 void* kthread_ls_get(struct kthread_ls* local_storage, struct kthread* thread);
-enum kthread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthread* thread, void* data);
+enum __thread_status kthread_ls_set(struct kthread_ls* local_storage, struct kthread* thread, void* data);

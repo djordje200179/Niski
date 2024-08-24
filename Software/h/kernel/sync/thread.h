@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "thread_status.h"
+#include "common/threads.h"
 
 enum cpu_reg {
 	REG_ZERO,

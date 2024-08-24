@@ -3,6 +3,7 @@
 #include "kernel/sync/scheduler.h"
 #include "kernel/mem_alloc/heap_allocator.h"
 #include "devices/dma.h"
+#include "common/syscalls.h"
 
 #define KTHREAD_STACK_SIZE 0x1000
 
@@ -69,8 +70,7 @@ struct kthread* kthread_create(int (*function)(void*), void* arg, bool superviso
 	thread->context.pc = (uint32_t*)function;
 	thread->context.regs[REG_A0] = (uint32_t)arg;
 	
-	_Noreturn void thrd_exit(int res);
-	thread->context.regs[REG_RA] = (uint32_t)thrd_exit;
+	thread->context.regs[REG_RA] = (uint32_t)__thread_exit;
 
 	thread->state = KTHREAD_STATE_READY;
 	thread->next = NULL;

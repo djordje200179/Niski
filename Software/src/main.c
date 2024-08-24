@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <devices/leds.h>
 #include <devices/ssds.h>
+#include <devices/btns.h>
 #include <signal.h>
 
 static void calculate_ok() { errno = 0; }
@@ -38,10 +39,10 @@ void main() {
 
 	ssds_set_dec_num(1234);
 
-	signal(KSIGNAL_BTN_0, btn_on_pressed);
-	signal(KSIGNAL_BTN_1, btn_on_pressed);
-	signal(KSIGNAL_BTN_2, btn_on_pressed);
-	signal(KSIGNAL_BTN_3, btn_on_pressed);
+	signal(SIGBTN0, btn_on_pressed);
+	signal(SIGBTN1, btn_on_pressed);
+	signal(SIGBTN2, btn_on_pressed);
+	signal(SIGBTN3, btn_on_pressed);
 
 	thrd_t handles[2];
 	thrd_create(&handles[0], first_thread, NULL);

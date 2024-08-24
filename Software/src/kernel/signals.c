@@ -10,7 +10,7 @@
 
 volatile uint32_t* ksig_addr;
 
-static void handle_illegal_action(enum ksignal cause) {
+static void handle_illegal_action(enum __signal cause) {
 	lcd_clear();
 
 	puts("FATAL SIGNAL ");
@@ -33,19 +33,19 @@ static void handle_illegal_action(enum ksignal cause) {
 }
 
 static ksignal_handler_t handlers[] = {
-	[KSIGNAL_ILLEGAL] = handle_illegal_action,
-	[KSIGNAL_MEM_ACCESS] = handle_illegal_action,
-	[KSIGNAL_ABORT] = handle_illegal_action,
-	[KSIGNAL_INTERRUPT] = NULL,
+	[__SIGNAL_ILLEGAL] = handle_illegal_action,
+	[__SIGNAL_MEM_ACCESS] = handle_illegal_action,
+	[__SIGNAL_ABORT] = handle_illegal_action,
+	[__SIGNAL_INTERRUPT] = NULL,
 	
-	[KSIGNAL_KEY] = NULL,
-	[KSIGNAL_BTN_0] = NULL,
-	[KSIGNAL_BTN_1] = NULL,
-	[KSIGNAL_BTN_2] = NULL,
-	[KSIGNAL_BTN_3] = NULL
+	[__SIGNAL_KEY] = NULL,
+	[__SIGNAL_BTN_0] = NULL,
+	[__SIGNAL_BTN_1] = NULL,
+	[__SIGNAL_BTN_2] = NULL,
+	[__SIGNAL_BTN_3] = NULL
 };
 
-static volatile enum ksignal requests[10] = {};
+static volatile enum __signal requests[10] = {};
 static volatile size_t head = 0, tail = 0;
 
 struct kmutex requests_mutex;
@@ -60,7 +60,7 @@ _Noreturn static int signal_processor(void* arg) {
 		while (head == tail)
 			cnd_wait(&cond, &mutex);
 
-		enum ksignal sig = requests[head];
+		enum __signal sig = requests[head];
 		head = (head + 1) % 10;
 		mtx_unlock(&mutex);
 
@@ -77,14 +77,14 @@ void ksignal_init() {
 	kscheduler_enqueue(thread);
 }
 
-ksignal_handler_t ksignal_handle(enum ksignal sig, ksignal_handler_t handler) {
+ksignal_handler_t ksignal_handle(enum __signal sig, ksignal_handler_t handler) {
 	ksignal_handler_t old_handler = handlers[sig];
 	handlers[sig] = handler;
 
 	return old_handler;
 }
 
-void ksignal_send(enum ksignal sig) {
+void ksignal_send(enum __signal sig) {
 	requests[tail] = sig;
 	tail = (tail + 1) % 10;
 	

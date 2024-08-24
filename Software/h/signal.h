@@ -1,9 +1,10 @@
 #pragma once
 
-#include "kernel/signals.h"
+#include "common/signals.h"
+#include "common/syscalls.h"
 
-void (*signal(int sig, void (*func)(int)))(int);
-int raise(int sig);
+static inline void (*signal(int sig, void (*func)(int)))(int) { return __sig_set(sig, func); }
+static inline int raise(int sig) { __sig_raise(sig); return 0; }
 
 typedef volatile int sig_atomic_t;
 
@@ -11,9 +12,9 @@ typedef volatile int sig_atomic_t;
 #define SIG_IGN ((void (*)(int))0)
 #define SIG_ERR ((void (*)(int))1)
 
-#define SIGTERM KSIGNAL_ABORT
-#define SIGSEGV KSIGNAL_MEM_ACCESS
-#define SIGINT KSIGNAL_INTERRUPT
-#define SIGILL KSIGNAL_ILLEGAL
-#define SIGABRT KSIGNAL_ABORT
-#define SIGFPE KSIGNAL_ILLEGAL
+#define SIGTERM __SIGNAL_ABORT
+#define SIGSEGV __SIGNAL_MEM_ACCESS
+#define SIGINT __SIGNAL_INTERRUPT
+#define SIGILL __SIGNAL_ILLEGAL
+#define SIGABRT __SIGNAL_ABORT
+#define SIGFPE __SIGNAL_ILLEGAL
