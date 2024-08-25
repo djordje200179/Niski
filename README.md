@@ -145,6 +145,9 @@ Currently, the following header files and functions have been fully implemented:
 	- `imaxdiv`
     - `imaxabs`
 - __stdio.h__
+	- `fputs`
+	- `fputc`
+	- `putc`
 	- `putchar`
 	- `puts`
 - __threads.h__
@@ -153,6 +156,7 @@ Currently, the following header files and functions have been fully implemented:
 	- `thrd_current`
 	- `thrd_yield`
 	- `thrd_exit`
+	- `thrd_detach`
 	- `mtx_init`
 	- `mtx_lock`
 	- `mtx_unlock`
@@ -169,20 +173,20 @@ Currently, the following header files and functions have been fully implemented:
 	- `timespec_get`
 	- `timespec_getres`
 - __ctype.h__
-  - `isalnum`
-  - `isalpha`
-  - `islower`
-  - `isupper`
-  - `isdigit`
-  - `isxdigit`
-  - `iscntrl`
-  - `isgraph`
-  - `isspace`
-  - `isblank`
-  - `isprint`
-  - `ispunct`
-  - `tolower`
-  - `toupper`
+	- `isalnum`
+	- `isalpha`
+	- `islower`
+	- `isupper`
+	- `isdigit`
+	- `isxdigit`
+	- `iscntrl`
+	- `isgraph`
+	- `isspace`
+	- `isblank`
+	- `isprint`
+	- `ispunct`
+	- `tolower`
+	- `toupper`
 - __string.h__
 	- `strcpy`
 	- `strncpy`
@@ -208,6 +212,9 @@ Currently, the following header files and functions have been fully implemented:
 - __setjmp.h__
 	- `setjmp`
     - `longjmp`
+- __signal.h__
+	- `signal`
+	- `raise`
 
 ### I/O devices
 In order to facilitate communication with external devices 
@@ -251,5 +258,4 @@ At present, the following header files and functions have been fully implemented
 	- `btns_disable_all`
 	- `btns_get_statuses`
 	- `btns_is_pressed`
-	- `btns_on_(1/2/3/4)_pressed` *(weak)*
 	
