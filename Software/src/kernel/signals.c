@@ -5,8 +5,8 @@
 #include "kernel/sync/condition.h"
 #include "kernel/sync/scheduler.h"
 #include "devices/lcd.h"
+#include "common/syscalls.h"
 #include <stdio.h>
-#include <threads.h>
 
 volatile uint32_t* ksig_addr;
 
@@ -52,17 +52,17 @@ struct kmutex requests_mutex;
 struct kcond requests_cond;
 
 _Noreturn static int signal_processor(void* arg) {	
-	static mtx_t mutex = &requests_mutex;
-	static cnd_t cond = &requests_cond;
-
 	while (true) {
-		mtx_lock(&mutex);
+		__mutex_lock((struct __mutex*)&requests_mutex);
 		while (head == tail)
-			cnd_wait(&cond, &mutex);
+			__condition_wait(
+				(struct __condition*)&requests_cond,
+				(struct __mutex*)&requests_mutex
+			);
 
 		enum __signal sig = requests[head];
 		head = (head + 1) % 10;
-		mtx_unlock(&mutex);
+		__mutex_unlock((struct __mutex*)&requests_mutex);
 
 		if (handlers[sig])
 			handlers[sig](sig);
