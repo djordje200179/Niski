@@ -4,6 +4,7 @@
 .global __condition_create, __condition_wait, __condition_signal, __con_signal_all, __condition_destroy
 .global __thread_storage_create, __thread_storage_destroy, __thread_storage_get, __thread_storage_set
 .global __signal_set_handler, __signal_raise
+.global __file_write, __file_read
 
 #include "common/syscall_codes.h"
 
@@ -125,5 +126,15 @@ __signal_set_handler:
 
 __signal_raise:
 	li a5, __SYSCALL_SIGNAL_RAISE
+	ecall
+	ret
+
+__file_write:
+	li a5, __SYSCALL_FILE_WRITE
+	ecall
+	ret
+
+__file_read:
+	li a5, __SYSCALL_FILE_READ
 	ecall
 	ret

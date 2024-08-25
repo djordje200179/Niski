@@ -5,6 +5,7 @@
 #include "kernel/sync/thread_local.h"
 #include "kernel/sync/scheduler.h"
 #include "kernel/signals.h"
+#include "kernel/io.h"
 #include "common/syscall_codes.h"
 
 #define GET_PARAM(index, type) (type)(kthread_current->context.regs[REG_A ## index])
@@ -310,6 +311,24 @@ static void syscall_sig_raise() {
 	SET_RET_VALUE(0);
 }
 
+static void syscall_file_write() {
+	enum __file file = GET_PARAM(0, enum __file);
+	const char* buffer = GET_PARAM(1, const char*);
+	size_t size = GET_PARAM(2, size_t);
+
+	size_t written = kfile_write(file, buffer, size);
+	SET_RET_VALUE(written);
+}
+
+static void syscall_file_read() {
+	enum __file file = GET_PARAM(0, enum __file);
+	char* buffer = GET_PARAM(1, char*);
+	size_t size = GET_PARAM(2, size_t);
+
+	size_t read = kfile_read(file, buffer, size);
+	SET_RET_VALUE(read);
+}
+
 static void (*syscalls[])() = {
 	[__SYSCALL_MEMORY_ALLOCATE] = syscall_mem_alloc,
 	[__SYSCALL_MEMORY_FREE] = syscall_mem_free,
@@ -341,6 +360,9 @@ static void (*syscalls[])() = {
 
 	[__SYSCALL_SIGNAL_SET_HANDLER] = syscall_sig_set_handler,
 	[__SYSCALL_SIGNAL_RAISE] = syscall_sig_raise,
+
+	[__SYSCALL_FILE_WRITE] = syscall_file_write,
+	[__SYSCALL_FILE_READ] = syscall_file_read,
 };
 
 void handle_syscall() {

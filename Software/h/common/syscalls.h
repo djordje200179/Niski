@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "common/threads.h"
 #include "common/signals.h"
+#include "common/io.h"
 
 void* __memory_allocate(size_t size);
 void __memory_free(void* ptr);
@@ -34,3 +35,6 @@ enum __thread_status __thread_storage_set(struct __thread_storage* ts, void* dat
 
 void (*__signal_set_handler(enum __signal sig, void (*handler)(enum __signal)))(enum __signal);
 void __signal_raise(enum __signal sig);
+
+size_t __file_write(enum __file file, const char* buffer, size_t size);
+size_t __file_read(enum __file file, char* buffer, size_t size);

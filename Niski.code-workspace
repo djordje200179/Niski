@@ -40,7 +40,10 @@
 			"thread_local.h": "c",
 			"stdint.h": "c",
 			"signal.h": "c",
-			"threads.h": "c"
+			"threads.h": "c",
+			"stdio.h": "c",
+			"syscall_codes.h": "c",
+			"io.h": "c"
 		}
 	}
 }
